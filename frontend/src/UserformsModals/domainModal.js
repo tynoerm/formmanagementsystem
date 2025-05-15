@@ -23,6 +23,9 @@ const DomainModal = () => {
   const [memberships, setMemberships] = useState(['']);
 
 
+  const [showModal2, setShowModal2] = useState(true);
+
+
 
   // Handle input change
   const handleChange = (index, value) => {
@@ -89,11 +92,7 @@ const DomainModal = () => {
   }
 };
 
-
-
-  if (!showModal1) return null;
-
-  const styles = {
+const styles = {
     modalBackdrop: {
       position: "fixed",
       top: 0,
@@ -120,7 +119,7 @@ const DomainModal = () => {
   };
 
   return (
-    <div style={styles.modalBackdrop} onClick={() => setShowModal1(false)}>
+    <div style={styles.modalBackdrop} onClick={() => setShowModal2(false)}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h5 className="mb-3">
           <b>

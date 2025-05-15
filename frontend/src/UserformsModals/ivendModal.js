@@ -192,6 +192,7 @@ const IvendModal = () => {
                 <b>ACCESS RIGHTS <i> (Managers Use Only)</i></b>
               </label>
             </div>
+            
             <div
               style={{
                 display: "grid",
