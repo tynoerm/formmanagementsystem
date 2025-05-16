@@ -131,7 +131,7 @@ const FormmanagementUsers = () => {
                       value = new Date(value).toLocaleDateString();
                     } catch {}
                   }
-                  return <td key={col}>{value !== undefined ? value.toString() : ""}</td>;
+                  return <td key={col}>{value != null ? value.toString() : ""}</td>;
                 })}
               </tr>
             ))
