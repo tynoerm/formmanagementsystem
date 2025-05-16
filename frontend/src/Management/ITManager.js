@@ -1,43 +1,68 @@
-import React from "react";
-import { LuLayoutDashboard } from "react-icons/lu";
+// components/LoginComponent.jsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Link } from "react-router-dom";
 
+import { RiLoginBoxFill } from "react-icons/ri";
+import image1 from '../images/login.png';
 
-
-const styles = {
-    dashboardContent: {
-        padding: '2rem',
-    },
-    cardHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '1rem',
-        gap: '0.5rem'
-    },
-    icon: {
-        fontSize: '1.5rem',
-        color: '#007bff',
-    }
-};
-
-const ITManager = () => {
+const ITManager  = () => {
     return (
         <div>
             <nav
-                className="navbar border-bottom shadow-lg p-2 mb-0 rounded"
+                className="navbar border-bottom shadow-lg p-1 mb-0 rounded"
                 style={{ backgroundColor: 'black' }}
             >
-                <div className="container-fluid">
-                    <span className="navbar-brand text-white">
-                        <LuLayoutDashboard style={styles.icon} />
-                        &nbsp;
-                        <b>IT MANAGER MANAGEMENT</b>
-                    </span>
+                <div className="container-fluid d-flex justify-content-between align-items-center">
+                    {/* Left side: Image and Title */}
+                    <div className="d-flex align-items-center text-white">
+                        <img
+                            src={image1}
+                            alt="Login Icon"
+                            style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+                        />
+                        <span className="ms-2 fw-bold">IT MANAGER MANAGEMENT</span>
+                    </div>
+
+                    {/* Right side: Welcome message */}
+                    <div className="text-white">
+                        <h5 className="mb-0"><i>Welcome </i></h5>
+                    </div>
                 </div>
             </nav>
-            <footer className="text-white bg-dark text-center p-2 fixed-bottom">
-                &copy; Associated Meat Packers. All rights reserved.
-            </footer>
+
+            <div className="mb-3 d-flex justify-content-end">
+                <input
+                    type="text"
+                    className="form-control w-25"
+                    placeholder="Enter form name"
+                    style={{ fontStyle: 'italic' }}
+                />
+
+            </div>
+
+
+            <table className="table table-striped table-bordered mt-3">
+                <thead className="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Supplier Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Buying Price</th>
+                        <th>Selling Price</th>
+                        <th>Received By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* Insert dynamic rows here */}
+                </tbody>
+            </table>
         </div>
-    )
-}
-export default ITManager
+    );
+};
+
+export default ITManager;

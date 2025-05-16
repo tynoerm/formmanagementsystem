@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { MdDomainDisabled } from "react-icons/md";
+import axios from "axios";
+
 
 const VpnModal = ({ showModal, setShowModal }) => {
   const [vpnRequestorname, setVpnrequestorname] = useState("");
@@ -22,15 +24,85 @@ const VpnModal = ({ showModal, setShowModal }) => {
   const [model, setModel] = useState("");
   const [operatingsystem, setOperatingsystem] = useState("");
 
-  const [headofdeptapproval, setHeadofdeptapproval] = useState("");
+  const [deptManagerApproval, setDeptManagerApproval] = useState("unapproved");
+const [itManagerApproval, setItManagerApproval] = useState("unapproved");
+const [itExecutiveApproval, setItExecutiveApproval] = useState("unapproved");
+
+
   const [itauthourisedby, setItauthourisedby] = useState("");
   const [itactionedby, setItactionedby] = useState("");
 
 const [showModal8, setShowModal8] = useState(true);
 
-  const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  const formData = {
+    vpnRequestorname,
+    vpnRequestordepartment,
+    vpnRequestorjobtitle,
+    vpnRequestoremail,
+
+    headofdepartmentname,
+    headofdeptDepartment,
+    headofdeptjobtitle,
+    headofdeptemail,
+
+    raccesstocolcomservers,
+    otherservices,
+    durationStartdate,
+    durationEnddate,
+
+    computername,
+    assettag,
+    model,
+    operatingsystem,
+
+    deptManagerApproval,
+    itManagerApproval,
+    itExecutiveApproval,
+
+    itauthourisedby,
+    itactionedby,
   };
+
+  try {
+    const response = await axios.post("http://localhost:3001/vpn/create-vpn", formData);
+    console.log("VPN Request submitted successfully:", response.data);
+
+    // Clear all fields after successful submission
+    setVpnrequestorname("");
+    setVpnrequestordepartment("");
+    setVpnrequestorjobtitle("");
+    setVpnrequestoremail("");
+
+    setHeadofdepartmentname("");
+    setHeadofdeptdepartment("");
+    setHeadofdeptjobtitle("");
+    setHeadofdeptemail("");
+
+    setRaccesstocolcomservers("");
+    setOtherservices("");
+    setDurationStartdate("");
+    setDurationEnddate("");
+
+    setComputername("");
+    setAssettag("");
+    setModel("");
+    setOperatingsystem("");
+
+    setDeptManagerApproval("unapproved");
+    setItManagerApproval("unapproved");
+    setItExecutiveApproval("unapproved");
+
+    setItauthourisedby("");
+    setItactionedby("");
+
+    setShowModal(false);  // Close the modal
+  } catch (error) {
+    console.error("Failed to submit VPN Request:", error);
+  }
+};
 
   const styles = {
     modalBackdrop: {
@@ -148,21 +220,41 @@ const [showModal8, setShowModal8] = useState(true);
             </div>
           </div>
 
-          <h6 className="mt-4"><b>6. Approvals</b></h6>
-          <div className="row mb-3">
-            <div className="col-md-4">
-              <label>Head of Department Approval</label>
-              <input type="text" className="form-control" value={headofdeptapproval} onChange={(e) => setHeadofdeptapproval(e.target.value)} />
-            </div>
-            <div className="col-md-4">
-              <label>IT Authorised By</label>
-              <input type="text" className="form-control" value={itauthourisedby} onChange={(e) => setItauthourisedby(e.target.value)} />
-            </div>
-            <div className="col-md-4">
-              <label>IT Actioned By</label>
-              <input type="text" className="form-control" value={itactionedby} onChange={(e) => setItactionedby(e.target.value)} />
-            </div>
-          </div>
+<div className="row mb-4">
+  <div className="col-12 text-center mb-3">
+    <label className="form-label mb-0">
+      <b>APPROVALS</b>
+    </label>
+  </div>
+
+  <div className="col-md-4 mb-3">
+    <label className="form-label">
+      <b>Department Manager</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+      <i> unapproved</i>
+    </button>
+  </div>
+
+  <div className="col-md-4 mb-3">
+    <label className="form-label">
+      <b>IT Manager</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+      <i> unapproved</i>
+    </button>
+  </div>
+
+  <div className="col-md-4 mb-3">
+    <label className="form-label">
+      <b>IT Executive</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+      <i> unapproved</i>
+    </button>
+  </div>
+</div>
+
 
           <div className="mt-4">
             <button type="submit" className="btn btn-primary w-100">Submit VPN Request</button>

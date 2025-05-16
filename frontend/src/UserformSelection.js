@@ -13,7 +13,9 @@ import { TbDeviceIpadHorizontalDown } from "react-icons/tb";
 
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdOutlineVpnLock } from "react-icons/md";
-
+import { MdAccountBalanceWallet } from "react-icons/md";
+import { SiFormstack } from "react-icons/si";
+import { useNavigate } from 'react-router-dom';
 
 
 import IvendModal from "./UserformsModals/ivendModal";
@@ -21,6 +23,7 @@ import DomainModal from "./UserformsModals/domainModal.js";
 import VpnModal from "./UserformsModals/vpnModal.js";
 import MeatmatrixModal from "./UserformsModals/meatmatrixModals.js";
 import InternetaccessModal from "./UserformsModals/internetuseraccessModal.js";
+import ChangeofcontrolModal from "./UserformsModals/changeofcontrolModal.js";
 
 
 
@@ -28,8 +31,7 @@ import InternetaccessModal from "./UserformsModals/internetuseraccessModal.js";
 const UserformSelection = () => {
 
 
-  const [rightsArray, setRightsArray] = useState([{ item: "", access: "" }]);
-  const [error, setError] = useState("");
+
 
   const [showModal1, setShowModal1] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
@@ -39,33 +41,12 @@ const UserformSelection = () => {
   const [showModal6, setShowModal6] = useState(false);
   const [showModal7, setShowModal7] = useState(false);
   const [showModal8, setShowModal8] = useState(false);
-
-
-  const addRight = () => {
-    setRightsArray([...rightsArray, { item: "", access: "" }]);
-  };
-
-  const removeRight = (index) => {
-    const newRights = [...rightsArray];
-    newRights.splice(index, 1);
-    setRightsArray(newRights);
-  };
-
-  const handleRightChange = (index, field, value) => {
-    const newRights = [...rightsArray];
-    newRights[index][field] = value;
-    setRightsArray(newRights);
-  };
+    const [showModal9, setShowModal9] = useState(false);
 
 
 
-  const handleAccountingSubmit = (e) => {
 
-  }
 
-  const handleMeatmatrixSubmit = (e) => {
-
-  }
 
   const styles = {
     dashboardContent: { padding: '2rem' },
@@ -104,7 +85,7 @@ const UserformSelection = () => {
       marginTop: '1rem',
     },
   };
-
+const navigate = useNavigate();
 
   return (
     <div>
@@ -119,6 +100,24 @@ const UserformSelection = () => {
 
       <div style={styles.dashboardContent}>
         <div className="row row-cols-1 row-cols-md-4 g-4">
+
+         <div className="col">
+      <div
+        className="card shadow-lg rounded"
+        onClick={() => navigate("/FormmanagementUsers")}
+        style={{ cursor: 'pointer' }} // Optional: show pointer cursor on hover
+      >
+        <div className="card-body">
+          <div style={styles.cardHeader}>
+            <SiFormstack style={styles.icon} />
+            <h5 className="card-title">USER FORMS MANAGEMENT</h5>
+          </div>
+          <p className="card-text">check the status of your form</p>
+        </div>
+      </div>
+    </div>
+
+
 
           <div className="col">
             <div className="card shadow-lg rounded" onClick={() => setShowModal1(true)}>
@@ -182,6 +181,9 @@ const UserformSelection = () => {
               </div>
             </div>
           </div>
+
+
+    
           {/* Card 4 */}
           <div className="col">
             <div className="card shadow-lg rounded" onClick={() => setShowModal5(true)}>
@@ -195,6 +197,22 @@ const UserformSelection = () => {
               </div>
             </div>
           </div>
+
+
+      <div className="col">
+            <div className="card shadow-lg rounded" onClick={() => setShowModal6(true)}>
+              <div className="card-body">
+                <div style={styles.cardHeader}>
+                  <MdAccountBalanceWallet  style={styles.icon} />
+                  <h5 className="card-title">PREDICTIV USER FORMS </h5>
+                </div>
+                <p className="card-text">bring your own device.</p>
+
+              </div>
+            </div>
+          </div>
+
+
 
 
           {/* Card 3 */}
@@ -225,6 +243,9 @@ const UserformSelection = () => {
           </div>
 
 
+      
+
+
 
         </div>
       </div>
@@ -248,6 +269,10 @@ const UserformSelection = () => {
 
       {showModal4 && (
         <InternetaccessModal />
+      )}
+
+      {showModal5 && (
+        <ChangeofcontrolModal/>
       )}
 
 

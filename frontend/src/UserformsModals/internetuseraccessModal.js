@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { LuFileInput } from "react-icons/lu";
 import { FaInternetExplorer } from "react-icons/fa";
 
+import axios from "axios";
+
 const InternetaccessModal = () => {
   const [firstname, setFirstname] = useState("");
   const [surname, setSurname] = useState("");
@@ -18,24 +20,30 @@ const InternetaccessModal = () => {
 
   const [showModal4, setShowModal4] = useState(true);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = {
-      firstname,
-      surname,
-      daterequested,
-      department,
-      daterequired,
-      device,
-      ipaddress,
-      macaddress,
-      businessjustification,
-      applicantapproval,
-      itmanagerapproval,
-      itexcapproval,
-    };
-    console.log("Internet Access Form Data:", formData);
-    // Clear form
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formData = {
+    firstname,
+    surname,
+    daterequested,
+    department,
+    daterequired,
+    device,
+    ipaddress,
+    macaddress,
+    businessjustification,
+    itmanagerapproval,
+    itexcapproval,
+  };
+
+  try {
+    const response = await axios.post( "http://localhost:3001/internetaccess/create-internetaccess", formData);
+    console.log("Response from server:", response.data);
+
+
+    window.location.reload();
+    // Clear form after successful submission
     setFirstname("");
     setSurname("");
     setDaterequested("");
@@ -45,11 +53,14 @@ const InternetaccessModal = () => {
     setIpaddress("");
     setMacaddress("");
     setBusinessjustification("");
-    setApplicantapproval("");
     setItmanagerapproval("");
     setItexecapproval("");
     setShowModal4(false);
-  };
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    // Optionally handle error UI here
+  }
+};
 
   const styles = {
     modalBackdrop: {
@@ -140,24 +151,32 @@ const InternetaccessModal = () => {
             <textarea className="form-control" rows="3" value={businessjustification} onChange={(e) => setBusinessjustification(e.target.value)} />
           </div>
 
-          <div className="mb-3 mt-4">
-            <b>Approvals</b>
-          </div>
-          <div className="row mb-2">
-            <div className="col-md-4">
-              <label><b>Applicant Approval</b></label>
-              <input type="text" className="form-control" value={applicantapproval} onChange={(e) => setApplicantapproval(e.target.value)} disabled/>
-            </div>
-            <div className="col-md-4">
-              <label><b>IT Manager Approval</b></label>
-              <input type="text" className="form-control" value={itmanagerapproval} onChange={(e) => setItmanagerapproval(e.target.value)} disabled/>
-            </div>
-            <div className="col-md-4">
-              <label><b>IT Executive Approval</b></label>
-              <input type="text" className="form-control" value={itexcapproval} onChange={(e) => setItexecapproval(e.target.value)}  disabled/>
-            </div>
-          </div>
+      
+          <div className="row mb-4">
+  <div className="col-12 text-center mb-3">
+    <label className="form-label mb-0">
+      <b>APPROVALS</b>
+    </label>
+  </div>
 
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>IT Manager</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+        <i> unapproved</i>
+    </button>
+  </div>
+
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>IT Executive</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+     <i> unapproved</i>
+    </button>
+  </div>
+</div>
           <button type="submit" className="btn btn-primary w-100 mt-3">Submit Request</button>
         </form>
       </div>

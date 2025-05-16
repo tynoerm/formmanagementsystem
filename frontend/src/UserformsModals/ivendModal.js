@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { LuFileInput } from "react-icons/lu"; // Ensure this icon is installed
+  // Updated handle submit:
+ import axios from "axios";
+ import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
+
 
 const IvendModal = () => {
   const [ivendForm, setIvendform] = useState([]);
@@ -69,36 +76,43 @@ const IvendModal = () => {
     },
   };
 
-  const handleRightChange = (index, field, value) => {
-    const updatedRights = [...rightsArray];
-    updatedRights[index][field] = value;
-    setRightsArray(updatedRights);
+
+
+const handleIvendSubmit = async (e) => {
+  e.preventDefault();
+
+  const formEntry = {
+    fullname,
+    jobtitle,
+    store,
+    date,
+    headofdepartmentname,
+    deptmanagerapproval,
+    itmanagerapproval,
+    rights: rightsArray,
+    roles: selectedRoles, // include roles as well
   };
 
-  const addRight = () => {
-    setRightsArray([...rightsArray, { item: "", access: "" }]);
-  };
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/ivendusers/create-ivenduser",
+      formEntry,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  const removeRight = (index) => {
-    const updatedRights = rightsArray.filter((_, idx) => idx !== index);
-    setRightsArray(updatedRights);
-  };
+    // If axios does not throw, response is successful
 
-  const handleIvendSubmit = (e) => {
-    e.preventDefault();
-    const formEntry = {
-      fullname,
-      jobtitle,
-      store,
-      date,
-      headofdepartmentname,
-      deptmanagerapproval,
-      itmanagerapproval,
-      rights: rightsArray,
-    };
-    setIvendform([...ivendForm, formEntry]);
+    toast.success("IVEND form submitted successfully!");
+ // Optional: delay a bit before reload
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000); // waits 1 second
 
-    // Reset fields
+    // Reset fields only after success
     setFullname("");
     setJobtitle("");
     setStore("");
@@ -107,12 +121,22 @@ const IvendModal = () => {
     setDepartmentapproval("");
     setItmanagerapproval("");
     setRightsArray([{ item: "", access: "" }]);
+    setSelectedRoles([]);
     setShowModal1(false);
-  };
+
+  } catch (error) {
+    toast.error("Error submitting form. Please try again.");
+    console.error("Form submission error:", error);
+  
+  }
+};
+
 
   if (!showModal1) return null;
 
   return (
+    <div>
+     <ToastContainer />
     <div style={styles.modalBackdrop} onClick={() => setShowModal1(false)}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h5 className="mb-3">
@@ -306,38 +330,31 @@ const IvendModal = () => {
             </div>
           </div>
 
+<div className="row mb-4">
+  <div className="col-12 text-center mb-3">
+    <label className="form-label mb-0">
+      <b>APPROVALS</b>
+    </label>
+  </div>
 
-          <div className="row mb-2">
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
-              <label className="form-label">
-                <b>APPROVALS</b>
-              </label>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label">
-                <b>Head of Department</b>
-              </label>
-              <input
-                type="text"
-                value={deptmanagerapproval}
-                onChange={(e) => setDepartmentapproval(e.target.value)}
-                className="form-control"
-                disabled
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="form-label">
-                <b>IT Manager</b>
-              </label>
-              <input
-                type="text"
-                value={itmanagerapproval}
-                onChange={(e) => setItmanagerapproval(e.target.value)}
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>Head of Department</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+       <i> unapproved</i>
+    </button>
+  </div>
+
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>IT Manager</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+     <i> unapproved</i>
+    </button>
+  </div>
+</div>
 
       
 
@@ -346,6 +363,7 @@ const IvendModal = () => {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 };

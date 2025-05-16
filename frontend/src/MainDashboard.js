@@ -1,137 +1,149 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { SiGoogletagmanager } from "react-icons/si";
-import { FaInternetExplorer, FaWarehouse, FaUserCheck } from "react-icons/fa";
-import { GrUserNew } from "react-icons/gr";
-import { IoLaptopSharp } from "react-icons/io5";
-import { AiOutlineControl } from "react-icons/ai";
-import { SiNginxproxymanager } from "react-icons/si";
-import { TbDeviceIpadHorizontalDown } from "react-icons/tb";
-import { FcManager } from "react-icons/fc";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { GrUserNew } from 'react-icons/gr';
+import { FcManager } from 'react-icons/fc';
+import { SiGoogletagmanager, SiNginxproxymanager } from 'react-icons/si';
+import { FaUserCheck } from 'react-icons/fa';
+import { LuLayoutDashboard } from 'react-icons/lu';
 
+const cards = {
+  client: [
+    {
+      id: 1,
+      title: "NEW USER FORMS",
+      icon: GrUserNew,
+      text: "Sales, invoicing, quotations.",
+      link: "/UserformSelection",
+    },
+  ],
+  itmanagement: [
+    {
+      id: 2,
+      title: "IT MANAGEMENT",
+      icon: FaUserCheck,
+      text: "User management, form management.",
+      link: "/ITManagement",
+    },
+  ],
+  itmanager: [
+    {
+      id: 3,
+      title: "IT MANAGER MANAGEMENT",
+      icon: SiGoogletagmanager,
+      text: "Nature of expenses incurred, amount used.",
+      link: "/ITManager",
+    },
+  ],
+  deptmanager: [
+    {
+      id: 4,
+      title: "DEPARTMENT MANAGER",
+      icon: FcManager,
+      text: "Nature of expenses incurred, amount used.",
+      link: "/DepartmentManager",
+    },
+  ],
+  itexec: [
+    {
+      id: 5,
+      title: "IT EXECUTIVE MANAGEMENT",
+      icon: SiNginxproxymanager,
+      text: "Nature of expenses incurred, amount used.",
+      link: "/ITExecutive",
+    },
+  ],
+};
 
 const styles = {
-    dashboardContent: {
-        padding: '2rem',
-    },
-    cardHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '1rem',
-        gap: '0.5rem'
-    },
-    icon: {
-        fontSize: '1.5rem',
-        color: '#007bff',
-    }
+  dashboardContent: {
+    padding: '2rem',
+  },
+  cardHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '1rem',
+    gap: '0.5rem',
+  },
+  icon: {
+    fontSize: '1.5rem',
+    color: '#007bff',
+  },
 };
 
 const MainDashboard = () => {
-    return (
-        <div>
-            <nav
-                className="navbar border-bottom shadow-lg p-2 mb-0 rounded"
-                style={{ backgroundColor: 'black' }}
-            >
-                <div className="container-fluid">
-                    <span className="navbar-brand text-white">
-                        <LuLayoutDashboard style={styles.icon} />
-                        &nbsp;
-                        <b>MAIN DASHBOARD</b>
-                    </span>
-                </div>
-            </nav>
+  // Read role and username from localStorage and normalize role to lowercase
+  const role = (localStorage.getItem('userRole') || '').toLowerCase();
+  const username = localStorage.getItem('username') || 'Guest';
 
-            <div style={styles.dashboardContent}>
-                <div className="row row-cols-1 row-cols-md-4 g-4">
-                    {/* Card 1 */}
-                    <div className="col">
-                        <div className="card shadow-lg rounded">
-                            <div className="card-body">
-                                <div style={styles.cardHeader}>
-                                    <GrUserNew style={styles.icon} />
-                                    <h5 className="card-title">NEW USER FORMS</h5>
-                                </div>
-                                <p className="card-text">Sales, invoicing, quotations.</p>
-                                <Link to="/UserformSelection" className="btn btn-primary">Next</Link>
-                            </div>
-                        </div>
-                    </div>
+  // For debugging - see role in console
+  console.log('Role from localStorage:', role);
 
-        
+  // Select cards based on role, fallback to empty array
+  const cardsToShow = cards[role] || [];
 
-          
+  return (
+    <div>
+      <nav
+        className="navbar border-bottom shadow-lg p-2 mb-0 rounded"
+        style={{ backgroundColor: 'black' }}
+      >
+        <div className="container-fluid d-flex justify-content-between align-items-center">
+          <span className="navbar-brand text-white d-flex align-items-center">
+            <LuLayoutDashboard style={styles.icon} />
+            &nbsp;
+            <b>MAIN DASHBOARD</b>
+          </span>
 
-                    {/* Card 6 */}
-                    <div className="col">
-                        <div className="card shadow-lg rounded">
-                            <div className="card-body">
-                                <div style={styles.cardHeader}>
-                                    <FcManager style={styles.icon} />
-                                    <h5 className="card-title">DEPARTMENT MANAGER</h5>
-                                </div>
-                                <p className="card-text">Nature of expenses incurred, amount used.</p>
-                                <Link to="/Expenses" className="btn btn-primary">Next</Link>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    {/* Card 7 */}
-                    <div className="col">
-                        <div className="card shadow-lg rounded">
-                            <div className="card-body">
-                                <div style={styles.cardHeader}>
-                                    <SiGoogletagmanager style={styles.icon} />
-                                    <h5 className="card-title">IT MANAGER MANAGEMENT</h5>
-                                </div>
-                                <p className="card-text">Nature of expenses incurred, amount used.</p>
-                                <Link to="/Expenses" className="btn btn-primary">Next</Link>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Card 8 */}
-                    <div className="col">
-                        <div className="card shadow-lg rounded">
-                            <div className="card-body">
-                                <div style={styles.cardHeader}>
-                                    <SiNginxproxymanager style={styles.icon} />
-                                    <h5 className="card-title">IT EXECUTIVE MANAGEMENT</h5>
-                                </div>
-                                <p className="card-text">Nature of expenses incurred, amount used.</p>
-                                <Link to="/Expenses" className="btn btn-primary">Next</Link>
-                            </div>
-                        </div>
-                    </div>
-
-
-                             {/* Card 8 */}
-                    <div className="col">
-                        <div className="card shadow-lg rounded">
-                            <div className="card-body">
-                                <div style={styles.cardHeader}>
-                                    <FaUserCheck style={styles.icon} />
-                                    <h5 className="card-title">IT MANAGEMENT</h5>
-                                </div>
-                                <p className="card-text">user management,form management.</p>
-                                <Link to="/Expenses" className="btn btn-primary">Next</Link>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <footer className="text-white bg-dark text-center p-2 fixed-bottom">
-                &copy; Associated Meat Packers. All rights reserved.
-            </footer>
+          {/* Right side: Welcome message */}
+          <div className="text-white">
+            <h5 className="mb-0">
+              <i>Welcome {username}</i>
+            </h5>
+          </div>
         </div>
-    );
+      </nav>
+
+      <div style={styles.dashboardContent}>
+        <div className="row row-cols-1 row-cols-md-4 g-4">
+          {cardsToShow.length > 0 ? (
+            cardsToShow.map(({ id, title, icon: Icon, text, link }) => (
+              <div key={id} className="col">
+                <div className="card shadow-lg rounded">
+                  <div className="card-body">
+                    <div style={styles.cardHeader}>
+                      <Icon style={styles.icon} />
+                      <h5 className="card-title">{title}</h5>
+                    </div>
+                    <p className="card-text">{text}</p>
+                    <Link to={link} className="btn btn-primary">
+                      Next
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col">
+              <p>No cards available for your role.</p>
+              <p>Please check if your role is correctly saved in localStorage as one of these:</p>
+              <ul>
+                {Object.keys(cards).map((key) => (
+                  <li key={key}>
+                    <code>{key}</code>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <footer className="text-white bg-dark text-center p-2 fixed-bottom">
+        &copy; Associated Meat Packers. All rights reserved.
+      </footer>
+    </div>
+  );
 };
 
 export default MainDashboard;

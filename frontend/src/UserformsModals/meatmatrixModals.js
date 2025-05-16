@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { LuFileInput } from "react-icons/lu";
 import { GiMeatCleaver } from "react-icons/gi";
+import axios from "axios";
+
+
+
+
 
 const MeatmatrixModal = () => {
   const [meatmatrixForm, setMeatmatrixform] = useState([]);
@@ -31,6 +36,9 @@ const MeatmatrixModal = () => {
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [showModal3, setShowModal3] = useState(true);
 
+
+  const [stockTransferLocations, setStockTransferLocations] = useState([{ from: "", to: "" }]);
+
   const roles = [
     "PRODUCTION",
     "STOCK BATCHES",
@@ -51,48 +59,60 @@ const MeatmatrixModal = () => {
     }
   };
 
-  const handlemeatmatrixSubmit = (e) => {
-    e.preventDefault();
-    if (selectedRoles.length === 0) {
-      alert("Please select at least one access right.");
-      return;
-    }
+const handlemeatmatrixSubmit = async (e) => {
+  e.preventDefault();
 
-    const formEntry = {
-      fullname,
-      jobtitle,
-      store,
-      date,
-      headofdepartmentname,
-      from,
-      to,
-      authoriseddatabase,
-      datetermination,
-      time,
-      terminatedby,
-      userCode,
-      userId,
-      costCenter,
-      stationNumber,
-      processId,
-      authorisedBy,
-      actionedBy,
-      date1,
-      deptmanagerapproval,
-      itmanagerapproval,
-      rights: selectedRoles,
-    };
+  if (selectedRoles.length === 0) {
+    alert("Please select at least one access right.");
+    return;
+  }
 
-    setMeatmatrixform([...meatmatrixForm, formEntry]);
+  // Convert from/to strings to numbers (optional, if you want them as numbers)
+  const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
+    from: Number(from),
+    to: Number(to),
+  }));
 
-    // Reset all fields
+  const formEntry = {
+    fullname,
+    jobtitle,
+    store,
+    date,
+    headofdepartmentname,
+    stockTransferLocations: cleanedStockLocations, // <-- send array here
+    authoriseddatabase,
+    datetermination,
+    time,
+    terminatedby,
+    userCode,
+    userId,
+    costCenter,
+    stationNumber,
+    processId,
+    authorisedBy,
+    actionedBy,
+    date1,
+    deptmanagerapproval,
+    itmanagerapproval,
+    rights: selectedRoles,
+  };
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/meatmatrix/create-meatmatrix",
+      formEntry
+    );
+    console.log("Form submitted successfully", response.data);
+
+    window.location.reload();
+
+    // Reset all fields on successful submit
     setFullname("");
     setJobtitle("");
     setStore("");
     setDate("");
     setHeadofdepartment("");
-    setFrom("");
-    setTo("");
+    setStockTransferLocations([{ from: "", to: "" }]); // reset array state
     setAuthoriseddatabase("");
     setDatetermination("");
     setTime("");
@@ -110,7 +130,12 @@ const MeatmatrixModal = () => {
     setRightsArray([{ item: "", access: "" }]);
     setSelectedRoles([]);
     setShowModal3(false);
-  };
+  } catch (error) {
+    console.error("Error submitting form", error);
+    alert("Failed to submit form. Please try again later.");
+  }
+};
+
 
   const styles = {
     modalBackdrop: {
@@ -174,16 +199,67 @@ const MeatmatrixModal = () => {
             <input type="text" value={headofdepartmentname} onChange={(e) => setHeadofdepartment(e.target.value)} className="form-control" />
           </div>
 
-          <div className="row mb-2">
-            <div className="col-md-6">
-              <label><b>From</b></label>
-              <input type="text" value={from} onChange={(e) => setFrom(e.target.value)} className="form-control" />
-            </div>
-            <div className="col-md-6">
-              <label><b>To</b></label>
-              <input type="text" value={to} onChange={(e) => setTo(e.target.value)} className="form-control" />
-            </div>
-          </div>
+<label>AUTHORISED STOCK TRANSFER LOCATION</label>
+{stockTransferLocations.map((location, index) => (
+  <div className="row mb-2" key={index}>
+    <div className="col-md-5">
+      <label><b>From</b></label>
+      <input
+        type="number"
+        value={location.from}
+        onChange={(e) => {
+          const newLocations = [...stockTransferLocations];
+          newLocations[index].from = e.target.value;
+          setStockTransferLocations(newLocations);
+        }}
+        className="form-control"
+        min={0}  // optionally prevent negative numbers
+        step={1} // integer steps only
+      />
+    </div>
+    <div className="col-md-5">
+      <label><b>To</b></label>
+      <input
+        type="number"
+        value={location.to}
+        onChange={(e) => {
+          const newLocations = [...stockTransferLocations];
+          newLocations[index].to = e.target.value;
+          setStockTransferLocations(newLocations);
+        }}
+        className="form-control"
+        min={0}
+        step={1}
+      />
+    </div>
+    <div className="col-md-2 d-flex align-items-end">
+      {stockTransferLocations.length > 1 && (
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={() => {
+            const newLocations = stockTransferLocations.filter((_, i) => i !== index);
+            setStockTransferLocations(newLocations);
+          }}
+        >
+          Remove
+        </button>
+      )}
+    </div>
+  </div>
+))}
+
+<button
+  type="button"
+  className="btn btn-secondary mb-3"
+  onClick={() => setStockTransferLocations([...stockTransferLocations, { from: "", to: "" }])}
+>
+  Add Location
+</button>
+
+
+
+
 
           <div className="row mb-2">
             <div className="col-md-6">
@@ -246,17 +322,31 @@ const MeatmatrixModal = () => {
             ))}
           </div>
 
-          <div className="row mb-2">
-            <div className="col-md-6">
-              <label><b>Head of Department Approval</b></label>
-              <input type="text" value={deptmanagerapproval} onChange={(e) => setDepartmentapproval(e.target.value)} className="form-control" disabled />
-            </div>
-            <div className="col-md-6">
-              <label><b>IT Manager Approval</b></label>
-              <input type="text" value={itmanagerapproval} onChange={(e) => setItmanagerapproval(e.target.value)} className="form-control" disabled />
-            </div>
-          </div>
+          <div className="row mb-4">
+  <div className="col-12 text-center mb-3">
+    <label className="form-label mb-0">
+      <b>APPROVALS</b>
+    </label>
+  </div>
 
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>Head of Department</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+        <i> unapproved</i>
+    </button>
+  </div>
+
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>IT Manager</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+     <i> unapproved</i>
+    </button>
+  </div>
+</div>
           <button type="submit" className="btn btn-primary w-100">Submit</button>
         </form>
       </div>

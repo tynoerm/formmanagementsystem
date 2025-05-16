@@ -1,50 +1,48 @@
-// components/LoginComponent.jsx
+// components/UserManagement.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from "react-router-dom";
+import { RiLoginBoxFill } from 'react-icons/ri';
+import image1 from './images/login.png';
 
-import { RiLoginBoxFill } from "react-icons/ri";
-
-import image1 from './images/login.png'
-
-function UserManagement(setLoggedIn, login) {
-
-    const [department, setDepartment] = useState('');
-
-
+function UserManagement() {
+    const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
+    const [department, setDepartment] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         try {
-            const response = await axios.post('http://localhost:3001/api/login', {
+            const response = await axios.post('http://localhost:3001/users/create-user', {
+                fullName,
                 username,
                 password,
+                role,
+                department,
             });
 
-            const { role, department } = response.data;
-
-            if (response.status === 200 && role) {
-                setLoggedIn(true);
-                login(role);
-                toast.success('Login successful');
-                navigate('/MainDashboard', { state: { role, dep: department } });
+            if (response.status === 201 || response.status === 200) {
+                toast.success('User registered successfully');
+                // Optionally clear the form
+                setFullName('');
+                setUsername('');
+                setPassword('');
+                setRole('');
+                setDepartment('');
             } else {
-                toast.error('Invalid credentials');
+                toast.error('Registration failed');
             }
-
         } catch (err) {
-            if (err.response && err.response.data && err.response.data.message) {
+            if (err.response?.data?.message) {
                 toast.error(err.response.data.message);
             } else {
-                toast.error('Login failed');
+                toast.error('Something went wrong');
             }
         } finally {
             setLoading(false);
@@ -53,49 +51,35 @@ function UserManagement(setLoggedIn, login) {
 
     return (
         <>
-            <nav
-                className="navbar border-bottom shadow-lg p-1 mb-0 rounded"
-                style={{ backgroundColor: 'black' }}
-            >
+            <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
                 <div className="container-fluid">
-
                     <span className="navbar-brand text-white">
                         <img
                             src={image1}
                             alt="Login Icon"
                             style={{ width: '40px', height: '40px', objectFit: 'contain' }}
                         />
-
-                        &nbsp;
-                        <b>ASSOCIATED MEAT PACKERS</b>
+                        &nbsp;<b>ASSOCIATED MEAT PACKERS</b>
                     </span>
-
                 </div>
             </nav>
 
-
-            <div
-                className="d-flex justify-content-center align-items-center bg-light"
-                style={{ height: 'calc(100vh - 70px)' }} // subtract navbar height (adjust if needed)
-            >
-                <div className="card p-3 shadow" style={{
-                    width: '400px',
-
-                }}>
+            <div className="d-flex justify-content-center align-items-center bg-light" style={{ height: 'calc(100vh - 70px)' }}>
+                <div className="card p-3 shadow" style={{ width: '400px' }}>
                     <ToastContainer />
-                   
-                    <h5 className="text-center mb-3"><b><RiLoginBoxFill /> ADD A NEW USER</b></h5>
-
+                    <h5 className="text-center mb-3">
+                        <b><RiLoginBoxFill /> ADD A NEW USER</b>
+                    </h5>
 
                     <form onSubmit={handleSubmit}>
-                        <label>Full Name:</label>
                         <div className="mb-3">
+                            <label>Full Name:</label>
                             <input
                                 type="text"
-                                placeholder="Username"
+                                placeholder="Full Name"
                                 className="form-control"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
                                 required
                             />
                         </div>
@@ -123,6 +107,25 @@ function UserManagement(setLoggedIn, login) {
                                 required
                             />
                         </div>
+
+                        <div className="mb-3">
+                            <label>Role:</label>
+                            <select
+                                className="form-control"
+                                value={role}
+                                onChange={(e) => setRole(e.target.value)}
+                                required
+                            >
+                                <option value="">-- Select Role --</option>
+                                <option value="client">Client</option>
+                                <option value="retail">Retail Shops</option>
+                                <option value="deptmanager">Department Manager</option>
+                                <option value="itmanagement">IT Management</option>
+                                      <option value="itmanager">IT Manager</option>
+                                <option value="itexec">IT Executive</option>
+                            </select>
+                        </div>
+
                         <div className="mb-3">
                             <label>Department:</label>
                             <select
@@ -135,21 +138,18 @@ function UserManagement(setLoggedIn, login) {
                                 <option value="Finance">Finance</option>
                                 <option value="Operations">Operations</option>
                                 <option value="Sales">Sales</option>
-                                <option value="IT Department">IT Department</option>
+                                <option value="IT Department">IT </option>
                                 <option value="Retail Shops">Retail Shops</option>
                             </select>
                         </div>
-
-
 
                         <button
                             type="submit"
                             className="btn btn-dark w-100"
                             disabled={loading}
                         >
-                            {loading ? 'Logging in...' : 'CREATE'}
+                            {loading ? 'Creating...' : 'CREATE'}
                         </button>
-                        
                     </form>
                 </div>
 

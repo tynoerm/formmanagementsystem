@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { LuFileInput } from "react-icons/lu";
 import { MdDomainDisabled } from "react-icons/md";
+import axios from "axios";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const DomainModal = () => {
   const [fullname, setFullname] = useState("");
@@ -45,7 +49,7 @@ const DomainModal = () => {
     setMemberships(updated);
   };
 
-  const handledomainSubmit = async (e) => {
+const handledomainSubmit = async (e) => {
   e.preventDefault();
 
   const formEntry = {
@@ -67,30 +71,24 @@ const DomainModal = () => {
   };
 
   try {
-    const response = await fetch("http://localhost:5000/api/domain-user-access", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formEntry),
-    });
+    const response = await axios.post("http://localhost:3001/domainaccess/create-domainaccess", formEntry);
 
-    if (response.ok) {
-      const result = await response.json();
-      console.log("Submission success:", result);
-      alert("Form submitted successfully!");
-      setFormEntries([...formEntries, formEntry]);
-      setShowModal1(false);
-    } else {
-      const errorData = await response.json();
-      console.error("Submission error:", errorData);
-      alert("Submission failed. Check the console for details.");
-    }
+    toast.success("Form submitted successfully!");
+    setFormEntries([...formEntries, formEntry]);
+    setShowModal1(false);
+
+    window.location.reload();
   } catch (error) {
-    console.error("Network error:", error);
-    alert("Network error occurred. Please try again.");
+    if (error.response) {
+      console.error("Submission error:", error.response.data);
+      toast.error(`Submission failed: ${error.response.data.message || "Server error"}`);
+    } else {
+      console.error("Network error:", error);
+      toast.error("Network error occurred. Please try again.");
+    }
   }
 };
+
 
 const styles = {
     modalBackdrop: {
@@ -383,31 +381,31 @@ const styles = {
             </div>
           </div>
 
-          <div className="row mb-2">
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
-              <label className="form-label"><b>APPROVALS</b></label>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label"><b>Head of Department</b></label>
-              <input
-                type="text"
-                value={deptmanagerapproval}
-                onChange={(e) => setDepartmentapproval(e.target.value)}
-                className="form-control"
-                disabled
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="form-label"><b>IT Manager</b></label>
-              <input
-                type="text"
-                value={itmanagerapproval}
-                onChange={(e) => setItmanagerapproval(e.target.value)}
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
+       <div className="row mb-4">
+  <div className="col-12 text-center mb-3">
+    <label className="form-label mb-0">
+      <b>APPROVALS</b>
+    </label>
+  </div>
+
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>Head of Department</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+        <i> unapproved</i>
+    </button>
+  </div>
+
+  <div className="col-md-6 mb-3">
+    <label className="form-label">
+      <b>IT Manager</b>
+    </label>
+    <button type="button" className="btn btn-danger w-100" disabled>
+     <i> unapproved</i>
+    </button>
+  </div>
+</div>
 
           <button type="submit" className="btn btn-primary w-100">
             Submit

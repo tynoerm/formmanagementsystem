@@ -9,6 +9,9 @@ import DepartmentManager from './Management/DepartmentManager.js';
 import ITManager from './Management/ITManager.js';
 import ITExecutive from './Management/ITExecutive.js';
 import UserformSelection from './UserformSelection.js';
+import ITManagement from './Management/ITManagement.js'
+
+import FormmanagementUsers from './FormmanagementUsers.js'
 
 
 import NotFound from './NotFound';
@@ -40,25 +43,19 @@ function App() {
   return (
     <Router>
       <UserProvider>
-        <Routes>
-          {/* Login Route */}
-          <Route
-            path="/"
-            element={<Login setLoggedIn={setLoggedIn} login={login} />}
-          />
+     <Routes>
+  <Route path="/" element={<Login setLoggedIn={setLoggedIn} login={login} />} />
+  <Route path="MainDashboard" element={<MainDashboard />} />
+  <Route path="ITManager" element={<ITManager />} />
+  <Route path="ITExecutive" element={<ITExecutive />} />
+  <Route path="UserformSelection" element={<UserformSelection />} />
+  <Route path="UserManagement" element={<UserManagement />} />
+  <Route path="FormmanagementUsers" element={<FormmanagementUsers />} />
+  <Route path="DepartmentManager" element={<DepartmentManager username={username} />} />
+  <Route path="ITManagement" element={<ITManagement />} />
+  <Route path="*" element={<NotFound />} />
+</Routes>
 
-          <Route path="MainDashboard" element={<MainDashboard />} />
-          <Route path="ITManager" element={<ITManager />} />
-           <Route path="ITExecutive" element={<ITExecutive />} />
-              <Route path="UserformSelection" element={<UserformSelection />} />
-       
-       
- <Route path="UserManagement" element={<UserManagement />} />
-
-
-          {/* Fallback 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
       </UserProvider>
     </Router>
   );
