@@ -1,11 +1,9 @@
-// components/LoginComponent.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from "react-router-dom";
-import { RiLoginBoxFill } from "react-icons/ri";
+import { RiLoginBoxFill } from 'react-icons/ri';
 import image1 from './images/login.png';
 
 function Login({ setLoggedIn, login }) {
@@ -24,29 +22,29 @@ function Login({ setLoggedIn, login }) {
         password,
       });
 
-      // Debug log - can remove after testing
       console.log('Login response:', response.data);
 
-      // Corrected destructuring
-      const { role, department, username: returnedUsername } = response.data.user;
-      
+      const { role, department, division, username: returnedUsername } = response.data.user;
 
       if (response.status === 200 && role) {
+        // Clear previous session
+        localStorage.clear();
+
         setLoggedIn(true);
         login(role);
 
-        // Save to localStorage
         localStorage.setItem('userRole', role.toLowerCase());
         localStorage.setItem('username', returnedUsername);
-        localStorage.setItem('userDepartment', department);
+        localStorage.setItem('department', department);
+        localStorage.setItem('division', division);
 
         toast.success('Login successful');
-        navigate('/MainDashboard', { state: { role, dep: department } });
+        navigate('/MainDashboard', { state: { role, dep: department, division } });
       } else {
         toast.error('Invalid credentials');
       }
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.message) {
+      if (err.response?.data?.message) {
         toast.error(err.response.data.message);
       } else {
         toast.error('Login failed');
@@ -105,7 +103,9 @@ function Login({ setLoggedIn, login }) {
             <button type="submit" className="btn btn-dark w-100" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </button>
-            <Link to="/register"><i>Create an account</i></Link>
+            <div className="text-center mt-2">
+              <Link to="/register"><i>Create an account</i></Link>
+            </div>
           </form>
         </div>
 

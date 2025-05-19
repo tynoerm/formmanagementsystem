@@ -14,9 +14,9 @@ const InternetaccessModal = () => {
   const [ipaddress, setIpaddress] = useState("");
   const [macaddress, setMacaddress] = useState("");
   const [businessjustification, setBusinessjustification] = useState("");
-  const [applicantapproval, setApplicantapproval] = useState("");
-  const [itmanagerapproval, setItmanagerapproval] = useState("");
-  const [itexcapproval, setItexecapproval] = useState("");
+ 
+  const [itmanagerapproval, setItmanagerapproval] = useState("pending");
+  const [itexcapproval, setItexecapproval] = useState("pending");
 
   const [showModal4, setShowModal4] = useState(true);
 

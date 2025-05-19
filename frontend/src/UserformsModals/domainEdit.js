@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdDomainDisabled } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const DomainModal = () => {
+const DomainEdit = ({ item, setFormEntries }) => {
   const [fullname, setFullname] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [department, setDepartment] = useState("");
@@ -19,22 +19,38 @@ const DomainModal = () => {
   const [headofdepartmentname, setHeadofdepartmentname] = useState("");
   const [deptmanagerapproval, setDepartmentapproval] = useState("pending");
   const [itmanagerapproval, setItmanagerapproval] = useState("pending");
-  const [formEntries, setFormEntries] = useState([]);
   const [memberships, setMemberships] = useState([""]);
 
-  // Handle input change for memberships
+  useEffect(() => {
+    if (item) {
+      setFullname(item.fullName || "");
+      setJobtitle(item.jobtitle || "");
+      setDepartment(item.department || "");
+      setDivision(item.division || "");
+      setManagername(item.managersname || "");
+      setDate(item.date ? item.date.split("T")[0] : "");
+      setUsername(item.username || "");
+      setDomain(item.domain || "");
+      setComputername(item.computername || "");
+      setAuthorisedby(item.authorisedby || "");
+      setDate1(item.date1 ? item.date1.split("T")[0] : "");
+      setHeadofdepartmentname(item.headofdepartmentname || "");
+      setDepartmentapproval(item.deptmanagerapproval || "pending");
+      setItmanagerapproval(item.itmanagerapproval || "pending");
+      setMemberships(item.memberships || [""]);
+    }
+  }, [item]);
+
   const handleChange = (index, value) => {
     const updated = [...memberships];
     updated[index] = value;
     setMemberships(updated);
   };
 
-  // Add new membership input field
   const handleAdd = () => {
     setMemberships([...memberships, ""]);
   };
 
-  // Remove membership input field
   const handleRemove = (index) => {
     const updated = memberships.filter((_, i) => i !== index);
     setMemberships(updated);
@@ -44,7 +60,7 @@ const DomainModal = () => {
     e.preventDefault();
 
     const formEntry = {
-      fullname,
+      fullName: fullname,
       jobtitle,
       department,
       division,
@@ -62,15 +78,14 @@ const DomainModal = () => {
     };
 
     try {
-      await axios.post(
-        "http://localhost:3001/domainaccess/create-domainaccess",
+      await axios.put(
+        `http://localhost:3001/domainaccess/update-domainaccess/${item._id}`,
         formEntry
       );
 
       toast.success("Form submitted successfully!");
-      setFormEntries([...formEntries, formEntry]);
-      // You might want to close modal here instead of reload
-       window.location.reload();
+      setFormEntries((prev) => [...prev, formEntry]);
+      window.location.reload();
     } catch (error) {
       if (error.response) {
         console.error("Submission error:", error.response.data);
@@ -111,14 +126,11 @@ const DomainModal = () => {
   };
 
   return (
-
-    
     <div style={styles.modalBackdrop}>
-
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h5 className="mb-3">
           <b>
-            <MdDomainDisabled /> &nbsp;DOMAIN USER ACCESS
+            <MdDomainDisabled /> &nbsp;DOMAIN APPROVALS EDIT
           </b>
         </h5>
         <form onSubmit={handledomainSubmit}>
@@ -213,87 +225,38 @@ const DomainModal = () => {
           </div>
 
           <div className="mb-3">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginBottom: "1rem",
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
               <label className="form-label">
-                <b>
-                  MEMBER OF <i>(ICT DEPARTMENT USE ONLY)</i>
-                </b>
+                <b>MEMBER OF <i>(ICT DEPARTMENT USE ONLY)</i></b>
               </label>
             </div>
 
-            {/* Checkboxes below IT Department */}
             <div className="container">
               <div className="row">
                 <div className="col-6">
                   <div className="form-check mb-2">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="Domain Users"
-                      id="domainUsers"
-                      disabled
-                    />
-                    <label className="form-check-label" htmlFor="domainUsers">
-                      Domain Users
-                    </label>
+                    <input className="form-check-input" type="checkbox" value="Domain Users" id="domainUsers" disabled />
+                    <label className="form-check-label" htmlFor="domainUsers">Domain Users</label>
                   </div>
                   <div className="form-check mb-2">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="Enterprise Admins"
-                      id="enterpriseAdmins"
-                      disabled
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="enterpriseAdmins"
-                    >
-                      Enterprise Admins
-                    </label>
+                    <input className="form-check-input" type="checkbox" value="Enterprise Admins" id="enterpriseAdmins" disabled />
+                    <label className="form-check-label" htmlFor="enterpriseAdmins">Enterprise Admins</label>
                   </div>
                 </div>
-
                 <div className="col-6">
                   <div className="form-check mb-2">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="Domain Admins"
-                      id="domainAdmins"
-                      disabled
-                    />
-                    <label className="form-check-label" htmlFor="domainAdmins">
-                      Domain Admins
-                    </label>
+                    <input className="form-check-input" type="checkbox" value="Domain Admins" id="domainAdmins" disabled />
+                    <label className="form-check-label" htmlFor="domainAdmins">Domain Admins</label>
                   </div>
                   <div className="form-check mb-2">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="Backup Operators"
-                      id="backupOperators"
-                      disabled
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="backupOperators"
-                    >
-                      Backup Operators
-                    </label>
+                    <input className="form-check-input" type="checkbox" value="Backup Operators" id="backupOperators" disabled />
+                    <label className="form-check-label" htmlFor="backupOperators">Backup Operators</label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* State other Distribution or Group Memberships */}
           <div className="mb-3">
             <label className="form-label fw-bold">
               State other Distribution or Group Memberships
@@ -303,7 +266,6 @@ const DomainModal = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder={`Membership or group ${index + 1}`}
                   value={value}
                   onChange={(e) => handleChange(index, e.target.value)}
                   disabled
@@ -315,134 +277,60 @@ const DomainModal = () => {
                     onClick={() => handleRemove(index)}
                     disabled
                   >
-                    <b>
-                      <i>X</i>
-                    </b>
+                    <b><i>X</i></b>
                   </button>
                 )}
               </div>
             ))}
-            <button
-              type="button"
-              className="btn btn-outline-primary"
-              onClick={handleAdd}
-              disabled
-            >
+            <button type="button" className="btn btn-outline-primary" onClick={handleAdd} disabled>
               Add Another
             </button>
           </div>
 
           <div className="row mb-2">
-            <div
-              style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}
-            >
-              <label className="form-label">
-                <b>ICT DEPARTMENT <i>(Use Only)</i></b>
-              </label>
+            <div className="col-md-6">
+              <label className="form-label"><b>Username</b></label>
+              <input type="text" value={username} className="form-control" disabled />
             </div>
             <div className="col-md-6">
-              <label className="form-label">
-                <b>Username</b>
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="form-control"
-                disabled
-              />
-            </div>
-            <div className="col-md-6">
-              <label className="form-label">
-                <b>Organisation Unit <i>(OU)</i></b>
-              </label>
-              <input
-                type="text"
-                value={itmanagerapproval}
-                onChange={(e) => setItmanagerapproval(e.target.value)}
-                className="form-control"
-                disabled
-              />
+              <label className="form-label"><b>Organisation Unit <i>(OU)</i></b></label>
+              <input type="text" value={itmanagerapproval} className="form-control" disabled />
             </div>
           </div>
 
           <div className="row mb-2">
             <div className="col-md-6">
-              <label className="form-label">
-                <b>Domain</b>
-              </label>
-              <input
-                type="text"
-                value={domain}
-                onChange={(e) => setDomain(e.target.value)}
-                className="form-control"
-                disabled
-              />
+              <label className="form-label"><b>Domain</b></label>
+              <input type="text" value={domain} className="form-control" disabled />
             </div>
             <div className="col-md-6">
-              <label className="form-label">
-                <b>Computer Name</b>
-              </label>
-              <input
-                type="text"
-                value={computername}
-                onChange={(e) => setComputername(e.target.value)}
-                className="form-control"
-                disabled
-              />
+              <label className="form-label"><b>Computer Name</b></label>
+              <input type="text" value={computername} className="form-control" disabled />
             </div>
           </div>
 
           <div className="row mb-2">
             <div className="col-md-6">
-              <label className="form-label">
-                <b>Authorised By</b>
-              </label>
-              <input
-                type="text"
-                value={authorisedby}
-                onChange={(e) => setAuthorisedby(e.target.value)}
-                className="form-control"
-                disabled
-              />
+              <label className="form-label"><b>Authorised By</b></label>
+              <input type="text" value={authorisedby} className="form-control" disabled />
             </div>
             <div className="col-md-6">
-              <label className="form-label">
-                <b>Date</b>
-              </label>
-              <input
-                type="date"
-                value={date1}
-                onChange={(e) => setDate1(e.target.value)}
-                className="form-control"
-                disabled
-              />
+              <label className="form-label"><b>Date</b></label>
+              <input type="date" value={date1} className="form-control" disabled />
             </div>
           </div>
 
           <div className="row mb-4">
             <div className="col-12 text-center mb-3">
-              <label className="form-label mb-0">
-                <b>APPROVALS</b>
-              </label>
+              <label className="form-label mb-0"><b>APPROVALS</b></label>
             </div>
-
             <div className="col-md-6 mb-3">
-              <label className="form-label">
-                <b>Head of Department</b>
-              </label>
-              <button type="button" className="btn btn-danger w-100" disabled>
-                <i> unapproved</i>
-              </button>
+              <label className="form-label"><b>Head of Department</b></label>
+              <button type="button" className="btn btn-danger w-100" enabled><i> unapproved</i></button>
             </div>
-
             <div className="col-md-6 mb-3">
-              <label className="form-label">
-                <b>IT Manager</b>
-              </label>
-              <button type="button" className="btn btn-danger w-100" disabled>
-                <i> unapproved</i>
-              </button>
+              <label className="form-label"><b>IT Manager</b></label>
+              <button type="button" className="btn btn-danger w-100" disabled><i> unapproved</i></button>
             </div>
           </div>
 
@@ -451,13 +339,8 @@ const DomainModal = () => {
           </button>
         </form>
       </div>
-
-      
     </div>
-
-
-
   );
 };
 
-export default DomainModal;
+export default DomainEdit;

@@ -135,11 +135,11 @@ function UserManagement() {
                                 required
                             >
                                 <option value="">-- Select Department --</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Operations">Operations</option>
-                                <option value="Sales">Sales</option>
-                                <option value="IT Department">IT </option>
-                                <option value="Retail Shops">Retail Shops</option>
+                                <option value="finance">Finance</option>
+                                <option value="operations">Operations</option>
+                                <option value="sales">Sales</option>
+                                <option value="itdepartment">IT </option>
+                                <option value="retailshops">Retail Shops</option>
                             </select>
                         </div>
 

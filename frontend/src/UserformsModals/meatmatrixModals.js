@@ -30,8 +30,8 @@ const MeatmatrixModal = () => {
   const [actionedBy, setActionedby] = useState("");
   const [date1, setDate1] = useState("");
 
-  const [deptmanagerapproval, setDepartmentapproval] = useState("");
-  const [itmanagerapproval, setItmanagerapproval] = useState("");
+  const [deptmanagerapproval, setDepartmentapproval] = useState("pending");
+  const [itmanagerapproval, setItmanagerapproval] = useState("pending");
   const [rightsArray, setRightsArray] = useState([{ item: "", access: "" }]);
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [showModal3, setShowModal3] = useState(true);
