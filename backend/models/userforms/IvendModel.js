@@ -8,14 +8,14 @@ const ivendSchema = new Schema({
   date: { type: Date, required: true },
   headofdepartmentname: { type: String, required: true },
   deptmanagerapproval: {
-    type: String,
-    enum: ["pending", "approved", "rejected", ""],
-    default: "pending",
+      type: String,
+  enum: ["pending", "approved", "rejected", "unapproved"],
+  default: "unapproved",
   }, // Optional, filled by ICT
   itmanagerapproval: {
-    type: String,
-    enum: ["pending", "approved", "rejected", ""],
-    default: "pending",
+      type: String,
+  enum: ["pending", "approved", "rejected", "unapproved"],
+  default: "unapproved",
   },   // Optional, filled by ICT
   rights: [
     {

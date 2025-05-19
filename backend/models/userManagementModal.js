@@ -32,11 +32,11 @@ const usersSchema = new Schema({
   department: {
     type: String,
     enum: [
-      'Finance',
-      'Operations',
-      'Sales',
-      'IT Department',
-      'Retail Shops'
+      'finance',
+      'operations',
+      'sales',
+      'itdeepartment',
+      'retailshops'
     ],
     required: true,
   },
