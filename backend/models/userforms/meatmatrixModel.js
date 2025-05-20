@@ -10,6 +10,7 @@ const meatmatrixSchema = new Schema({
   fullname: { type: String, required: true },
   jobtitle: { type: String, required: true },
   store: { type: String, required: true },
+  department: {type: String, required: true},
   date: { type: Date, required: true },
   headofdepartmentname: { type: String },
 

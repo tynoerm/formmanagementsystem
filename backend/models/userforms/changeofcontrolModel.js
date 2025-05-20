@@ -4,6 +4,7 @@ const Schema = _Schema;
 const changeofcontrolSchema = new Schema({
   name: { type: String, required: true },
   division: { type: String, required: true },
+  department: {type: String, required: true},
   datesubmitted: { type: Date, required: true },
   workestimatedhours: { type: String },
   severity: { type: String },
