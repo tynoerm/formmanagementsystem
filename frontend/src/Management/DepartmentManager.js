@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from '../images/login.png';
-import DomainEdit from '../UserformsModals/domainEdit';
 
+
+import DomainEdit from '../UserformsModals/domainEdit';
+import IvendEdit from '../UserformsModals/ivendEdit';
+import InternetaccessEdit from '../UserformsModals/internetaccessEdit';
+import ChangeofcontrolEdit from '../UserformsModals/changecontrolEdit';
+import MeatmatrixEdit from '../UserformsModals/meatmatrixEdit';
 
 const collections = [
   "ivendusers",
@@ -15,11 +20,11 @@ const collections = [
 
 // Column mapping for each collection
 const columnMapping = {
-  ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'rights', 'roles'],
-  meatmatrix: ['fullName', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
+  ivendusers: ['fullname', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'rights', 'roles'],
+  meatmatrix: ['fullname', 'jobtitle', 'date','department', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
   vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail', 'deptManagerApproval', 'itManagerApproval', 'itExecutiveApproval'],
-  changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
-  domainaccess: ['fullName', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
+  changeofcontrol: ['name', 'division','department','datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
+  domainaccess: ['fullname', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
 };
 
@@ -33,8 +38,12 @@ const DepartmentManager = () => {
   const [department, setDepartment] = useState('');
   const [username, setUsername] = useState('');
 
+
   // Modal state
   const [showModal, setShowModal] = useState(false);
+  const [showModal1, setShowModal1] = useState(false);
+
+
 const [formEntries, setFormEntries] = useState([]);
 const [selectedItem, setSelectedItem] = useState(null);
 
@@ -45,44 +54,49 @@ const [selectedItem, setSelectedItem] = useState(null);
     if (storedUsername) setUsername(storedUsername);
   }, []);
 
-  useEffect(() => {
-    if (!collectionSelected) return;
-    setLoading(true);
-    setError(null);
+useEffect(() => {
+  setShowModal(false);     // 👈 Reset modal
+  setSelectedItem(null);   // 👈 Reset selected item
 
-    axios
-      .get(`http://localhost:3001/${collectionSelected}/`)
-      .then((res) => {
-        const data = res.data.data || [];
-        setFormData(data);
+  if (!collectionSelected) return;
+  setLoading(true);
+  setError(null);
 
-        if (columnMapping[collectionSelected]) {
-          setColumns(columnMapping[collectionSelected]);
-        } else if (data.length > 0) {
-          setColumns(Object.keys(data[0]));
-        } else {
-          setColumns([]);
-        }
+  axios
+    .get(`http://localhost:3001/${collectionSelected}/`)
+    .then((res) => {
+      const data = res.data.data || [];
+      setFormData(data);
 
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError('Failed to load data');
-        setFormData([]);
+      if (columnMapping[collectionSelected]) {
+        setColumns(columnMapping[collectionSelected]);
+      } else if (data.length > 0) {
+        setColumns(Object.keys(data[0]));
+      } else {
         setColumns([]);
-        setLoading(false);
-      });
-  }, [collectionSelected]);
+      }
+
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error(err);
+      setError('Failed to load data');
+      setFormData([]);
+      setColumns([]);
+      setLoading(false);
+    });
+}, [collectionSelected]);
+
 
   const filteredData = formData.filter(item =>
     item.department?.toLowerCase() === department.toLowerCase()
   );
 
-  const handleRowClick = (item) => {
-    setSelectedItem(item);
-    setShowModal(true);
-  };
+const handleRowClick = (item) => {
+  setSelectedItem(item);
+  setShowModal(true);
+};
+
 
   return (
     <div>
@@ -156,13 +170,44 @@ const [selectedItem, setSelectedItem] = useState(null);
         </tbody>
       </table>
 
-   {showModal && selectedItem && (
-  <DomainEdit 
-    item={selectedItem} 
-    onClose={() => setShowModal(false)} 
-    collection={collectionSelected}
-  />
+{showModal && selectedItem && (
+  <>
+    {collectionSelected === 'ivendusers' ? (
+      <IvendEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'internetaccess' ? (
+      <InternetaccessEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'domainaccess' ? (
+      <DomainEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'changeofcontrol' ? (
+      <ChangeofcontrolEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+
+          ) : collectionSelected === 'meatmatrix' ? (
+      <MeatmatrixEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : null}
+  </>
 )}
+
+
 
 
     </div>

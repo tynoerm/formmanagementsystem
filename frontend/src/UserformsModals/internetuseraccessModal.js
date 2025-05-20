@@ -117,9 +117,23 @@ const handleSubmit = async (e) => {
               <label><b>Date Requested</b></label>
               <input type="date" className="form-control" value={daterequested} onChange={(e) => setDaterequested(e.target.value)} required />
             </div>
-            <div className="col-md-6">
-              <label><b>Department</b></label>
-              <input type="text" className="form-control" value={department} onChange={(e) => setDepartment(e.target.value)} required />
+          <div className="col-md-6">
+              <label className="form-label">
+                <b>Department</b>
+              </label>
+              <select
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                className="form-control"
+                required
+              >
+                <option value="">-- Select Department --</option>
+                <option value="finance">Finance</option>
+                <option value="operations">Operations</option>
+                <option value="sales">Sales</option>
+                <option value="itdepartment">IT</option>
+                <option value="retailshops">Retail Shops</option>
+              </select>
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LuFileInput } from "react-icons/lu";
 import { GiMeatCleaver } from "react-icons/gi";
 import axios from "axios";
@@ -7,12 +7,11 @@ import axios from "axios";
 
 
 
-const MeatmatrixModal = () => {
+const MeatmatrixEdit = ({item, setFormEntries}) => {
   const [meatmatrixForm, setMeatmatrixform] = useState([]);
   const [fullname, setFullname] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [store, setStore] = useState("");
-  const [department, setDepartment] = useState("");
   const [date, setDate] = useState("");
   const [headofdepartmentname, setHeadofdepartment] = useState("");
   const [from, setFrom] = useState("");
@@ -40,6 +39,8 @@ const MeatmatrixModal = () => {
 
   const [stockTransferLocations, setStockTransferLocations] = useState([{ from: "", to: "" }]);
 
+
+   
   const roles = [
     "PRODUCTION",
     "STOCK BATCHES",
@@ -51,6 +52,39 @@ const MeatmatrixModal = () => {
     "GRADING",
   ];
 
+useEffect(() => {
+  if (item) {
+    setFullname(item.fullname || "");
+    setJobtitle(item.jobtitle || "");
+    setStore(item.store || "");
+    setDate(item.date || "");
+    setHeadofdepartment(item.headofdepartmentname || "");
+    setFrom(item.from || "");
+    setTo(item.to || "");
+    setAuthoriseddatabase(item.authoriseddatabase || "");
+    setDatetermination(item.datetermination || "");
+    setTime(item.time || "");
+    setTerminatedby(item.terminatedby || "");
+
+    setUsercode(item.userCode || "");
+    setUserid(item.userId || "");
+    setCostcenter(item.costCenter || "");
+    setStationnumber(item.stationNumber || "");
+    setProcessid(item.processId || "");
+    setAuthorisedby(item.authorisedBy || "");
+    setActionedby(item.actionedBy || "");
+    setDate1(item.date1 || "");
+
+    setDepartmentapproval(item.deptmanagerapproval || "pending");
+    setItmanagerapproval(item.itmanagerapproval || "pending");
+    setRightsArray(item.rightsArray || [{ item: "", access: "" }]);
+    setSelectedRoles(item.selectedRoles || []);
+    setStockTransferLocations(item.stockTransferLocations || [{ from: "", to: "" }]);
+  }
+}, [item]);
+
+  
+
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -60,6 +94,8 @@ const MeatmatrixModal = () => {
     }
   };
 
+
+
 const handlemeatmatrixSubmit = async (e) => {
   e.preventDefault();
 
@@ -68,7 +104,12 @@ const handlemeatmatrixSubmit = async (e) => {
     return;
   }
 
-  // Convert from/to strings to numbers (optional, if you want them as numbers)
+  // Optional: check that userId or another identifier is present
+  if (!userId) {
+    alert("Missing user ID. Cannot update entry.");
+    return;
+  }
+
   const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
     from: Number(from),
     to: Number(to),
@@ -78,16 +119,15 @@ const handlemeatmatrixSubmit = async (e) => {
     fullname,
     jobtitle,
     store,
-    department,
     date,
     headofdepartmentname,
-    stockTransferLocations: cleanedStockLocations, // <-- send array here
+    stockTransferLocations: cleanedStockLocations,
     authoriseddatabase,
     datetermination,
     time,
     terminatedby,
     userCode,
-    userId,
+    userId, // important for identifying the record
     costCenter,
     stationNumber,
     processId,
@@ -100,22 +140,24 @@ const handlemeatmatrixSubmit = async (e) => {
   };
 
   try {
-    const response = await axios.post(
-      "http://localhost:3001/meatmatrix/create-meatmatrix",
+    const response = await axios.put(
+      `http://localhost:3001/meatmatrix/update-meatmatrix/${userId}`, // use ID in URL
       formEntry
     );
-    console.log("Form submitted successfully", response.data);
+    console.log("Form updated successfully", response.data);
+  setFormEntries((prev) =>
+  prev.map((entry) => (entry.userId === userId ? response.data.data : entry))
+);
 
     window.location.reload();
 
-    // Reset all fields on successful submit
+    // Reset form
     setFullname("");
     setJobtitle("");
     setStore("");
-    setDepartment("");
     setDate("");
     setHeadofdepartment("");
-    setStockTransferLocations([{ from: "", to: "" }]); // reset array state
+    setStockTransferLocations([{ from: "", to: "" }]);
     setAuthoriseddatabase("");
     setDatetermination("");
     setTime("");
@@ -128,16 +170,19 @@ const handlemeatmatrixSubmit = async (e) => {
     setAuthorisedby("");
     setActionedby("");
     setDate1("");
-    setDepartmentapproval("");
-    setItmanagerapproval("");
+    setDepartmentapproval("pending");
+    setItmanagerapproval("pending");
     setRightsArray([{ item: "", access: "" }]);
     setSelectedRoles([]);
     setShowModal3(false);
   } catch (error) {
-    console.error("Error submitting form", error);
-    alert("Failed to submit form. Please try again later.");
+    console.error("Error updating form", error);
+    alert("Failed to update form. Please try again later.");
   }
 };
+
+
+
 
 
   const styles = {
@@ -172,7 +217,7 @@ const handlemeatmatrixSubmit = async (e) => {
     <div style={styles.modalBackdrop} onClick={() => setShowModal3(false)}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h5 className="mb-3">
-          <b><GiMeatCleaver /> &nbsp;MEAT MATRIX FORM</b>
+          <b><GiMeatCleaver /> &nbsp;MEAT MATRIX FORM UPDATE</b>
         </h5>
         <form onSubmit={handlemeatmatrixSubmit}>
           <div className="row mb-2">
@@ -190,24 +235,6 @@ const handlemeatmatrixSubmit = async (e) => {
             <div className="col-md-6">
               <label><b>Store</b></label>
               <input type="text" value={store} onChange={(e) => setStore(e.target.value)} className="form-control" required />
-            </div>
-              <div className="col-md-6">
-              <label className="form-label">
-                <b>Department</b>
-              </label>
-              <select
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                className="form-control"
-                required
-              >
-                <option value="">-- Select Department --</option>
-                <option value="finance">Finance</option>
-                <option value="operations">Operations</option>
-                <option value="sales">Sales</option>
-                <option value="itdepartment">IT</option>
-                <option value="retailshops">Retail Shops</option>
-              </select>
             </div>
             <div className="col-md-6">
               <label><b>Date</b></label>
@@ -375,4 +402,4 @@ const handlemeatmatrixSubmit = async (e) => {
   );
 };
 
-export default MeatmatrixModal;
+export default MeatmatrixEdit;

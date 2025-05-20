@@ -168,6 +168,8 @@ const DomainModal = () => {
                 <option value="retailshops">Retail Shops</option>
               </select>
             </div>
+
+            
             <div className="col-md-6">
               <label className="form-label">
                 <b>Division</b>

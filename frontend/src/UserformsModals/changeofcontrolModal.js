@@ -11,6 +11,7 @@ const ChangeofcontrolModal = ({ showModal, setShowModal }) => {
   const [changeofcontrolForm, setChangeofcontrolForm] = useState([]);
   const [name, setName] = useState("");
   const [division, setDivision] = useState("");
+  const [department, setDepartment] = useState("");
   const [datesubmitted, setDatesubmitted] = useState("");
   const [workestimatedhours, setWorkestimatedhours] = useState("");
   const [severity, setSeverity] = useState("");
@@ -23,9 +24,9 @@ const ChangeofcontrolModal = ({ showModal, setShowModal }) => {
   const [changeddate, setChangeddate] = useState("");  // fixed setter name
   const [requestor, setRequestor] = useState("");
   const [requstordate, setRequestordate] = useState("");
-  const [headofdept, setHeadofdept] = useState("");
+  const [headofdept, setHeadofdept] = useState("unapproved");
   const [dateapprovedhd, setdateapprovedhd] = useState("");
-  const [headofict, setHeadofict] = useState("");
+  const [headofict, setHeadofict] = useState("unapproved");
   const [dateapprovedict, setDateapprovedict] = useState("");
 
 
@@ -37,6 +38,7 @@ const handleSubmit = async (e) => {
   const newRequest = {
     name,
     division,
+    department,
     datesubmitted,
     workestimatedhours,
     severity,
@@ -67,6 +69,7 @@ const handleSubmit = async (e) => {
 
     // Clear form after successful submission
     setName("");
+    setDepartment("");
     setDivision("");
     setDatesubmitted("");
     setWorkestimatedhours("");
@@ -169,6 +172,26 @@ const handleSubmit = async (e) => {
                 onChange={(e) => setDivision(e.target.value)}
               />
             </div>
+
+             <div className="col-md-6">
+              <label className="form-label">
+                <b>Department</b>
+              </label>
+              <select
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                className="form-control"
+                required
+              >
+                <option value="">-- Select Department --</option>
+                <option value="finance">Finance</option>
+                <option value="operations">Operations</option>
+                <option value="sales">Sales</option>
+                <option value="itdepartment">IT</option>
+                <option value="retailshops">Retail Shops</option>
+              </select>
+            </div>
+
             <div className="col-md-6 mt-2">
               <label>Date Submitted</label>
               <input

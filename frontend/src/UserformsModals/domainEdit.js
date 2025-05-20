@@ -17,9 +17,23 @@ const DomainEdit = ({ item, setFormEntries }) => {
   const [authorisedby, setAuthorisedby] = useState("");
   const [date1, setDate1] = useState("");
   const [headofdepartmentname, setHeadofdepartmentname] = useState("");
+
+
   const [deptmanagerapproval, setDepartmentapproval] = useState("pending");
+
+
+
+
   const [itmanagerapproval, setItmanagerapproval] = useState("pending");
   const [memberships, setMemberships] = useState([""]);
+  const [role, setRole] = useState("")
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  })
 
   useEffect(() => {
     if (item) {
@@ -125,6 +139,9 @@ const DomainEdit = ({ item, setFormEntries }) => {
     },
   };
 
+
+
+
   return (
     <div style={styles.modalBackdrop}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -144,7 +161,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
                 value={fullname}
                 onChange={(e) => setFullname(e.target.value)}
                 className="form-control"
-                required
+                disabled
               />
             </div>
             <div className="col-md-6">
@@ -156,7 +173,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
                 value={jobtitle}
                 onChange={(e) => setJobtitle(e.target.value)}
                 className="form-control"
-                required
+                disabled
               />
             </div>
           </div>
@@ -170,7 +187,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
                 className="form-control"
-                required
+                disabled
               >
                 <option value="">-- Select Department --</option>
                 <option value="finance">Finance</option>
@@ -189,7 +206,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
                 value={division}
                 onChange={(e) => setDivision(e.target.value)}
                 className="form-control"
-                required
+                disabled
               />
             </div>
           </div>
@@ -204,7 +221,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
                 value={managersname}
                 onChange={(e) => setManagername(e.target.value)}
                 className="form-control"
-                required
+                disabled
               />
             </div>
           </div>
@@ -219,7 +236,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="form-control"
-                required
+                disabled
               />
             </div>
           </div>
@@ -235,21 +252,32 @@ const DomainEdit = ({ item, setFormEntries }) => {
               <div className="row">
                 <div className="col-6">
                   <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" value="Domain Users" id="domainUsers" disabled />
+                    <input className="form-check-input"
+                      type="checkbox" value="Domain Users"
+                      id="domainUsers"
+                      disabled />
                     <label className="form-check-label" htmlFor="domainUsers">Domain Users</label>
                   </div>
+
                   <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" value="Enterprise Admins" id="enterpriseAdmins" disabled />
+                    <input className="form-check-input"
+                      type="checkbox" value="Enterprise Admins"
+                      id="enterpriseAdmins"
+                      disabled />
                     <label className="form-check-label" htmlFor="enterpriseAdmins">Enterprise Admins</label>
                   </div>
                 </div>
                 <div className="col-6">
                   <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" value="Domain Admins" id="domainAdmins" disabled />
+                    <input className="form-check-input"
+                      type="checkbox" value="Domain Admins"
+                      id="domainAdmins"
+                      disabled />
                     <label className="form-check-label" htmlFor="domainAdmins">Domain Admins</label>
                   </div>
                   <div className="form-check mb-2">
-                    <input className="form-check-input" type="checkbox" value="Backup Operators" id="backupOperators" disabled />
+                    <input className="form-check-input" type="checkbox" value="Backup Operators"
+                      id="backupOperators" disabled />
                     <label className="form-check-label" htmlFor="backupOperators">Backup Operators</label>
                   </div>
                 </div>
@@ -326,13 +354,29 @@ const DomainEdit = ({ item, setFormEntries }) => {
             </div>
             <div className="col-md-6 mb-3">
               <label className="form-label"><b>Head of Department</b></label>
-              <button type="button" className="btn btn-danger w-100" enabled><i> unapproved</i></button>
+              <select
+                className="form-select w-100"
+                defaultValue="pending"
+                onChange={(e) => setDepartmentapproval(e.target.value)}
+              >
+                <option value="pending"><i>Pending</i></option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
             </div>
+
             <div className="col-md-6 mb-3">
               <label className="form-label"><b>IT Manager</b></label>
-              <button type="button" className="btn btn-danger w-100" disabled><i> unapproved</i></button>
+              <select className="form-select w-100" defaultValue="pending"
+                onChange={(e) => setItmanagerapproval(e.target.value)}
+                disabled >
+                <option value="pending"><i>Pending</i></option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
             </div>
           </div>
+
 
           <button type="submit" className="btn btn-primary w-100">
             Submit
