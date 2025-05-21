@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 
 import { GrCloudSoftware } from "react-icons/gr";
 import { SiBmcsoftware, SiEsotericsoftware } from "react-icons/si";
@@ -24,7 +24,7 @@ import VpnModal from "./UserformsModals/vpnModal.js";
 import MeatmatrixModal from "./UserformsModals/meatmatrixModals.js";
 import InternetaccessModal from "./UserformsModals/internetuseraccessModal.js";
 import ChangeofcontrolModal from "./UserformsModals/changeofcontrolModal.js";
-
+import image1 from './images/login.png';
 
 
 
@@ -43,8 +43,13 @@ const UserformSelection = () => {
   const [showModal8, setShowModal8] = useState(false);
     const [showModal9, setShowModal9] = useState(false);
 
+      const [username, setUsername] = useState('');
 
 
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) setUsername(storedUsername);
+  }, []);
 
 
 
@@ -89,14 +94,21 @@ const navigate = useNavigate();
 
   return (
     <div>
-      <nav className="navbar border-bottom shadow-lg p-2 mb-0 rounded" style={{ backgroundColor: 'black' }}>
-        <div className="container-fluid">
-          <span className="navbar-brand text-white">
-            <LuLayoutDashboard style={styles.icon} /> &nbsp;
-            <b>USER FORM SELECTION</b>
-          </span>
-        </div>
-      </nav>
+        <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
+              <div className="container-fluid d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center text-white">
+                  <img
+                    src={image1}
+                    alt="Login Icon"
+                    style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+                  />
+                  <span className="ms-2 fw-bold">USER FORM SELECTION</span>
+                </div>
+                <div className="text-white">
+                  <h5 className="mb-0"><i>Welcome {username}</i></h5>
+                </div>
+              </div>
+            </nav>
 
       <div style={styles.dashboardContent}>
         <div className="row row-cols-1 row-cols-md-4 g-4">

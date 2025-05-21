@@ -33,7 +33,7 @@ function Login({ setLoggedIn, login }) {
         setLoggedIn(true);
         login(role);
 
-        localStorage.setItem('userRole', role.toLowerCase());
+        localStorage.setItem('role', role.toLowerCase());
         localStorage.setItem('username', returnedUsername);
         localStorage.setItem('department', department);
         localStorage.setItem('division', division);

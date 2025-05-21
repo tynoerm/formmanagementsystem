@@ -7,13 +7,15 @@ import { SiGoogletagmanager, SiNginxproxymanager } from 'react-icons/si';
 import { FaUserCheck } from 'react-icons/fa';
 import { LuLayoutDashboard } from 'react-icons/lu';
 
+import image1 from './images/login.png';
+
 const cards = {
   client: [
     {
       id: 1,
       title: "NEW USER FORMS",
       icon: GrUserNew,
-      text: "Sales, invoicing, quotations.",
+      text: "for all new user forms.",
       link: "/UserformSelection",
     },
   ],
@@ -29,9 +31,9 @@ const cards = {
   itmanager: [
     {
       id: 3,
-      title: "IT MANAGER MANAGEMENT",
+      title: "IT MANAGER ",
       icon: SiGoogletagmanager,
-      text: "Nature of expenses incurred, amount used.",
+      text: "user forms approvals",
       link: "/ITManager",
     },
   ],
@@ -40,7 +42,7 @@ const cards = {
       id: 4,
       title: "DEPARTMENT MANAGER",
       icon: FcManager,
-      text: "Nature of expenses incurred, amount used.",
+      text: "deparment forms management.",
       link: "/DepartmentManager",
     },
   ],
@@ -73,7 +75,7 @@ const styles = {
 
 const MainDashboard = () => {
   // Read role and username from localStorage and normalize role to lowercase
-  const role = (localStorage.getItem('userRole') || '').toLowerCase();
+  const role = (localStorage.getItem('role') || '').toLowerCase();
   const username = localStorage.getItem('username') || 'Guest';
 
   // For debugging - see role in console
@@ -84,25 +86,20 @@ const MainDashboard = () => {
 
   return (
     <div>
-      <nav
-        className="navbar border-bottom shadow-lg p-2 mb-0 rounded"
-        style={{ backgroundColor: 'black' }}
-      >
-        <div className="container-fluid d-flex justify-content-between align-items-center">
-          <span className="navbar-brand text-white d-flex align-items-center">
-            <LuLayoutDashboard style={styles.icon} />
+    <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
+        <div className="container-fluid">
+          <span className="navbar-brand text-white">
+            <img
+              src={image1}
+              alt="Login Icon"
+              style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+            />
             &nbsp;
-            <b>MAIN DASHBOARD</b>
+            <b>ASSOCIATED MEAT PACKERS</b>
           </span>
-
-          {/* Right side: Welcome message */}
-          <div className="text-white">
-            <h5 className="mb-0">
-              <i>Welcome {username}</i>
-            </h5>
-          </div>
         </div>
       </nav>
+
 
       <div style={styles.dashboardContent}>
         <div className="row row-cols-1 row-cols-md-4 g-4">

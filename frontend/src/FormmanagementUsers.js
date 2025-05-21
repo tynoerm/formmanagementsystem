@@ -11,31 +11,27 @@ const collections = [
   "internetaccess"
 ];
 
-// Use this mapping to display fixed columns per collection
 const columnMapping = {
   ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'rights', 'roles'],
   meatmatrix: ['fullName', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
   vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail', 'deptManagerApproval', 'itManagerApproval', 'itExecutiveApproval'],
   changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
-  domainaccess: ['fullName', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
+  domainaccess: ['fullname', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
 };
 
 const FormmanagementUsers = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const [collectionSelected, setCollectionSelected] = useState(collections[0]);
   const [formData, setFormData] = useState([]);
   const [username, setUsername] = useState('');
 
-  // Load username from localStorage once on mount
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) setUsername(storedUsername);
   }, []);
 
-  // Fetch data for selected collection filtered by current user
   useEffect(() => {
     if (!collectionSelected) return;
 
@@ -45,13 +41,11 @@ const FormmanagementUsers = () => {
     axios.get(`http://localhost:3001/${collectionSelected}/`)
       .then(res => {
         const data = res.data.data || [];
-
-        // Filter data where username or createdBy matches current username
-        const filteredByUser = data.filter(item =>
+        const filteredData = data.filter(item =>
           item.username === username || item.createdBy === username
         );
 
-        setFormData(filteredByUser);
+        setFormData(filteredData);
         setLoading(false);
       })
       .catch(err => {
@@ -62,19 +56,8 @@ const FormmanagementUsers = () => {
       });
   }, [collectionSelected, username]);
 
-  // Columns to show - use mapping or fallback to dynamic keys
   const columns = columnMapping[collectionSelected] || (formData[0] ? Object.keys(formData[0]) : []);
 
-  // Filter data based on search term (case insensitive, string fields only)
-  const filteredData = formData.filter(item => {
-    if (!searchTerm) return true;
-    return columns.some(col => {
-      const val = item[col];
-      return typeof val === 'string' && val.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-  });
-
-  // Format column headers nicely (e.g. camelCase or snake_case to Title Case)
   const formatHeader = (header) => {
     return header
       .replace(/([A-Z])/g, ' $1')        // Add space before capital letters
@@ -97,7 +80,7 @@ const FormmanagementUsers = () => {
         </div>
       </nav>
 
-      <div className="mb-3 d-flex justify-content-between">
+      <div className="mb-3 d-flex justify-content-start">
         <select
           className="form-select w-25"
           value={collectionSelected}
@@ -109,15 +92,6 @@ const FormmanagementUsers = () => {
             </option>
           ))}
         </select>
-
-        <input
-          type="text"
-          className="form-control w-25"
-          placeholder="Search..."
-          style={{ fontStyle: 'italic' }}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
       </div>
 
       {loading && <p>Loading data...</p>}
@@ -134,12 +108,11 @@ const FormmanagementUsers = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.length > 0 ? filteredData.map((item, idx) => (
+          {formData.length > 0 ? formData.map((item, idx) => (
             <tr key={idx}>
               {columns.map(col => {
                 let value = item[col];
 
-                // Format dates nicely
                 if (value && (col.toLowerCase().includes("date") || col.toLowerCase().includes("at"))) {
                   const dateObj = new Date(value);
                   if (!isNaN(dateObj)) {

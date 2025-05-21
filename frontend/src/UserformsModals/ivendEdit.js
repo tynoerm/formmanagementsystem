@@ -9,6 +9,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
   const formId = item._id;
 
   const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [store, setStore] = useState("");
   const [date, setDate] = useState("");
@@ -18,6 +19,16 @@ const IvendEdit = ({ item, setFormEntries }) => {
   const [rightsArray, setRightsArray] = useState([{ item: "", access: "" }]);
   const [showModal1, setShowModal1] = useState(true);
   const [selectedRoles, setSelectedRoles] = useState([]);
+
+
+ const [role, setRole] = useState("")
+ 
+   useEffect(() => {
+     const storedRole = localStorage.getItem("role");
+     if (storedRole) {
+       setRole(storedRole);
+     }
+   })
 
   const roles = [
     "ADMINSTRATION ROLE",
@@ -44,6 +55,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
   useEffect(() => {
     if (item) {
       setFullname(item.fullname || "");
+       setUsername(item.username || "");
       setJobtitle(item.jobtitle || "");
       setStore(item.store || "");
       setDate(item.date || "");
@@ -86,6 +98,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
 
     const formEntry = {
       fullname,
+      username,
       jobtitle,
       store,
       date,
@@ -126,7 +139,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
   return (
     <>
       <ToastContainer />
-      <div style={styles.modalBackdrop} onClick={() => setShowModal1(false)}>
+      <div style={styles.modalBackdrop}>
         <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
           <h5 className="mb-3">
             <b>
@@ -144,7 +157,19 @@ const IvendEdit = ({ item, setFormEntries }) => {
                   value={fullname}
                   onChange={(e) => setFullname(e.target.value)}
                   className="form-control"
-                  required
+                  disabled
+                />
+              </div>
+                 <div className="col-md-6">
+                <label className="form-label">
+                  <b>Username</b>
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="form-control"
+                  disabled
                 />
               </div>
               <div className="col-md-6">
@@ -156,7 +181,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
                   value={jobtitle}
                   onChange={(e) => setJobtitle(e.target.value)}
                   className="form-control"
-                  required
+                  disabled
                 />
               </div>
             </div>
@@ -171,7 +196,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
                   value={store}
                   onChange={(e) => setStore(e.target.value)}
                   className="form-control"
-                  required
+                  disabled
                 />
               </div>
               <div className="col-md-6">
@@ -183,7 +208,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                   className="form-control"
-                  required
+                 disabled
                 />
               </div>
             </div>
@@ -197,7 +222,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
                 value={headofdepartmentname}
                 onChange={(e) => setHeadofdepartment(e.target.value)}
                 className="form-control mb-2"
-                required
+               disabled
               />
 
               <div
@@ -301,7 +326,9 @@ const IvendEdit = ({ item, setFormEntries }) => {
                   className="form-select w-100"
                   value={deptmanagerapproval}
                   onChange={(e) => setDepartmentapproval(e.target.value)}
-                >
+                 disabled = {role !== "deptmanager"}
+               
+               >
                   <option value="pending">
                     <i>Pending</i>
                   </option>
@@ -318,7 +345,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
                   className="form-select w-100"
                   value={itmanagerapproval}
                   onChange={(e) => setItmanagerapproval(e.target.value)}
-                  disabled
+                  disabled = {role !== "itmanager"}
                 >
                   <option value="pending">
                     <i>Pending</i>

@@ -8,6 +8,7 @@ import IvendEdit from '../UserformsModals/ivendEdit';
 import InternetaccessEdit from '../UserformsModals/internetaccessEdit';
 import ChangeofcontrolEdit from '../UserformsModals/changecontrolEdit';
 import MeatmatrixEdit from '../UserformsModals/meatmatrixEdit';
+import VpnEdit from '../UserformsModals/vpnEdit';
 
 const collections = [
   "ivendusers",
@@ -23,7 +24,7 @@ const columnMapping = {
   ivendusers: ['fullname', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'rights', 'roles'],
   meatmatrix: ['fullname', 'jobtitle', 'date','department', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
   vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail', 'deptManagerApproval', 'itManagerApproval', 'itExecutiveApproval'],
-  changeofcontrol: ['name', 'division','department','datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
+  changeofcontrol: ['name', 'division','department','datesubmitted', 'proposedchange','headofdept' ,'headofict','changesmade', 'requestor'],
   domainaccess: ['fullname', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
 };
@@ -196,9 +197,14 @@ const handleRowClick = (item) => {
         onClose={() => setShowModal(false)}
         collection={collectionSelected}
       />
-
-          ) : collectionSelected === 'meatmatrix' ? (
+      ) : collectionSelected === 'meatmatrix' ? (
       <MeatmatrixEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'vpn' ? (
+      <VpnEdit
         item={selectedItem}
         onClose={() => setShowModal(false)}
         collection={collectionSelected}
@@ -209,7 +215,9 @@ const handleRowClick = (item) => {
 
 
 
-
+ <footer className="text-white bg-dark text-center p-2 fixed-bottom">
+        &copy; Associated Meat Packers. All rights reserved.
+      </footer>
     </div>
   );
 };

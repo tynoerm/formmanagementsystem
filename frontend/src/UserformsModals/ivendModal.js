@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const IvendModal = () => {
   const [fullname, setFullname] = useState("");
+   const [username, setUsername] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [store, setStore] = useState("");
   const [date, setDate] = useState("");
@@ -16,6 +17,21 @@ const IvendModal = () => {
   const [rightsArray, setRightsArray] = useState([{ item: "", access: "" }]);
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [showModal, setShowModal] = useState(true);
+
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+    useEffect(() => {
+    const storedDepartment = localStorage.getItem("department");
+    if (storedDepartment) {
+      setDepartment(storedDepartment);
+    }
+  }, []);
 
   const roles = [
     "ADMINSTRATION ROLE", "AMP ADMIN", "COST ACCOUNTANT", "STOCK CONTROLLER",
@@ -33,6 +49,7 @@ const IvendModal = () => {
     e.preventDefault();
     const formEntry = {
       fullname,
+      username,
       jobtitle,
       store,
       date,
@@ -48,7 +65,7 @@ const IvendModal = () => {
       await axios.post("http://localhost:3001/ivendusers/create-ivenduser", formEntry, {
         headers: { "Content-Type": "application/json" }
       });
-      toast.success("IVEND form submitted successfully!");
+      toast.success("Ivend form submitted successfully!");
 
       setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
@@ -87,6 +104,11 @@ const IvendModal = () => {
                 <label className="form-label"><b>Fullname</b></label>
                 <input type="text" className="form-control" value={fullname} onChange={(e) => setFullname(e.target.value)} required />
               </div>
+               <div className="col-md-6">
+                <label className="form-label"><b>Username</b></label>
+                <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              </div>
+              
               <div className="col-md-6">
                 <label className="form-label"><b>Job Title</b></label>
                 <input type="text" className="form-control" value={jobtitle} onChange={(e) => setJobtitle(e.target.value)} required />

@@ -6,6 +6,7 @@ import { toast } from "react-toastify"; // Add if using toast for feedback
 const InternetaccessEdit = ({ item, setFormEntries }) => {
   const [firstname, setFirstname] = useState("");
   const [surname, setSurname] = useState("");
+   const [username, setUsername] = useState("");
   const [daterequested, setDaterequested] = useState("");
   const [department, setDepartment] = useState("");
   const [daterequired, setDaterequired] = useState("");
@@ -17,11 +18,21 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
   const [itexcapproval, setItexecapproval] = useState("pending");
   const [showModal4, setShowModal4] = useState(true);
 
+
+  const [role, setRole] = useState("")
+  
+    useEffect(() => {
+      const storedRole = localStorage.getItem("role");
+      if (storedRole) {
+        setRole(storedRole);
+      }
+    })
   // Populate form fields on mount or item change
   useEffect(() => {
     if (item) {
       setFirstname(item.firstname || "");
       setSurname(item.surname || "");
+      setUsername(item.username || "");
       setDaterequested(item.daterequested || "");
       setDepartment(item.department || "");
       setDaterequired(item.daterequired || "");
@@ -40,6 +51,7 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
     const formData = {
       firstname,
       surname,
+      username,
       daterequested,
       department,
       daterequired,
@@ -107,7 +119,7 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
   if (!showModal4) return null;
 
   return (
-    <div style={styles.modalBackdrop} onClick={() => setShowModal4(false)}>
+    <div style={styles.modalBackdrop}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h5 className="mb-3">
           <b><FaInternetExplorer /> &nbsp;Internet Access Request</b>
@@ -127,6 +139,10 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
             <div className="col-md-6">
               <label><b>Surname</b></label>
               <input type="text" className="form-control" value={surname} onChange={(e) => setSurname(e.target.value)} disabled />
+            </div>
+                 <div className="col-md-6">
+              <label><b>Username</b></label>
+              <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} disabled />
             </div>
           </div>
 
@@ -191,7 +207,11 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
             </div>
             <div className="col-md-6 mb-3">
               <label className="form-label"><b>IT Manager</b></label>
-              <select className="form-select w-100" value={itmanagerapproval} onChange={(e) => setItmanagerapproval(e.target.value)}>
+              <select className="form-select w-100" 
+              value={itmanagerapproval}
+               onChange={(e) => setItmanagerapproval(e.target.value)} 
+              disabled = {role !== "itmanager"}
+              >
                 <option value="pending"><i>Pending</i></option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
@@ -200,12 +220,12 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
 
             <div className="col-md-6 mb-3">
               <label className="form-label"><b>IT Executive</b></label>
-              <select className="form-select w-100" value={itexcapproval} onChange={(e) => setItexecapproval(e.target.value)} disabled>
+              <select className="form-select w-100" value={itexcapproval} onChange={(e) => setItexecapproval(e.target.value)} disabled = {role !== "itexec"}>
                
                 <option value="pending"><i>Pending</i></option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
-                disabled
+              
               </select>
             </div>
           </div>

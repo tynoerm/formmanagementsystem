@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdDomainDisabled } from "react-icons/md";
 import axios from "axios";
 
 
 const VpnModal = ({ showModal, setShowModal }) => {
   const [vpnRequestorname, setVpnrequestorname] = useState("");
-  const [vpnRequestordepartment, setVpnrequestordepartment] = useState("");
+  const [department, setDepartment] = useState("");
+  const [username, setUsername] = useState("");
   const [vpnRequestorjobtitle, setVpnrequestorjobtitle] = useState("");
   const [vpnRequestoremail, setVpnrequestoremail] = useState("");
 
@@ -34,12 +35,28 @@ const [itExecutiveApproval, setItExecutiveApproval] = useState("unapproved");
 
 const [showModal8, setShowModal8] = useState(true);
 
+useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+    useEffect(() => {
+    const storedDepartment = localStorage.getItem("department");
+    if (storedDepartment) {
+      setDepartment(storedDepartment);
+    }
+  }, []);
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
   const formData = {
     vpnRequestorname,
-    vpnRequestordepartment,
+    department,
+    username,
     vpnRequestorjobtitle,
     vpnRequestoremail,
 
@@ -72,7 +89,7 @@ const handleSubmit = async (e) => {
 
     // Clear all fields after successful submission
     setVpnrequestorname("");
-    setVpnrequestordepartment("");
+    setDepartment("");
     setVpnrequestorjobtitle("");
     setVpnrequestoremail("");
 
@@ -138,7 +155,7 @@ const handleSubmit = async (e) => {
         </h5>
 
         <form onSubmit={handleSubmit}>
-          <h6 className="mt-3"><b>1. Requestor Information</b></h6>
+          <h6 className="col-12 text-center mb-3"><b>REQUESTOR INFORMATION</b></h6>
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Name</label>
@@ -150,7 +167,11 @@ const handleSubmit = async (e) => {
             </div>
             <div className="col-md-6 mt-2">
               <label>Department</label>
-              <input type="text" className="form-control" value={vpnRequestordepartment} onChange={(e) => setVpnrequestordepartment(e.target.value)} />
+              <input type="text" className="form-control" value={department} onChange={(e) => setDepartment(e.target.value)} />
+            </div>
+            <div className="col-md-6 mt-2">
+              <label>Username</label>
+              <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>
             <div className="col-md-6 mt-2">
               <label>Email</label>
@@ -158,27 +179,42 @@ const handleSubmit = async (e) => {
             </div>
           </div>
 
-          <h6 className="mt-4"><b>2. Head of Department Information</b></h6>
+          <h6 className="mt-4"><b>HEAD OF DEPARTMENT INFORMATION</b></h6>
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Name</label>
-              <input type="text" className="form-control" value={headofdepartmentname} onChange={(e) => setHeadofdepartmentname(e.target.value)} />
+              <input type="text"
+               className="form-control" 
+               value={headofdepartmentname} 
+               onChange={(e) => setHeadofdepartmentname(e.target.value)} />
             </div>
+
             <div className="col-md-6">
               <label>Job Title</label>
-              <input type="text" className="form-control" value={headofdeptjobtitle} onChange={(e) => setHeadofdeptjobtitle(e.target.value)} />
+              <input type="text"
+               className="form-control" 
+               value={headofdeptjobtitle}
+                onChange={(e) => setHeadofdeptjobtitle(e.target.value)} />
             </div>
+
+
             <div className="col-md-6 mt-2">
               <label>Department</label>
-              <input type="text" className="form-control" value={headofdeptDepartment} onChange={(e) => setHeadofdeptdepartment(e.target.value)} />
+              <input type="text" 
+              className="form-control"
+               value={headofdeptDepartment} 
+               onChange={(e) => setHeadofdeptdepartment(e.target.value)} />
             </div>
             <div className="col-md-6 mt-2">
               <label>Email</label>
-              <input type="email" className="form-control" value={headofdeptemail} onChange={(e) => setHeadofdeptemail(e.target.value)} />
+              <input type="email"
+               className="form-control" 
+               value={headofdeptemail} 
+               onChange={(e) => setHeadofdeptemail(e.target.value)} />
             </div>
           </div>
 
-          <h6 className="mt-4"><b>3. Access Request</b></h6>
+          <h6 className="mt-4"><b>ACCESS REQUEST</b></h6>
           <div className="mb-3">
             <label>Access to Colcom Servers</label>
             <input type="text" className="form-control" value={raccesstocolcomservers} onChange={(e) => setRaccesstocolcomservers(e.target.value)} />
@@ -188,7 +224,7 @@ const handleSubmit = async (e) => {
             <input type="text" className="form-control" value={otherservices} onChange={(e) => setOtherservices(e.target.value)} />
           </div>
 
-          <h6 className="mt-4"><b>4. Access Duration</b></h6>
+          <h6 className="mt-4"><b> ACCESS DURATION</b></h6>
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Start Date</label>
@@ -200,7 +236,7 @@ const handleSubmit = async (e) => {
             </div>
           </div>
 
-          <h6 className="mt-4"><b>5. Requestor Device Information</b></h6>
+          <h6 className="mt-4"><b>REQUESTOR DEVICE INFORMATION</b></h6>
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Computer Name</label>

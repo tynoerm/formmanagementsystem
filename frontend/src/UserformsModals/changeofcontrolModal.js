@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdDomainDisabled } from "react-icons/md";
 import { VscSourceControl } from "react-icons/vsc";
 import axios from "axios";
@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 const ChangeofcontrolModal = ({ showModal, setShowModal }) => {
   const [changeofcontrolForm, setChangeofcontrolForm] = useState([]);
   const [name, setName] = useState("");
+   const [username, setUsername] = useState("");
   const [division, setDivision] = useState("");
   const [department, setDepartment] = useState("");
   const [datesubmitted, setDatesubmitted] = useState("");
@@ -30,13 +31,27 @@ const ChangeofcontrolModal = ({ showModal, setShowModal }) => {
   const [dateapprovedict, setDateapprovedict] = useState("");
 
 
-
+     useEffect(() => {
+       const storedUsername = localStorage.getItem("username");
+       if (storedUsername) {
+         setUsername(storedUsername);
+       }
+     }, []);
+   
+       useEffect(() => {
+       const storedDepartment = localStorage.getItem("department");
+       if (storedDepartment) {
+         setDepartment(storedDepartment);
+       }
+     }, []);
+   
   const [showModal5, setShowModal5] = useState(true);
 const handleSubmit = async (e) => {
   e.preventDefault();
 
   const newRequest = {
     name,
+    username,
     division,
     department,
     datesubmitted,
@@ -161,6 +176,15 @@ const handleSubmit = async (e) => {
                 className="form-control"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+             <div className="col-md-6">
+              <label>Username</label>
+              <input
+                type="text"
+                className="form-control"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="col-md-6">

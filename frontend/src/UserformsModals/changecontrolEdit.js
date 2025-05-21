@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
   const [name, setName] = useState("");
+   const [username, setUsername] = useState("");
   const [division, setDivision] = useState("");
   const [department, setDepartment] = useState("");
   const [datesubmitted, setDatesubmitted] = useState("");
@@ -26,9 +27,23 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
   const [headofict, setHeadofict] = useState("");
   const [dateapprovedict, setDateapprovedict] = useState("");
 
+  const [role, setRole] =  useState("")
+
+
+  
+  
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  })
+
   useEffect(() => {
     if (item) {
       setName(item.name || "");
+       setUsername(item.username || "");
       setDivision(item.division || "");
       setDepartment(item.department || "");
       setDatesubmitted(item.datesubmitted || "");
@@ -50,54 +65,45 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
     }
   }, [item]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const data = {
-      name,
-      division,
-      department,
-      datesubmitted,
-      workestimatedhours,
-      severity,
-      internalserviceorder,
-      proposedchange,
-      objectstobechanged,
-      purposeforchange,
-      changesmade,
-      changesconsultant,
-      changeddate,
-      requestor,
-      requstordate,
-      headofdept,
-      dateapprovedhd,
-      headofict,
-      dateapprovedict,
-    };
+  const formData = {
+  name,
+  username,
+  division,
+  department,
+  datesubmitted,
+  workestimatedhours,
+  severity,
+  internalserviceorder,
+  proposedchange,
+  objectstobechanged,
+  purposeforchange,
+  changesmade,
+  changesconsultant,
+  changeddate,
+  requestor,
+  requstordate,
+  headofdept,
+  dateapprovedhd,
+  headofict,
+  dateapprovedict,
+};
 
-    try {
-      const endpoint = item
-        ? `http://localhost:3001/changeofcontrol/update-changeofcontrol/${item._id}`
-        : "http://localhost:3001/changeofcontrol/create-changeofcontrol";
-      const method = item ? axios.put : axios.post;
 
-      await method(endpoint, data);
+  try {
+    const response = await axios.put(
+      `http://localhost:3001/changeofcontrol/update-changeofcontrol/${item._id}`,
+      formData
+    );
+    console.log("VPN Request submitted successfully:", response.data);
+  } catch (error) {
+    console.error("Failed to submit VPN Request:", error);
+  }
+};
 
-      toast.success(`Change of Control ${item ? "updated" : "submitted"} successfully!`, {
-        position: "top-center",
-        autoClose: 5000,
-      });
 
-      setFormEntries(false);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error submitting Change of Control:", error);
-      toast.error("Failed to submit form. Please try again.", {
-        position: "top-center",
-        autoClose: 5000,
-      });
-    }
-  };
 
   const styles = {
     modalBackdrop: {
@@ -136,15 +142,19 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Name</label>
-              <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
+              <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} disabled />
+            </div>
+            <div className="col-md-6">
+              <label>Username</label>
+              <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} disabled />
             </div>
             <div className="col-md-6">
               <label>Division</label>
-              <input type="text" className="form-control" value={division} onChange={(e) => setDivision(e.target.value)} />
+              <input type="text" className="form-control" value={division} onChange={(e) => setDivision(e.target.value)} disabled/>
             </div>
             <div className="col-md-6">
               <label>Department</label>
-              <select className="form-control" value={department} onChange={(e) => setDepartment(e.target.value)} required>
+              <select className="form-control" value={department} onChange={(e) => setDepartment(e.target.value)} disabled>
                 <option value="">-- Select Department --</option>
                 <option value="finance">Finance</option>
                 <option value="operations">Operations</option>
@@ -155,11 +165,11 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
             </div>
             <div className="col-md-6 mt-2">
               <label>Date Submitted</label>
-              <input type="date" className="form-control" value={datesubmitted} onChange={(e) => setDatesubmitted(e.target.value)} />
+              <input type="date" className="form-control" value={datesubmitted} onChange={(e) => setDatesubmitted(e.target.value)} disabled/>
             </div>
             <div className="col-md-6 mt-2">
               <label>Estimated Work Hours</label>
-              <input type="text" className="form-control" value={workestimatedhours} onChange={(e) => setWorkestimatedhours(e.target.value)} />
+              <input type="text" className="form-control" value={workestimatedhours} onChange={(e) => setWorkestimatedhours(e.target.value)} disabled/>
             </div>
           </div>
 
@@ -173,7 +183,7 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
           ].map(({ label, state, setter }) => (
             <div className="mb-3" key={label}>
               <label>{label}</label>
-              <textarea className="form-control" value={state} onChange={(e) => setter(e.target.value)} />
+              <textarea className="form-control" value={state} onChange={(e) => setter(e.target.value)} disabled />
             </div>
           ))}
 
@@ -181,15 +191,15 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Changes Made</label>
-              <textarea className="form-control" value={changesmade} onChange={(e) => setChangesmade(e.target.value)} />
+              <textarea className="form-control" value={changesmade} onChange={(e) => setChangesmade(e.target.value)} disabled/>
             </div>
             <div className="col-md-6">
               <label>By (Consultant)</label>
-              <input type="text" className="form-control" value={changesconsultant} onChange={(e) => setChangesconsultant(e.target.value)} />
+              <input type="text" className="form-control" value={changesconsultant} onChange={(e) => setChangesconsultant(e.target.value)} disabled/>
             </div>
             <div className="col-md-6 mt-2">
               <label>Change Date</label>
-              <input type="date" className="form-control" value={changeddate} onChange={(e) => setChangeddate(e.target.value)} />
+              <input type="date" className="form-control" value={changeddate} onChange={(e) => setChangeddate(e.target.value)} disabled />
             </div>
           </div>
 
@@ -197,11 +207,11 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
           <div className="row mb-3">
             <div className="col-md-6">
               <label>Requestor</label>
-              <input type="text" className="form-control" value={requestor} onChange={(e) => setRequestor(e.target.value)} />
+              <input type="text" className="form-control" value={requestor} onChange={(e) => setRequestor(e.target.value)} disabled />
             </div>
             <div className="col-md-6">
               <label>Date</label>
-              <input type="date" className="form-control" value={requstordate} onChange={(e) => setRequstordate(e.target.value)} />
+              <input type="date" className="form-control" value={requstordate} onChange={(e) => setRequstordate(e.target.value)} disabled/>
             </div>
           </div>
 
@@ -211,7 +221,7 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
             </div>
             <div className="col-md-6 mb-3">
               <label className="form-label"><b>Head of Department</b></label>
-              <select className="form-select w-100" value={headofdept} onChange={(e) => setHeadofdept(e.target.value)}>
+              <select className="form-select w-100" value={headofdept} onChange={(e) => setHeadofdept(e.target.value)} disabled = {role !== 'deptmanager'} >
               <option value="unapproved"><i>Unapproved</i></option>   
                 <option value="pending"><i>Pending</i></option>
                 <option value="approved">Approved</option>
@@ -221,7 +231,7 @@ const ChangeofcontrolEdit = ({ item, setFormEntries }) => {
 
             <div className="col-md-6 mb-3">
               <label className="form-label"><b>IT Manager</b></label>
-              <select className="form-select w-100" value={headofict} onChange={(e) => setHeadofict(e.target.value)} disabled>
+              <select className="form-select w-100" value={headofict} onChange={(e) => setHeadofict(e.target.value)} disabled={role !== 'itmanager'}>
                 <option value="pending"><i>Pending</i></option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>

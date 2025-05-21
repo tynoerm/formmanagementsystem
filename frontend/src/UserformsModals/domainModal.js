@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { MdDomainDisabled } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -22,6 +22,20 @@ const DomainModal = () => {
   const [formEntries, setFormEntries] = useState([]);
   const [memberships, setMemberships] = useState([""]);
 
+
+    useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+    useEffect(() => {
+    const storedDepartment = localStorage.getItem("department");
+    if (storedDepartment) {
+      setDepartment(storedDepartment);
+    }
+  }, []);
   // Handle input change for memberships
   const handleChange = (index, value) => {
     const updated = [...memberships];
@@ -40,6 +54,7 @@ const DomainModal = () => {
     setMemberships(updated);
   };
 
+    
   const handledomainSubmit = async (e) => {
     e.preventDefault();
 

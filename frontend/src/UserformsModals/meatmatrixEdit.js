@@ -7,9 +7,10 @@ import axios from "axios";
 
 
 
-const MeatmatrixEdit = ({item, setFormEntries}) => {
+const MeatmatrixEdit = ({ item, setFormEntries }) => {
   const [meatmatrixForm, setMeatmatrixform] = useState([]);
   const [fullname, setFullname] = useState("");
+    const [username, setUsername] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [store, setStore] = useState("");
   const [date, setDate] = useState("");
@@ -40,7 +41,18 @@ const MeatmatrixEdit = ({item, setFormEntries}) => {
   const [stockTransferLocations, setStockTransferLocations] = useState([{ from: "", to: "" }]);
 
 
-   
+  const [role, setRole] = useState("")
+
+
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  })
+
+
   const roles = [
     "PRODUCTION",
     "STOCK BATCHES",
@@ -52,38 +64,39 @@ const MeatmatrixEdit = ({item, setFormEntries}) => {
     "GRADING",
   ];
 
-useEffect(() => {
-  if (item) {
-    setFullname(item.fullname || "");
-    setJobtitle(item.jobtitle || "");
-    setStore(item.store || "");
-    setDate(item.date || "");
-    setHeadofdepartment(item.headofdepartmentname || "");
-    setFrom(item.from || "");
-    setTo(item.to || "");
-    setAuthoriseddatabase(item.authoriseddatabase || "");
-    setDatetermination(item.datetermination || "");
-    setTime(item.time || "");
-    setTerminatedby(item.terminatedby || "");
+  useEffect(() => {
+    if (item) {
+      setFullname(item.fullname || "");
+         setUsername(item.username || "");
+      setJobtitle(item.jobtitle || "");
+      setStore(item.store || "");
+      setDate(item.date || "");
+      setHeadofdepartment(item.headofdepartmentname || "");
+      setFrom(item.from || "");
+      setTo(item.to || "");
+      setAuthoriseddatabase(item.authoriseddatabase || "");
+      setDatetermination(item.datetermination || "");
+      setTime(item.time || "");
+      setTerminatedby(item.terminatedby || "");
 
-    setUsercode(item.userCode || "");
-    setUserid(item.userId || "");
-    setCostcenter(item.costCenter || "");
-    setStationnumber(item.stationNumber || "");
-    setProcessid(item.processId || "");
-    setAuthorisedby(item.authorisedBy || "");
-    setActionedby(item.actionedBy || "");
-    setDate1(item.date1 || "");
+      setUsercode(item.userCode || "");
+      setUserid(item.userId || "");
+      setCostcenter(item.costCenter || "");
+      setStationnumber(item.stationNumber || "");
+      setProcessid(item.processId || "");
+      setAuthorisedby(item.authorisedBy || "");
+      setActionedby(item.actionedBy || "");
+      setDate1(item.date1 || "");
 
-    setDepartmentapproval(item.deptmanagerapproval || "pending");
-    setItmanagerapproval(item.itmanagerapproval || "pending");
-    setRightsArray(item.rightsArray || [{ item: "", access: "" }]);
-    setSelectedRoles(item.selectedRoles || []);
-    setStockTransferLocations(item.stockTransferLocations || [{ from: "", to: "" }]);
-  }
-}, [item]);
+      setDepartmentapproval(item.deptmanagerapproval || "pending");
+      setItmanagerapproval(item.itmanagerapproval || "pending");
+      setRightsArray(item.rightsArray || [{ item: "", access: "" }]);
+      setSelectedRoles(item.selectedRoles || []);
+      setStockTransferLocations(item.stockTransferLocations || [{ from: "", to: "" }]);
+    }
+  }, [item]);
 
-  
+
 
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
@@ -94,29 +107,18 @@ useEffect(() => {
     }
   };
 
+const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
+      from: Number(from),
+      to: Number(to),
+    }));
 
 
-const handlemeatmatrixSubmit = async (e) => {
+  const handlemeatmatrixSubmit = async (e) => {
   e.preventDefault();
-
-  if (selectedRoles.length === 0) {
-    alert("Please select at least one access right.");
-    return;
-  }
-
-  // Optional: check that userId or another identifier is present
-  if (!userId) {
-    alert("Missing user ID. Cannot update entry.");
-    return;
-  }
-
-  const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
-    from: Number(from),
-    to: Number(to),
-  }));
 
   const formEntry = {
     fullname,
+    username,
     jobtitle,
     store,
     date,
@@ -140,19 +142,18 @@ const handlemeatmatrixSubmit = async (e) => {
   };
 
   try {
-    const response = await axios.put(
-      `http://localhost:3001/meatmatrix/update-meatmatrix/${userId}`, // use ID in URL
-      formEntry
-    );
-    console.log("Form updated successfully", response.data);
-  setFormEntries((prev) =>
-  prev.map((entry) => (entry.userId === userId ? response.data.data : entry))
+   const response = await axios.put(
+  `http://localhost:3001/meatmatrix/update-meatmatrix/${item._id}`, // or item._id or whatever your id field is
+  formEntry
 );
+
+    console.log("Form updated successfully", response.data);
 
     window.location.reload();
 
     // Reset form
     setFullname("");
+    setUsername("");
     setJobtitle("");
     setStore("");
     setDate("");
@@ -180,9 +181,6 @@ const handlemeatmatrixSubmit = async (e) => {
     alert("Failed to update form. Please try again later.");
   }
 };
-
-
-
 
 
   const styles = {
@@ -214,7 +212,7 @@ const handlemeatmatrixSubmit = async (e) => {
   if (!showModal3) return null;
 
   return (
-    <div style={styles.modalBackdrop} onClick={() => setShowModal3(false)}>
+    <div style={styles.modalBackdrop} >
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h5 className="mb-3">
           <b><GiMeatCleaver /> &nbsp;MEAT MATRIX FORM UPDATE</b>
@@ -223,87 +221,99 @@ const handlemeatmatrixSubmit = async (e) => {
           <div className="row mb-2">
             <div className="col-md-6">
               <label><b>Fullname</b></label>
-              <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} className="form-control" required />
+              <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} className="form-control" disabled />
+            </div>
+
+             <div className="col-md-6">
+              <label><b>Fullname</b></label>
+              <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="form-control" disabled />
             </div>
             <div className="col-md-6">
               <label><b>Job Title</b></label>
-              <input type="text" value={jobtitle} onChange={(e) => setJobtitle(e.target.value)} className="form-control" required />
+              <input type="text" value={jobtitle} onChange={(e) => setJobtitle(e.target.value)} className="form-control" disabled />
             </div>
           </div>
 
           <div className="row mb-2">
             <div className="col-md-6">
               <label><b>Store</b></label>
-              <input type="text" value={store} onChange={(e) => setStore(e.target.value)} className="form-control" required />
+              <input type="text" value={store} onChange={(e) => setStore(e.target.value)} className="form-control" disabled />
             </div>
             <div className="col-md-6">
               <label><b>Date</b></label>
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="form-control" required />
+              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="form-control" disabled />
             </div>
           </div>
 
           <div className="mb-3">
             <label><b>H.O.D Name</b></label>
-            <input type="text" value={headofdepartmentname} onChange={(e) => setHeadofdepartment(e.target.value)} className="form-control" />
+            <input type="text" value={headofdepartmentname} onChange={(e) => setHeadofdepartment(e.target.value)} className="form-control" disabled />
           </div>
 
-<label>AUTHORISED STOCK TRANSFER LOCATION</label>
-{stockTransferLocations.map((location, index) => (
-  <div className="row mb-2" key={index}>
-    <div className="col-md-5">
-      <label><b>From</b></label>
-      <input
-        type="number"
-        value={location.from}
-        onChange={(e) => {
-          const newLocations = [...stockTransferLocations];
-          newLocations[index].from = e.target.value;
-          setStockTransferLocations(newLocations);
-        }}
-        className="form-control"
-        min={0}  // optionally prevent negative numbers
-        step={1} // integer steps only
-      />
-    </div>
-    <div className="col-md-5">
-      <label><b>To</b></label>
-      <input
-        type="number"
-        value={location.to}
-        onChange={(e) => {
-          const newLocations = [...stockTransferLocations];
-          newLocations[index].to = e.target.value;
-          setStockTransferLocations(newLocations);
-        }}
-        className="form-control"
-        min={0}
-        step={1}
-      />
-    </div>
-    <div className="col-md-2 d-flex align-items-end">
-      {stockTransferLocations.length > 1 && (
-        <button
-          type="button"
-          className="btn btn-danger"
-          onClick={() => {
-            const newLocations = stockTransferLocations.filter((_, i) => i !== index);
-            setStockTransferLocations(newLocations);
-          }}
-        >
-          Remove
-        </button>
-      )}
-    </div>
-  </div>
-))}
+          <label>AUTHORISED STOCK TRANSFER LOCATION</label>
+          {stockTransferLocations.map((location, index) => (
+            <div className="row mb-2" key={index}>
+              <div className="col-md-5">
+                <label><b>From</b></label>
+                <input
+                  type="number"
+                  value={location.from}
+                  onChange={(e) => {
+                    const newLocations = [...stockTransferLocations];
+                    newLocations[index].from = e.target.value;
+                    setStockTransferLocations(newLocations);
 
-<button
-  type="button"
-  className="btn btn-secondary mb-3"
-  onClick={() => setStockTransferLocations([...stockTransferLocations, { from: "", to: "" }])}
->
-  Add Location
-</button>
+                  }}
+                  className="form-control"
+                  min={0}  // optionally prevent negative numbers
+                  step={1} // integer steps only
+                  disabled
+                />
+              </div>
+              <div className="col-md-5">
+                <label><b>To</b></label>
+                <input
+                  type="number"
+                  value={location.to}
+                  onChange={(e) => {
+                    const newLocations = [...stockTransferLocations];
+                    newLocations[index].to = e.target.value;
+                    setStockTransferLocations(newLocations);
+
+                  }}
+                  className="form-control"
+                  min={0}
+                  step={1}
+                  disabled
+                />
+              </div>
+              <div className="col-md-2 d-flex align-items-end">
+                {stockTransferLocations.length > 1 && (
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => {
+                      const newLocations = stockTransferLocations.filter((_, i) => i !== index);
+                      setStockTransferLocations(newLocations);
+
+                    }}
+                    disabled
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            className="btn btn-secondary mb-3"
+            onClick={() => setStockTransferLocations([...stockTransferLocations, { from: "", to: "" }])}
+            disabled
+          >
+            Add Location
+          </button>
 
 
 
@@ -312,7 +322,7 @@ const handlemeatmatrixSubmit = async (e) => {
           <div className="row mb-2">
             <div className="col-md-6">
               <label><b>Authorised Database</b></label>
-              <input type="text" value={authoriseddatabase} onChange={(e) => setAuthoriseddatabase(e.target.value)} className="form-control" />
+              <input type="text" value={authoriseddatabase} onChange={(e) => setAuthoriseddatabase(e.target.value)} className="form-control" disabled />
             </div>
           </div>
 
@@ -327,7 +337,7 @@ const handlemeatmatrixSubmit = async (e) => {
             </div>
             <div className="col-md-4">
               <label><b>Terminated By</b></label>
-              <input type="text" value={terminatedby} onChange={(e) => setTerminatedby(e.target.value)} className="form-control" disabled/>
+              <input type="text" value={terminatedby} onChange={(e) => setTerminatedby(e.target.value)} className="form-control" disabled />
             </div>
           </div>
 
@@ -343,6 +353,7 @@ const handlemeatmatrixSubmit = async (e) => {
                   id={`role-${index}`}
                   onChange={handleCheckboxChange}
                   className="form-check-input"
+                  disabled
                 />
                 <label className="form-check-label" htmlFor={`role-${index}`}>{role}</label>
               </div>
@@ -369,32 +380,35 @@ const handlemeatmatrixSubmit = async (e) => {
               </div>
             ))}
           </div>
-
           <div className="row mb-4">
-  <div className="col-12 text-center mb-3">
-    <label className="form-label mb-0">
-      <b>APPROVALS</b>
-    </label>
-  </div>
+            <div className="col-12 text-center mb-3">
+              <label className="form-label mb-0"><b>APPROVALS</b></label>
+            </div>
+            <div className="col-md-6 mb-3">
+              <label className="form-label"><b>Head of Department</b></label>
+              <select
+                className="form-select w-100"
+                defaultValue="pending"
+                onChange={(e) => setDepartmentapproval(e.target.value)}
+                disabled={role !== "deptmanager"}
+              >
+                <option value="pending"><i>Pending</i></option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
 
-  <div className="col-md-6 mb-3">
-    <label className="form-label">
-      <b>Head of Department</b>
-    </label>
-    <button type="button" className="btn btn-danger w-100" disabled>
-        <i> unapproved</i>
-    </button>
-  </div>
-
-  <div className="col-md-6 mb-3">
-    <label className="form-label">
-      <b>IT Manager</b>
-    </label>
-    <button type="button" className="btn btn-danger w-100" disabled>
-     <i> unapproved</i>
-    </button>
-  </div>
-</div>
+            <div className="col-md-6 mb-3">
+              <label className="form-label"><b>IT Manager</b></label>
+              <select className="form-select w-100" defaultValue="pending"
+                onChange={(e) => setItmanagerapproval(e.target.value)}
+                disabled={role !== "itmanager"} >
+                <option value="pending"><i>Pending</i></option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
           <button type="submit" className="btn btn-primary w-100">Submit</button>
         </form>
       </div>

@@ -97,8 +97,8 @@ const DomainEdit = ({ item, setFormEntries }) => {
         formEntry
       );
 
-      toast.success("Form submitted successfully!");
-      setFormEntries((prev) => [...prev, formEntry]);
+      toast.success("Form Submitted Successfully!");
+     
       window.location.reload();
     } catch (error) {
       if (error.response) {
@@ -358,6 +358,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
                 className="form-select w-100"
                 defaultValue="pending"
                 onChange={(e) => setDepartmentapproval(e.target.value)}
+                disabled = {role !== "deptmanager"}
               >
                 <option value="pending"><i>Pending</i></option>
                 <option value="approved">Approved</option>
@@ -369,7 +370,7 @@ const DomainEdit = ({ item, setFormEntries }) => {
               <label className="form-label"><b>IT Manager</b></label>
               <select className="form-select w-100" defaultValue="pending"
                 onChange={(e) => setItmanagerapproval(e.target.value)}
-                disabled >
+                disabled = {role != "itmanager"} >
                 <option value="pending"><i>Pending</i></option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>

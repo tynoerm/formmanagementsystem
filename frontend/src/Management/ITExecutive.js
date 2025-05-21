@@ -1,16 +1,19 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from '../images/login.png';
+import DomainEdit from '../UserformsModals/domainEdit';
+import IvendEdit from '../UserformsModals/ivendEdit';
+import InternetaccessEdit from '../UserformsModals/internetaccessEdit';
+import ChangeofcontrolEdit from '../UserformsModals/changecontrolEdit';
+import MeatmatrixEdit from '../UserformsModals/meatmatrixEdit';
+import VpnEdit from '../UserformsModals/vpnEdit';
 
 const collections = [
-  "ivendusers",
-  "meatmatrix",
   "vpn",
   "changeofcontrol",
-  "domainaccess",
   "internetaccess"
 ];
+
 
 const columnMapping = {
   ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname','deptmanagerapproval','itmanagerapproval','rights','roles'],
@@ -29,6 +32,8 @@ const ITExecutive = () => {
   const [formData, setFormData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [username, setUsername] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -47,7 +52,6 @@ const ITExecutive = () => {
         const data = res.data.data || [];
         setFormData(data);
 
-        // Use mapped columns
         const mappedColumns = columnMapping[collectionSelected] || [];
         setColumns(mappedColumns);
 
@@ -68,6 +72,11 @@ const ITExecutive = () => {
       typeof val === 'string' && val.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
+  const handleRowClick = (item) => {
+    setSelectedItem(item);
+    setShowModal(true);
+  };
 
   return (
     <div>
@@ -100,14 +109,6 @@ const ITExecutive = () => {
           ))}
         </select>
 
-        <input
-          type="text"
-          className="form-control w-25"
-          placeholder="Search..."
-          style={{ fontStyle: 'italic' }}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
       </div>
 
       {loading && <p>Loading data...</p>}
@@ -128,7 +129,7 @@ const ITExecutive = () => {
         <tbody>
           {filteredData.length > 0 ? (
             filteredData.map((item, idx) => (
-              <tr key={idx}>
+              <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
                 {columns.map((col) => {
                   let value = item[col];
                   if (value && (col.toLowerCase().includes("date") || col.toLowerCase().includes("at"))) {
@@ -149,6 +150,33 @@ const ITExecutive = () => {
           )}
         </tbody>
       </table>
+
+      {showModal && selectedItem && (
+        <>
+          {collectionSelected === 'internetaccess' ? (
+            <InternetaccessEdit
+              item={selectedItem}
+              onClose={() => setShowModal(false)}
+              collection={collectionSelected}
+            />
+          ) : collectionSelected === 'changeofcontrol' ? (
+            <ChangeofcontrolEdit
+              item={selectedItem}
+              onClose={() => setShowModal(false)}
+              collection={collectionSelected}
+            />
+          ) : collectionSelected === 'vpn' ? (
+            <VpnEdit
+              item={selectedItem}
+              onClose={() => setShowModal(false)}
+              collection={collectionSelected}
+            />
+          ) : null}
+        </>
+      )}
+      <footer className="text-white bg-dark text-center p-2 fixed-bottom">
+        &copy; Associated Meat Packers. All rights reserved.
+      </footer>
     </div>
   );
 };

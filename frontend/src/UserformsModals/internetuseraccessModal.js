@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LuFileInput } from "react-icons/lu";
 import { FaInternetExplorer } from "react-icons/fa";
 
@@ -7,6 +7,7 @@ import axios from "axios";
 const InternetaccessModal = () => {
   const [firstname, setFirstname] = useState("");
   const [surname, setSurname] = useState("");
+  const [username, setUsername] = useState("");
   const [daterequested, setDaterequested] = useState("");
   const [department, setDepartment] = useState("");
   const [daterequired, setDaterequired] = useState("");
@@ -21,11 +22,26 @@ const InternetaccessModal = () => {
   const [showModal4, setShowModal4] = useState(true);
 
 
+    useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+    useEffect(() => {
+    const storedDepartment = localStorage.getItem("department");
+    if (storedDepartment) {
+      setDepartment(storedDepartment);
+    }
+  }, []);
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   const formData = {
     firstname,
     surname,
+    username,
     daterequested,
     department,
     daterequired,
@@ -109,6 +125,10 @@ const handleSubmit = async (e) => {
             <div className="col-md-6">
               <label><b>Surname</b></label>
               <input type="text" className="form-control" value={surname} onChange={(e) => setSurname(e.target.value)} required />
+            </div>
+            <div className="col-md-6">
+              <label><b>Username</b></label>
+              <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} required />
             </div>
           </div>
 

@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from '../images/login.png';
 
+import DomainEdit from '../UserformsModals/domainEdit';
+import IvendEdit from '../UserformsModals/ivendEdit';
+import InternetaccessEdit from '../UserformsModals/internetaccessEdit';
+import ChangeofcontrolEdit from '../UserformsModals/changecontrolEdit';
+import MeatmatrixEdit from '../UserformsModals/meatmatrixEdit';
+import VpnEdit from '../UserformsModals/vpnEdit';
+
 const collections = [
   "ivendusers",
   "meatmatrix",
@@ -12,11 +19,11 @@ const collections = [
 ];
 
 const columnMapping = {
-  ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'rights', 'roles'],
-  meatmatrix: ['fullName', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
+  ivendusers: ['fullname', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'rights', 'roles'],
+  meatmatrix: ['fullname', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
   vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail', 'deptManagerApproval', 'itManagerApproval', 'itExecutiveApproval'],
-  changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
-  domainaccess: ['fullName', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
+  changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor','headofdept','headofict'],
+  domainaccess: ['fullname', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
 };
 
@@ -29,6 +36,8 @@ const ITManager = () => {
   const [columns, setColumns] = useState([]);
   const [username, setUsername] = useState('');
 
+const [selectedItem, setSelectedItem] = useState(null);
+    const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) setUsername(storedUsername);
@@ -128,30 +137,83 @@ const ITManager = () => {
             )}
           </tr>
         </thead>
-        <tbody>
-          {filteredData.length > 0 ? (
-            filteredData.map((item, idx) => (
-              <tr key={idx}>
-                {columns.map((col) => {
-                  let value = item[col];
-                  if (value && (col.toLowerCase().includes("date") || col.toLowerCase().includes("at"))) {
-                    try {
-                      value = new Date(value).toLocaleDateString();
-                    } catch {}
-                  }
-                  return <td key={col}>{value != null ? value.toString() : ""}</td>;
-                })}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={columns.length || 1} className="text-center">
-                No records found
-              </td>
-            </tr>
-          )}
-        </tbody>
+       <tbody>
+  {filteredData.length > 0 ? (
+    filteredData.map((item, idx) => (
+      <tr
+        key={idx}
+        onClick={() => {
+          setSelectedItem(item);
+          setShowModal(true);
+        }}
+        style={{ cursor: 'pointer' }}
+      >
+        {columns.map((col) => {
+          let value = item[col];
+          if (value && (col.toLowerCase().includes("date") || col.toLowerCase().includes("at"))) {
+            try {
+              value = new Date(value).toLocaleDateString();
+            } catch {}
+          }
+          return <td key={col}>{value != null ? value.toString() : ""}</td>;
+        })}
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={columns.length || 1} className="text-center">
+        No records found
+      </td>
+    </tr>
+  )}
+</tbody>
+
       </table>
+      
+{showModal && selectedItem && (
+  <>
+    {collectionSelected === 'ivendusers' ? (
+      <IvendEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'internetaccess' ? (
+      <InternetaccessEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'domainaccess' ? (
+      <DomainEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'changeofcontrol' ? (
+      <ChangeofcontrolEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+      ) : collectionSelected === 'meatmatrix' ? (
+      <MeatmatrixEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : collectionSelected === 'vpn' ? (
+      <VpnEdit
+        item={selectedItem}
+        onClose={() => setShowModal(false)}
+        collection={collectionSelected}
+      />
+    ) : null}
+  </>
+)}
+<footer className="text-white bg-dark text-center p-2 fixed-bottom">
+        &copy; Associated Meat Packers. All rights reserved.
+      </footer>
     </div>
   );
 };

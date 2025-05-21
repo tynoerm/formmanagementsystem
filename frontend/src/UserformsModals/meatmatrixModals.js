@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { LuFileInput } from "react-icons/lu";
 import { GiMeatCleaver } from "react-icons/gi";
 import axios from "axios";
@@ -10,10 +10,12 @@ import axios from "axios";
 const MeatmatrixModal = () => {
   const [meatmatrixForm, setMeatmatrixform] = useState([]);
   const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [store, setStore] = useState("");
   const [department, setDepartment] = useState("");
   const [date, setDate] = useState("");
+
   const [headofdepartmentname, setHeadofdepartment] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -36,6 +38,20 @@ const MeatmatrixModal = () => {
   const [rightsArray, setRightsArray] = useState([{ item: "", access: "" }]);
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [showModal3, setShowModal3] = useState(true);
+
+ useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+    useEffect(() => {
+    const storedDepartment = localStorage.getItem("department");
+    if (storedDepartment) {
+      setDepartment(storedDepartment);
+    }
+  }, []);
 
 
   const [stockTransferLocations, setStockTransferLocations] = useState([{ from: "", to: "" }]);
@@ -76,6 +92,7 @@ const handlemeatmatrixSubmit = async (e) => {
 
   const formEntry = {
     fullname,
+    username,
     jobtitle,
     store,
     department,
@@ -110,6 +127,7 @@ const handlemeatmatrixSubmit = async (e) => {
 
     // Reset all fields on successful submit
     setFullname("");
+    setUsername("");
     setJobtitle("");
     setStore("");
     setDepartment("");
@@ -175,16 +193,41 @@ const handlemeatmatrixSubmit = async (e) => {
           <b><GiMeatCleaver /> &nbsp;MEAT MATRIX FORM</b>
         </h5>
         <form onSubmit={handlemeatmatrixSubmit}>
-          <div className="row mb-2">
-            <div className="col-md-6">
-              <label><b>Fullname</b></label>
-              <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} className="form-control" required />
-            </div>
-            <div className="col-md-6">
-              <label><b>Job Title</b></label>
-              <input type="text" value={jobtitle} onChange={(e) => setJobtitle(e.target.value)} className="form-control" required />
-            </div>
-          </div>
+       <div className="row mb-2">
+  <div className="col-md-4">
+    <label><b>Fullname</b></label>
+    <input
+      type="text"
+      value={fullname}
+      onChange={(e) => setFullname(e.target.value)}
+      className="form-control"
+      required
+    />
+  </div>
+
+  <div className="col-md-4">
+    <label><b>Username</b></label>
+    <input
+      type="text"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+      className="form-control"
+      required
+    />
+  </div>
+
+  <div className="col-md-4">
+    <label><b>Job Title</b></label>
+    <input
+      type="text"
+      value={jobtitle}
+      onChange={(e) => setJobtitle(e.target.value)}
+      className="form-control"
+      required
+    />
+  </div>
+</div>
+
 
           <div className="row mb-2">
             <div className="col-md-6">
