@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const IvendModal = () => {
   const [fullname, setFullname] = useState("");
-   const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [store, setStore] = useState("");
   const [date, setDate] = useState("");
@@ -15,6 +15,11 @@ const IvendModal = () => {
   const [deptManagerApproval, setDeptManagerApproval] = useState("unapproved");
   const [itManagerApproval, setItManagerApproval] = useState("unapproved");
   const [rightsArray, setRightsArray] = useState([{ item: "", access: "" }]);
+
+  const [agentname, setAgentname]= useState("");
+   const [authorisedby, setAuthorisedby]= useState("");
+   const [actionedby, setActionedby]= useState("");
+   const [reviewedby, setReviewedby]= useState("");
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [showModal, setShowModal] = useState(true);
 
@@ -26,7 +31,7 @@ const IvendModal = () => {
     }
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const storedDepartment = localStorage.getItem("department");
     if (storedDepartment) {
       setDepartment(storedDepartment);
@@ -104,11 +109,11 @@ const IvendModal = () => {
                 <label className="form-label"><b>Fullname</b></label>
                 <input type="text" className="form-control" value={fullname} onChange={(e) => setFullname(e.target.value)} required />
               </div>
-               <div className="col-md-6">
+              <div className="col-md-6">
                 <label className="form-label"><b>Username</b></label>
                 <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} required />
               </div>
-              
+
               <div className="col-md-6">
                 <label className="form-label"><b>Job Title</b></label>
                 <input type="text" className="form-control" value={jobtitle} onChange={(e) => setJobtitle(e.target.value)} required />
@@ -128,23 +133,23 @@ const IvendModal = () => {
 
             <div className="d-flex gap-3 mb-3">
               <div className="col-md-6">
-              <label className="form-label">
-                <b>Department</b>
-              </label>
-              <select
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                className="form-control"
-                required
-              >
-                <option value="">-- Select Department --</option>
-                <option value="finance">Finance</option>
-                <option value="operations">Operations</option>
-                <option value="sales">Sales</option>
-                <option value="itdepartment">IT</option>
-                <option value="retailshops">Retail Shops</option>
-              </select>
-            </div>
+                <label className="form-label">
+                  <b>Department</b>
+                </label>
+                <select
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="form-control"
+                  required
+                >
+                  <option value="">-- Select Department --</option>
+                  <option value="finance">Finance</option>
+                  <option value="operations">Operations</option>
+                  <option value="sales">Sales</option>
+                  <option value="itdepartment">IT</option>
+                  <option value="retailshops">Retail Shops</option>
+                </select>
+              </div>
 
 
               <div className="flex-fill">
@@ -170,11 +175,11 @@ const IvendModal = () => {
             <div className="row mb-2">
               <div className="col-md-6">
                 <label className="form-label"><b>Agent Name</b></label>
-                <input type="text" className="form-control" value={deptManagerApproval} disabled />
+                <input type="text" className="form-control" value={agentname} disabled />
               </div>
               <div className="col-md-6">
                 <label className="form-label"><b>Authorised By</b></label>
-                <input type="text" className="form-control" value={itManagerApproval} disabled />
+                <input type="text" className="form-control" value={authorisedby} disabled />
               </div>
             </div>
 
@@ -185,7 +190,7 @@ const IvendModal = () => {
               </div>
               <div className="col-md-6">
                 <label className="form-label"><b>Actioned By</b></label>
-                <input type="text" className="form-control" value={itManagerApproval} disabled />
+                <input type="text" className="form-control" value={actionedby} disabled />
               </div>
             </div>
 
@@ -196,7 +201,7 @@ const IvendModal = () => {
               </div>
               <div className="col-md-6">
                 <label className="form-label"><b>Reviewed By</b></label>
-                <input type="text" className="form-control" value={itManagerApproval} disabled />
+                <input type="text" className="form-control" value={reviewedby} disabled />
               </div>
             </div>
 

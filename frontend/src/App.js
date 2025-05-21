@@ -16,6 +16,7 @@ import FormmanagementUsers from './FormmanagementUsers.js'
 
 import NotFound from './NotFound';
 import Login from './Login.js'
+import Users from './Users.js'
 import MainDashboard from './MainDashboard.js'
 import UserManagement from './UserManagement.js';
 
@@ -47,6 +48,7 @@ function App() {
   <Route path="/" element={<Login setLoggedIn={setLoggedIn} login={login} />} />
   <Route path="MainDashboard" element={<MainDashboard />} />
   <Route path="ITManager" element={<ITManager />} />
+   <Route path="Users" element={<Users />} />
   <Route path="ITExecutive" element={<ITExecutive />} />
   <Route path="UserformSelection" element={<UserformSelection />} />
   <Route path="UserManagement" element={<UserManagement />} />

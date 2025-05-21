@@ -26,17 +26,26 @@ const cards = {
       icon: FaUserCheck,
       text: "User management, form management.",
       link: "/ITManagement",
-    },
+    }  ,
+    {
+    id: 6,
+    title: "USERS MODULE ",
+    icon: SiGoogletagmanager,
+    text: "user forms approvals",
+    link: "/Users",
+  },
   ],
   itmanager: [
-    {
-      id: 3,
-      title: "IT MANAGER ",
-      icon: SiGoogletagmanager,
-      text: "user forms approvals",
-      link: "/ITManager",
-    },
-  ],
+  {
+    id: 3,
+    title: "IT MANAGER ",
+    icon: SiGoogletagmanager,
+    text: "user forms approvals",
+    link: "/ITManager",
+  },
+
+],
+
   deptmanager: [
     {
       id: 4,
@@ -55,6 +64,7 @@ const cards = {
       link: "/ITExecutive",
     },
   ],
+  
 };
 
 const styles = {

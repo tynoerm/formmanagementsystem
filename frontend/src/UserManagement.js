@@ -1,9 +1,9 @@
-// components/UserManagement.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RiLoginBoxFill } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import image1 from './images/login.png';
 
 function UserManagement() {
@@ -13,6 +13,8 @@ function UserManagement() {
     const [role, setRole] = useState('');
     const [department, setDepartment] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate(); // Initialize navigate
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,12 +31,25 @@ function UserManagement() {
 
             if (response.status === 201 || response.status === 200) {
                 toast.success('User registered successfully');
-                // Optionally clear the form
+
+                // Prepare user data to send on navigation
+                const userData = {
+                    fullName,
+                    username,
+                    password,
+                    role,
+                    department,
+                };
+
+                // Clear form inputs
                 setFullName('');
                 setUsername('');
                 setPassword('');
                 setRole('');
                 setDepartment('');
+
+                // Navigate to '/users' and pass user data
+                navigate('/users', { state: { newUser: userData } });
             } else {
                 toast.error('Registration failed');
             }
@@ -121,7 +136,7 @@ function UserManagement() {
                                 <option value="retail">Retail Shops</option>
                                 <option value="deptmanager">Department Manager</option>
                                 <option value="itmanagement">IT Management</option>
-                                      <option value="itmanager">IT Manager</option>
+                                <option value="itmanager">IT Manager</option>
                                 <option value="itexec">IT Executive</option>
                             </select>
                         </div>

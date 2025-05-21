@@ -3,13 +3,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from '../images/login.png';
 
+
+import DomainEdit from '../UserformsModals/domainEdit';
+import IvendEdit from '../UserformsModals/ivendEdit';
+import InternetaccessEdit from '../UserformsModals/internetaccessEdit';
+import ChangeofcontrolEdit from '../UserformsModals/changecontrolEdit';
+import MeatmatrixEdit from '../UserformsModals/meatmatrixEdit';
+import VpnEdit from '../UserformsModals/vpnEdit';
+
+
 const collections = [
-  "ivendusers",
-  "meatmatrix",
-  "vpn",
-  "changeofcontrol",
-  "domainaccess",
-  "internetaccess"
+  'ivendusers',
+  'meatmatrix',
+  'vpn',
+  'changeofcontrol',
+  'domainaccess',
+  'internetaccess',
 ];
 
 const columnMapping = {
@@ -29,6 +38,8 @@ const ITManagement = () => {
   const [formData, setFormData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [username, setUsername] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -46,11 +57,7 @@ const ITManagement = () => {
       .then((res) => {
         const data = res.data.data || [];
         setFormData(data);
-
-        // Set tailored columns from columnMapping
-        const mappedColumns = columnMapping[collectionSelected] || [];
-        setColumns(mappedColumns);
-
+        setColumns(columnMapping[collectionSelected] || []);
         setLoading(false);
       })
       .catch((err) => {
@@ -69,16 +76,17 @@ const ITManagement = () => {
     )
   );
 
+  const handleRowClick = (item) => {
+    setSelectedItem(item);
+    setShowModal(true);
+  };
+
   return (
     <div>
       <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
         <div className="container-fluid d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center text-white">
-            <img
-              src={image1}
-              alt="Login Icon"
-              style={{ width: '40px', height: '40px', objectFit: 'contain' }}
-            />
+            <img src={image1} alt="Login Icon" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
             <span className="ms-2 fw-bold">IT MANAGEMENT</span>
           </div>
           <div className="text-white">
@@ -88,11 +96,7 @@ const ITManagement = () => {
       </nav>
 
       <div className="mb-3 d-flex justify-content-between mt-3">
-        <select
-          className="form-select w-25"
-          value={collectionSelected}
-          onChange={(e) => setCollectionSelected(e.target.value)}
-        >
+        <select className="form-select w-25" value={collectionSelected} onChange={(e) => setCollectionSelected(e.target.value)}>
           {collections.map((col) => (
             <option key={col} value={col}>
               {col.charAt(0).toUpperCase() + col.slice(1)}
@@ -100,14 +104,7 @@ const ITManagement = () => {
           ))}
         </select>
 
-        <input
-          type="text"
-          className="form-control w-25"
-          placeholder="Search..."
-          style={{ fontStyle: 'italic' }}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+       
       </div>
 
       {loading && <p>Loading data...</p>}
@@ -128,13 +125,15 @@ const ITManagement = () => {
         <tbody>
           {filteredData.length > 0 ? (
             filteredData.map((item, idx) => (
-              <tr key={idx}>
+              <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
                 {columns.map((col) => {
                   let value = item[col];
                   if (value && (col.toLowerCase().includes("date") || col.toLowerCase().includes("at"))) {
                     try {
                       value = new Date(value).toLocaleDateString();
-                    } catch {}
+                    } catch {
+                      // Keep original value if date parsing fails
+                    }
                   }
                   return <td key={col}>{value != null ? value.toString() : ""}</td>;
                 })}
@@ -149,6 +148,33 @@ const ITManagement = () => {
           )}
         </tbody>
       </table>
+
+      {showModal && selectedItem && (
+        <>
+          {collectionSelected === 'ivendusers' && (
+            <IvendEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />
+          )}
+          {collectionSelected === 'internetaccess' && (
+            <InternetaccessEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />
+          )}
+          {collectionSelected === 'domainaccess' && (
+            <DomainEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />
+          )}
+          {collectionSelected === 'changeofcontrol' && (
+            <ChangeofcontrolEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />
+          )}
+          {collectionSelected === 'meatmatrix' && (
+            <MeatmatrixEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />
+          )}
+          {collectionSelected === 'vpn' && (
+            <VpnEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />
+          )}
+        </>
+      )}
+
+      <footer className="text-white bg-dark text-center p-2 fixed-bottom">
+        &copy; Associated Meat Packers. All rights reserved.
+      </footer>
     </div>
   );
 };
