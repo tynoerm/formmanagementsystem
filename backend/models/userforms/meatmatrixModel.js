@@ -8,6 +8,7 @@ const stockTransferLocationSchema = new Schema({
 
 const meatmatrixSchema = new Schema({
   fullname: { type: String, required: true },
+  username: { type: String},
   jobtitle: { type: String, required: true },
   store: { type: String, required: true },
   department: {type: String, required: true},

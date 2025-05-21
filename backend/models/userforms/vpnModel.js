@@ -3,7 +3,8 @@ import { Schema, model } from 'mongoose';
 const vpnSchema = new Schema({
   // Requestor Info
   vpnRequestorname: { type: String, required: true },
-  vpnRequestordepartment: { type: String, required: true },
+   department: { type: String},
+    username: { type: String },
   vpnRequestorjobtitle: { type: String, required: true },
   vpnRequestoremail: { type: String, required: true },
 
@@ -31,17 +32,17 @@ const vpnSchema = new Schema({
 
   deptManagerApproval: {
      type: String,
-  enum: ["pending", "approved", "rejected", "unapproved"],
+  enum: ["approved", "rejected", "unapproved"],
   default: "unapproved",
   },
   itManagerApproval: {
      type: String,
-  enum: ["pending", "approved", "rejected", "unapproved"],
+  enum: ["approved", "rejected", "unapproved"],
   default: "unapproved",
   },
   itExecutiveApproval: {
      type: String,
-  enum: ["pending", "approved", "rejected", "unapproved"],
+  enum: ["approved", "rejected", "unapproved"],
   default: "unapproved",
   },
 

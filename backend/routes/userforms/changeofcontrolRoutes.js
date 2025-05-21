@@ -41,34 +41,26 @@ router.route("/").get(async (req, res, next) => {
 });
 
 // Update a domain access form by ID
-router.route("/update-changeofcontrol/:id").put(async (req, res, next) => {
+router.put("/update-changeofcontrol/:id", async (req, res) => {
   const { id } = req.params;
+  console.log("UPDATE BODY", req.body); // Debug
 
   try {
-    const updatedForm = await domainSchema.findByIdAndUpdate(id, req.body, {
+    const updated = await changeofcontrolSchema.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
     });
 
-    if (!updatedForm) {
-      return res.status(404).json({
-        message: "Form not found",
-        status: 404,
-      });
+    if (!updated) {
+      return res.status(404).json({ message: "Form not found" });
     }
 
-    res.json({
-      data: updatedForm,
-      message: "Form updated successfully",
-      status: 200,
-    });
-  } catch (error) {
-    console.error("Update error:", error);
-    res.status(500).json({
-      message: "Failed to update the form",
-      status: 500,
-    });
+    res.json({ message: "Form updated", data: updated });
+  } catch (err) {
+    console.error("Update error", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
+
 
 export { router as changeofcontrolRoutes }

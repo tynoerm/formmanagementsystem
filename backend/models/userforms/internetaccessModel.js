@@ -13,6 +13,11 @@ const internetaccessSchema = new Schema({
     required: true,
     trim: true,
   },
+
+    username: {
+    type: String,
+  
+  },
   daterequested: {
     type: Date,
     required: true,

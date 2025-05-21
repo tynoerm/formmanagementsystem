@@ -3,8 +3,9 @@ const Schema = _Schema;
 
 const changeofcontrolSchema = new Schema({
   name: { type: String, required: true },
+  username: { type: String },
   division: { type: String, required: true },
-  department: {type: String, required: true},
+  department: {type: String},
   datesubmitted: { type: Date, required: true },
   workestimatedhours: { type: String },
   severity: { type: String },
@@ -17,21 +18,20 @@ const changeofcontrolSchema = new Schema({
   changeddate: { type: Date },
   requestor: { type: String },
   requstordate: { type: Date },
-  headofdept: {
-    type: String,
-    enum: ["pending", "approved", "rejected", "unapproved"],
-    default: "unapproved",
-    set: v => v === "" ? undefined : v
-  },
+ 
   dateapprovedhd: {
     type: Date,
     default: null,
   },
+   headofdept: {
+     type: String,
+  enum: ["approved", "rejected", "unapproved"],
+  default: "unapproved",
+  },
   headofict: {
-    type: String,
-    enum: ["pending", "approved", "rejected", "unapproved"],
-    default: "unapproved",
-    set: v => v === "" ? undefined : v
+       type: String,
+  enum: ["approved", "rejected", "unapproved"],
+  default: "unapproved",
   },
   dateapprovedict: {
     type: Date,

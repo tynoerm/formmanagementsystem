@@ -3,6 +3,7 @@ const Schema = _Schema;
 
 const ivendSchema = new Schema({
   fullname: { type: String, required: true },
+   username: { type: String },
   jobtitle: { type: String, required: true },
   store: { type: String, required: true },
   department: {type: String, required: true},
