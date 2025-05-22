@@ -10,7 +10,7 @@ import axios from "axios";
 const MeatmatrixEdit = ({ item, setFormEntries }) => {
   const [meatmatrixForm, setMeatmatrixform] = useState([]);
   const [fullname, setFullname] = useState("");
-    const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [jobtitle, setJobtitle] = useState("");
   const [store, setStore] = useState("");
   const [date, setDate] = useState("");
@@ -67,7 +67,7 @@ const MeatmatrixEdit = ({ item, setFormEntries }) => {
   useEffect(() => {
     if (item) {
       setFullname(item.fullname || "");
-         setUsername(item.username || "");
+      setUsername(item.username || "");
       setJobtitle(item.jobtitle || "");
       setStore(item.store || "");
       setDate(item.date || "");
@@ -107,80 +107,80 @@ const MeatmatrixEdit = ({ item, setFormEntries }) => {
     }
   };
 
-const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
-      from: Number(from),
-      to: Number(to),
-    }));
+  const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
+    from: Number(from),
+    to: Number(to),
+  }));
 
 
   const handlemeatmatrixSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const formEntry = {
-    fullname,
-    username,
-    jobtitle,
-    store,
-    date,
-    headofdepartmentname,
-    stockTransferLocations: cleanedStockLocations,
-    authoriseddatabase,
-    datetermination,
-    time,
-    terminatedby,
-    userCode,
-    userId, // important for identifying the record
-    costCenter,
-    stationNumber,
-    processId,
-    authorisedBy,
-    actionedBy,
-    date1,
-    deptmanagerapproval,
-    itmanagerapproval,
-    rights: selectedRoles,
+    const formEntry = {
+      fullname,
+      username,
+      jobtitle,
+      store,
+      date,
+      headofdepartmentname,
+      stockTransferLocations: cleanedStockLocations,
+      authoriseddatabase,
+      datetermination,
+      time,
+      terminatedby,
+      userCode,
+      userId, // important for identifying the record
+      costCenter,
+      stationNumber,
+      processId,
+      authorisedBy,
+      actionedBy,
+      date1,
+      deptmanagerapproval,
+      itmanagerapproval,
+      rights: selectedRoles,
+    };
+
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/meatmatrix/update-meatmatrix/${item._id}`, // or item._id or whatever your id field is
+        formEntry
+      );
+
+      console.log("Form updated successfully", response.data);
+
+      window.location.reload();
+
+      // Reset form
+      setFullname("");
+      setUsername("");
+      setJobtitle("");
+      setStore("");
+      setDate("");
+      setHeadofdepartment("");
+      setStockTransferLocations([{ from: "", to: "" }]);
+      setAuthoriseddatabase("");
+      setDatetermination("");
+      setTime("");
+      setTerminatedby("");
+      setUsercode("");
+      setUserid("");
+      setCostcenter("");
+      setStationnumber("");
+      setProcessid("");
+      setAuthorisedby("");
+      setActionedby("");
+      setDate1("");
+      setDepartmentapproval("pending");
+      setItmanagerapproval("pending");
+      setRightsArray([{ item: "", access: "" }]);
+      setSelectedRoles([]);
+      setShowModal3(false);
+    } catch (error) {
+      console.error("Error updating form", error);
+      alert("Failed to update form. Please try again later.");
+    }
   };
-
-  try {
-   const response = await axios.put(
-  `http://localhost:3001/meatmatrix/update-meatmatrix/${item._id}`, // or item._id or whatever your id field is
-  formEntry
-);
-
-    console.log("Form updated successfully", response.data);
-
-    window.location.reload();
-
-    // Reset form
-    setFullname("");
-    setUsername("");
-    setJobtitle("");
-    setStore("");
-    setDate("");
-    setHeadofdepartment("");
-    setStockTransferLocations([{ from: "", to: "" }]);
-    setAuthoriseddatabase("");
-    setDatetermination("");
-    setTime("");
-    setTerminatedby("");
-    setUsercode("");
-    setUserid("");
-    setCostcenter("");
-    setStationnumber("");
-    setProcessid("");
-    setAuthorisedby("");
-    setActionedby("");
-    setDate1("");
-    setDepartmentapproval("pending");
-    setItmanagerapproval("pending");
-    setRightsArray([{ item: "", access: "" }]);
-    setSelectedRoles([]);
-    setShowModal3(false);
-  } catch (error) {
-    console.error("Error updating form", error);
-    alert("Failed to update form. Please try again later.");
-  }
-};
 
 
   const styles = {
@@ -224,7 +224,7 @@ const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
               <input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} className="form-control" disabled />
             </div>
 
-             <div className="col-md-6">
+            <div className="col-md-6">
               <label><b>Fullname</b></label>
               <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="form-control" disabled />
             </div>
@@ -315,10 +315,6 @@ const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
             Add Location
           </button>
 
-
-
-
-
           <div className="row mb-2">
             <div className="col-md-6">
               <label><b>Authorised Database</b></label>
@@ -353,7 +349,7 @@ const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
                   id={`role-${index}`}
                   onChange={handleCheckboxChange}
                   className="form-check-input"
-                  disabled
+               
                 />
                 <label className="form-check-label" htmlFor={`role-${index}`}>{role}</label>
               </div>
@@ -363,6 +359,7 @@ const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
           <div className="mb-2 text-center">
             <b>ICT DEPARTMENT</b>
           </div>
+
           <div className="row mb-2">
             {[
               ["User Code", userCode, setUsercode],
@@ -372,14 +369,23 @@ const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
               ["Process ID", processId, setProcessid],
               ["Authorised By", authorisedBy, setAuthorisedby],
               ["Actioned By", actionedBy, setActionedby],
-              ["Date", date1, setDate1],
+              ["Date", date, setDate1], // <-- use date as value, setDate1 as setter
             ].map(([label, value, setter], idx) => (
               <div key={idx} className="col-md-3 mb-2">
                 <label><b>{label}</b></label>
-                <input type="text" value={value} onChange={(e) => setter(e.target.value)} className="form-control" disabled />
+                <input
+                  type={label === "Date" ? "date" : "text"}
+                  value={value}
+                  onChange={(e) => setter(e.target.value)}
+                  className="form-control"
+                  disabled={role !== "itmanagement"}
+                />
               </div>
             ))}
           </div>
+
+
+
           <div className="row mb-4">
             <div className="col-12 text-center mb-3">
               <label className="form-label mb-0"><b>APPROVALS</b></label>

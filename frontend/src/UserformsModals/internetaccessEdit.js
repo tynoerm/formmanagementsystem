@@ -183,15 +183,15 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
           <div className="row mb-2">
             <div className="col-md-4">
               <label><b>Device</b></label>
-              <input type="text" className="form-control" value={device} onChange={(e) => setDevice(e.target.value)} disabled />
+              <input type="text" className="form-control" value={device} onChange={(e) => setDevice(e.target.value)} disabled = {role !== "itmanagement"} />
             </div>
             <div className="col-md-4">
               <label><b>IP Address</b></label>
-              <input type="text" className="form-control" value={ipaddress} onChange={(e) => setIpaddress(e.target.value)} disabled />
+              <input type="text" className="form-control" value={ipaddress} onChange={(e) => setIpaddress(e.target.value)} disabled = {role !== "itmanagement"}/>
             </div>
             <div className="col-md-4">
               <label><b>MAC Address</b></label>
-              <input type="text" className="form-control" value={macaddress} onChange={(e) => setMacaddress(e.target.value)} disabled />
+              <input type="text" className="form-control" value={macaddress} onChange={(e) => setMacaddress(e.target.value)} disabled = {role !== "itmanagement"} />
             </div>
           </div>
 

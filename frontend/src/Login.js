@@ -104,7 +104,7 @@ function Login({ setLoggedIn, login }) {
               {loading ? 'Logging in...' : 'Login'}
             </button>
             <div className="text-center mt-2">
-              <Link to="/register"><i>Create an account</i></Link>
+              <Link to="/UserManagement"><i></i></Link>
             </div>
           </form>
         </div>

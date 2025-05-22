@@ -119,6 +119,10 @@ const IvendEdit = ({ item, setFormEntries }) => {
       itmanagerapproval,
       rights: rightsArray,
       roles: selectedRoles,
+      agentname,
+      authorisedby,
+      actionedby,
+      reviewedby,
     };
 
     try {
@@ -133,9 +137,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
       );
 
       toast.success("IVEND form updated successfully!");
-      setFormEntries((prev) =>
-        prev.map((entry) => (entry._id === formId ? response.data.data : entry))
-      );
+    
 
       setTimeout(() => {
         window.location.reload();
@@ -212,33 +214,43 @@ const IvendEdit = ({ item, setFormEntries }) => {
             <div className="row mb-2">
               <div className="col-md-6">
                 <label className="form-label"><b>Agent Name</b></label>
-                <input type="text" className="form-control" value={agentname} disabled />
+                <input type="text" className="form-control" value={agentname}
+                 onChange = {(e) => setAgentname(e.target.value)}
+                 disabled = {role !== "itmanagement"} />
               </div>
               <div className="col-md-6">
                 <label className="form-label"><b>Authorised By</b></label>
-                <input type="text" className="form-control" value={authorisedby} disabled />
+                <input type="text" className="form-control" value={authorisedby}
+                 onChange={(e) => setAuthorisedby(e.target.value)}
+                  disabled = {role !== "itmanagement"}/>
               </div>
             </div>
 
             <div className="row mb-2">
               <div className="col-md-6">
                 <label className="form-label"><b>Date</b></label>
-                <input type="text" className="form-control" value={date} disabled />
+                <input type="text" className="form-control" value={date} 
+                disabled = {role !== "itmanagement"}/>
               </div>
               <div className="col-md-6">
                 <label className="form-label"><b>Actioned By</b></label>
-                <input type="text" className="form-control" value={actionedby} disabled />
+                <input type="text" className="form-control" 
+                value={actionedby} 
+                onChange={(e) => setActionedby(e.target.value)}
+                disabled = {role !== "itmanagement"} />
               </div>
             </div>
 
             <div className="row mb-2">
               <div className="col-md-6">
                 <label className="form-label"><b>Date</b></label>
-                <input type="text" className="form-control" value={date} disabled />
+                <input type="text" className="form-control" value={date} disabled = {role !== "itmanagement"}/>
               </div>
               <div className="col-md-6">
                 <label className="form-label"><b>Reviewed By</b></label>
-                <input type="text" className="form-control" value={reviewedby} disabled />
+                <input type="text" className="form-control" value={reviewedby}
+                 onChange={(e) => setReviewedby(e.target.value)}
+                disabled = {role !== "itmanagement"}/>
               </div>
             </div>
 
@@ -265,7 +277,7 @@ const IvendEdit = ({ item, setFormEntries }) => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-100" disabled={role !== "deptmanager" && role !== "itmanager"}>
+            <button type="submit" className="btn btn-primary w-100" disabled={role !== "deptmanager" && role !== "itmanager" && role !== "itmanagement"}>
               Submit
             </button>
           </form>
