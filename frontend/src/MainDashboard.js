@@ -1,11 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { GrUserNew } from 'react-icons/gr';
 import { FcManager } from 'react-icons/fc';
 import { SiGoogletagmanager, SiNginxproxymanager } from 'react-icons/si';
 import { FaUserCheck } from 'react-icons/fa';
 import { LuLayoutDashboard } from 'react-icons/lu';
+import { IoCreate } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
+
+
+
 
 import image1 from './images/login.png';
 
@@ -94,23 +101,48 @@ const MainDashboard = () => {
   // Select cards based on role, fallback to empty array
   const cardsToShow = cards[role] || [];
 
+const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+
+
+
+
   return (
     <div>
-    <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
-        <div className="container-fluid">
-          <span className="navbar-brand text-white">
-            <img
-              src={image1}
-              alt="Login Icon"
-              style={{ width: '40px', height: '40px', objectFit: 'contain' }}
-            />
-            &nbsp;
-            <b>ASSOCIATED MEAT PACKERS</b>
-          </span>
-        </div>
-      </nav>
+   <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
+  <div className="container-fluid d-flex justify-content-between align-items-center">
+    <span className="navbar-brand text-white d-flex align-items-center">
+      <img
+        src={image1}
+        alt="Login Icon"
+        style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+      />
+      &nbsp;
+      <b>ASSOCIATED MEAT PACKERS</b>
+    </span>
+    <div className="d-flex gap-2">
+      <button onClick={handleBack} className="btn btn-primary">
+        <b><IoMdArrowRoundBack /> Back</b>
+      </button>
+      <button
+        className="btn btn-danger"
+        onClick={() => {
+          localStorage.clear();
+          navigate('/');
+        }}
+      >
+         <b> <IoLogOutSharp />Logout</b>
+      </button>
+    </div>
+  </div>
+</nav>
 
 
+   
       <div style={styles.dashboardContent}>
         <div className="row row-cols-1 row-cols-md-4 g-4">
           {cardsToShow.length > 0 ? (

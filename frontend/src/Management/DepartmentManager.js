@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from '../images/login.png';
+import { useNavigate } from 'react-router-dom';
 
 
 import DomainEdit from '../UserformsModals/domainEdit';
@@ -9,6 +10,13 @@ import InternetaccessEdit from '../UserformsModals/internetaccessEdit';
 import ChangeofcontrolEdit from '../UserformsModals/changecontrolEdit';
 import MeatmatrixEdit from '../UserformsModals/meatmatrixEdit';
 import VpnEdit from '../UserformsModals/vpnEdit';
+
+
+import { IoCreate } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
+
 
 const collections = [
   "ivendusers",
@@ -97,6 +105,11 @@ const handleRowClick = (item) => {
   setSelectedItem(item);
   setShowModal(true);
 };
+const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
 
   return (
@@ -129,6 +142,20 @@ const handleRowClick = (item) => {
             </option>
           ))}
         </select>
+
+            <div className="d-flex justify-content-end">
+          <button onClick={handleBack} className="btn btn-primary">
+          <b><IoMdArrowRoundBack /> Back</b>
+          </button>
+          <button className="btn btn-danger" onClick={() => {
+            localStorage.clear();
+            navigate('/');
+          }}>
+            <b> <IoLogOutSharp />Logout</b>
+          </button>
+        </div>
+
+
       </div>
 
       {loading && <p>Loading data...</p>}

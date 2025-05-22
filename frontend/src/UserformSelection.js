@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { IoCreate } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 import { GrCloudSoftware } from "react-icons/gr";
 import { SiBmcsoftware, SiEsotericsoftware } from "react-icons/si";
@@ -90,7 +93,12 @@ const UserformSelection = () => {
       marginTop: '1rem',
     },
   };
-const navigate = useNavigate();
+ const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
 
   return (
     <div>
@@ -109,6 +117,18 @@ const navigate = useNavigate();
                 </div>
               </div>
             </nav>
+
+             <div className="d-flex justify-content-end">
+          <button onClick={handleBack} className="btn btn-primary">
+              <b><IoMdArrowRoundBack /> Back</b>
+          </button>
+          <button className="btn btn-danger" onClick={() => {
+            localStorage.clear();
+            navigate('/');
+          }}>
+           <b> <IoLogOutSharp />Logout</b>
+          </button>
+        </div>
 
       <div style={styles.dashboardContent}>
         <div className="row row-cols-1 row-cols-md-4 g-4">

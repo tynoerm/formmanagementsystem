@@ -2,7 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from '../images/login.png';
+import { useNavigate } from 'react-router-dom';
 
+
+import { IoCreate } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 import DomainEdit from '../UserformsModals/domainEdit';
 import IvendEdit from '../UserformsModals/ivendEdit';
@@ -40,6 +45,7 @@ const ITManagement = () => {
   const [username, setUsername] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -80,6 +86,14 @@ const ITManagement = () => {
     setSelectedItem(item);
     setShowModal(true);
   };
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+
+
 
   return (
     <div>
@@ -103,9 +117,20 @@ const ITManagement = () => {
             </option>
           ))}
         </select>
+        <div className="d-flex justify-content-end">
+          <button onClick={handleBack} className="btn btn-primary">
+           <b><IoMdArrowRoundBack /> Back</b>
+          </button>
+          <button className="btn btn-danger" onClick={() => {
+            localStorage.clear();
+            navigate('/');
+          }}>
+            <b> <IoLogOutSharp />Logout</b>
+          </button>
+        </div>
 
-       
       </div>
+
 
       {loading && <p>Loading data...</p>}
       {error && <p className="text-danger">{error}</p>}

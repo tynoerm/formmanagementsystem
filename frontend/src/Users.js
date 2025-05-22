@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from './images/login.png';
 import { useNavigate } from 'react-router-dom';
+import { IoCreate } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
+
+
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -80,24 +86,45 @@ const handleResetPassword = async () => {
 };
 
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
 
   return (
     <div>
-      <nav
-        className="navbar border-bottom shadow-lg p-1 mb-0 rounded"
-        style={{ backgroundColor: 'black' }}
+   <nav
+  className="navbar border-bottom shadow-lg p-1 mb-0 rounded"
+  style={{ backgroundColor: 'black' }}
+>
+  <div className="container-fluid d-flex justify-content-between align-items-center">
+    <span className="navbar-brand text-white d-flex align-items-center">
+      <img
+        src={image1}
+        alt="Login Icon"
+        style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+      />
+      &nbsp;
+      <b><i>USERS MANAGEMENT MODULE</i></b>
+    </span>
+    <div className="d-flex gap-2">
+      <button onClick={handleBack} className="btn btn-primary">
+        <b><IoMdArrowRoundBack /> Back</b>
+      </button>
+      <button
+        className="btn btn-danger"
+        onClick={() => {
+          localStorage.clear();
+          navigate('/');
+        }}
       >
-        <div className="container-fluid">
-          <span className="navbar-brand text-white">
-            <img
-              src={image1}
-              alt="Login Icon"
-              style={{ width: '40px', height: '40px', objectFit: 'contain' }}
-            />
-            &nbsp;<b> <i>USERS MANAGEMENT MODULE</i></b>
-          </span>
-        </div>
-      </nav>
+       <b> <IoLogOutSharp />Logout</b>
+      </button>
+    </div>
+  </div>
+</nav>
+
+      
 
       <div className="container mt-3 d-flex justify-content-between align-items-center">
         <input
@@ -113,7 +140,7 @@ const handleResetPassword = async () => {
           onClick={handleCreateUser}
           style={{ minWidth: '150px' }}
         >
-          Create User
+           <b><IoCreate /> CREATE USER</b>
         </button>
       </div>
 
@@ -196,6 +223,10 @@ const handleResetPassword = async () => {
           </div>
         </div>
       )}
+       <footer className="text-white bg-dark text-center p-2 fixed-bottom">
+        &copy; Associated Meat Packers. All rights reserved.
+      </footer>
+    
     </div>
   );
 };

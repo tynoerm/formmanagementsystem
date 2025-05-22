@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from '../images/login.png';
+import { useNavigate } from 'react-router-dom';
+
+import { IoCreate } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 import DomainEdit from '../UserformsModals/domainEdit';
 import IvendEdit from '../UserformsModals/ivendEdit';
@@ -81,6 +86,14 @@ const [selectedItem, setSelectedItem] = useState(null);
       .replace(/([A-Z])/g, ' $1')       // Add space before capital letters
       .replace(/^./, str => str.toUpperCase()); // Capitalize first letter
 
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+
+
   return (
     <div>
       <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
@@ -112,14 +125,17 @@ const [selectedItem, setSelectedItem] = useState(null);
           ))}
         </select>
 
-        <input
-          type="text"
-          className="form-control w-25"
-          placeholder="Search..."
-          style={{ fontStyle: 'italic' }}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+            <div className="d-flex justify-content-end">
+          <button onClick={handleBack} className="btn btn-primary">
+            <b><IoMdArrowRoundBack /> Back</b>
+          </button>
+          <button className="btn btn-danger" onClick={() => {
+            localStorage.clear();
+            navigate('/');
+          }}>
+            <b> <IoLogOutSharp />Logout</b>
+          </button>
+        </div>
       </div>
 
       {loading && <p>Loading data...</p>}

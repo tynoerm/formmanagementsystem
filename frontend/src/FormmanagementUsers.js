@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import image1 from './images/login.png';
+import { useNavigate } from 'react-router-dom';
 
 const collections = [
   "ivendusers",
@@ -66,6 +67,14 @@ const FormmanagementUsers = () => {
       .trim();
   };
 
+
+   const navigate = useNavigate();
+  
+    const handleBack = () => {
+      navigate(-1);
+    };
+  
+
   return (
     <div>
       <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
@@ -92,6 +101,17 @@ const FormmanagementUsers = () => {
             </option>
           ))}
         </select>
+           <div className="d-flex justify-content-end">
+          <button onClick={handleBack} className="btn btn-primary">
+            &larr; Back
+          </button>
+          <button className="btn btn-danger" onClick={() => {
+            localStorage.clear();
+            navigate('/');
+          }}>
+            Logout
+          </button>
+        </div>
       </div>
 
       {loading && <p>Loading data...</p>}

@@ -6,6 +6,11 @@ import { RiLoginBoxFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import image1 from './images/login.png';
 
+
+import { IoCreate } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
+
 function UserManagement() {
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
@@ -64,20 +69,39 @@ function UserManagement() {
         }
     };
 
+    const handleBack = () => {
+    navigate(-1);
+  };
+
     return (
         <>
             <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
-                <div className="container-fluid">
-                    <span className="navbar-brand text-white">
-                        <img
-                            src={image1}
-                            alt="Login Icon"
-                            style={{ width: '40px', height: '40px', objectFit: 'contain' }}
-                        />
-                        &nbsp;<b>ASSOCIATED MEAT PACKERS</b>
-                    </span>
-                </div>
-            </nav>
+  <div className="container-fluid d-flex justify-content-between align-items-center">
+    <span className="navbar-brand text-white d-flex align-items-center">
+      <img
+        src={image1}
+        alt="Login Icon"
+        style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+      />
+      &nbsp;<b>ASSOCIATED MEAT PACKERS</b>
+    </span>
+
+    <div className="d-flex gap-2">
+      <button onClick={handleBack} className="btn btn-primary">
+        <b><IoMdArrowRoundBack /> Back</b>
+      </button>
+      <button className="btn btn-danger" onClick={() => {
+        localStorage.clear();
+        navigate('/');
+      }}>
+        <b><IoLogOutSharp /> Logout</b>
+      </button>
+    </div>
+  </div>
+</nav>
+
+        
+
 
             <div className="d-flex justify-content-center align-items-center bg-light" style={{ height: 'calc(100vh - 70px)' }}>
                 <div className="card p-3 shadow" style={{ width: '400px' }}>
@@ -153,7 +177,7 @@ function UserManagement() {
                                 <option value="finance">Finance</option>
                                 <option value="operations">Operations</option>
                                 <option value="sales">Sales</option>
-                                <option value="itdepartment">IT </option>
+                                <option value="itdepartment">IT Department </option>
                                 <option value="retailshops">Retail Shops</option>
                             </select>
                         </div>
