@@ -1,34 +1,42 @@
-import { Schema as _Schema, model } from 'mongoose';
-const Schema = _Schema;
+import mongoose from 'mongoose';
 
-const ivendSchema = new Schema({
-  fullname: { type: String, required: true },
-   username: { type: String },
-  jobtitle: { type: String, required: true },
-  store: { type: String, required: true },
-  department: {type: String, required: true},
-  date: { type: Date, required: true },
-  headofdepartmentname: { type: String, required: true },
-  deptmanagerapproval: {
+const { Schema, model } = mongoose;
+
+const ivendSchema = new Schema(
+  {
+    fullname: { type: String, required: true },
+    username: { type: String },
+    jobtitle: { type: String, required: true },
+    store: { type: String, required: true },
+    department: { type: String, required: true },
+    date: { type: Date, required: true },
+    headofdepartmentname: { type: String, required: true },
+    deptmanagerapproval: {
       type: String,
-  enum: ["pending", "approved", "rejected", "unapproved"],
-  default: "unapproved",
-  }, // Optional, filled by ICT
-  itmanagerapproval: {
+      enum: ['pending', 'approved', 'rejected', 'unapproved'],
+      default: 'unapproved',
+    },
+    itmanagerapproval: {
       type: String,
-  enum: ["pending", "approved", "rejected", "unapproved"],
-  default: "unapproved",
-  },   // Optional, filled by ICT
-  rights: [
-    {
-      item: { type: String },
-      access: { type: String }
-    }
-  ],
-  roles: [{ type: String }] // Checkbox selections
-}, {
-  timestamps: true,
-  collection: 'ivendusers'  // ✅ Move collection name here
-});
+      enum: ['pending', 'approved', 'rejected', 'unapproved'],
+      default: 'unapproved',
+    },
+    rights: [
+      {
+        item: { type: String },
+        access: { type: String },
+      },
+    ],
+    roles: [{ type: String }],
+    agentname: { type: String },
+    authorisedby: { type: String },
+    actionedby: { type: String },
+    reviewedby: {type: String},
+  },
+  {
+    timestamps: true,
+    collection: 'ivendusers',
+  }
+);
 
 export default model('ivendusers', ivendSchema);

@@ -15,6 +15,10 @@ const domainSchema = new Schema({
   authorisedby: { type: String },
   date1: { type: Date },
 
+  organisationunit: {
+    type: String
+  },
+
   headofdepartmentname: { type: String },
   deptmanagerapproval: {
     type: String,

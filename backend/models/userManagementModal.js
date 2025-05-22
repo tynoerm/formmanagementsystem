@@ -35,7 +35,7 @@ const usersSchema = new Schema({
       'finance',
       'operations',
       'sales',
-      'itdeepartment',
+      'itdepartment',
       'retailshops'
     ],
     required: true,
