@@ -231,7 +231,7 @@ const handleSubmit = async (e) => {
 
             <div className="col-md-6 mb-3">
               <label className="form-label"><b>IT Manager</b></label>
-              <select className="form-select w-100" value={headofict} onChange={(e) => setHeadofict(e.target.value)} disabled={role !== 'itmanager'}>
+              <select className="form-select w-100" value={headofict} onChange={(e) => setHeadofict(e.target.value)} disabled={role !== 'itexec'}>
                 <option value="pending"><i>Pending</i></option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>

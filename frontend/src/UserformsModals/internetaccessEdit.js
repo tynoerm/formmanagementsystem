@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaInternetExplorer } from "react-icons/fa";
 import axios from "axios";
-import { toast } from "react-toastify"; // Add if using toast for feedback
+import { toast } from "react-toastify";
 
 const InternetaccessEdit = ({ item, setFormEntries }) => {
   const [firstname, setFirstname] = useState("");
   const [surname, setSurname] = useState("");
-   const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [daterequested, setDaterequested] = useState("");
   const [department, setDepartment] = useState("");
   const [daterequired, setDaterequired] = useState("");
@@ -15,19 +15,17 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
   const [macaddress, setMacaddress] = useState("");
   const [businessjustification, setBusinessjustification] = useState("");
   const [itmanagerapproval, setItmanagerapproval] = useState("pending");
-  const [itexcapproval, setItexecapproval] = useState("pending");
+  const [itexcapproval, setItexecapproval] = useState("pending"); // ✅ Corrected state name
   const [showModal4, setShowModal4] = useState(true);
+  const [role, setRole] = useState("");
 
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
 
-  const [role, setRole] = useState("")
-  
-    useEffect(() => {
-      const storedRole = localStorage.getItem("role");
-      if (storedRole) {
-        setRole(storedRole);
-      }
-    })
-  // Populate form fields on mount or item change
   useEffect(() => {
     if (item) {
       setFirstname(item.firstname || "");
@@ -41,7 +39,7 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
       setMacaddress(item.macaddress || "");
       setBusinessjustification(item.businessjustification || "");
       setItmanagerapproval(item.itmanagerapproval || "pending");
-      setItexecapproval(item.itexecapproval || "pending"); // corrected key
+      setItexecapproval(item.itexecapproval || "pending"); // ✅ Corrected key
     }
   }, [item]);
 
@@ -60,20 +58,18 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
       macaddress,
       businessjustification,
       itmanagerapproval,
-      itexecapproval: itexcapproval, // corrected key
+      itexcapproval, // ✅ Corrected key usage
     };
 
     try {
       let response;
       if (item && item._id) {
-        // Update mode
         response = await axios.put(
           `http://localhost:3001/internetaccess/update-internetaccess/${item._id}`,
           formData
         );
         toast.success("Request updated successfully!");
       } else {
-        // Create mode (fallback)
         response = await axios.post(
           "http://localhost:3001/internetaccess/create-internetaccess",
           formData
@@ -122,36 +118,71 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
     <div style={styles.modalBackdrop}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <h5 className="mb-3">
-          <b><FaInternetExplorer /> &nbsp;Internet Access Request</b>
+          <b>
+            <FaInternetExplorer /> &nbsp;Internet Access Request
+          </b>
         </h5>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <b><i>(To be completed by the Applicant)</i></b>
-          </div>
-
-          {/* APPLICANT SECTION */}
-          <div className="row mb-2">
-            <div className="col-md-6">
-              <label><b>First Name</b></label>
-              <input type="text" className="form-control" value={firstname} onChange={(e) => setFirstname(e.target.value)} disabled />
-            </div>
-            <div className="col-md-6">
-              <label><b>Surname</b></label>
-              <input type="text" className="form-control" value={surname} onChange={(e) => setSurname(e.target.value)} disabled />
-            </div>
-                 <div className="col-md-6">
-              <label><b>Username</b></label>
-              <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} disabled />
-            </div>
+            <b>
+              <i>(To be completed by the Applicant)</i>
+            </b>
           </div>
 
           <div className="row mb-2">
             <div className="col-md-6">
-              <label><b>Date Requested</b></label>
-              <input type="date" className="form-control" value={daterequested} onChange={(e) => setDaterequested(e.target.value)} disabled />
+              <label>
+                <b>First Name</b>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+                disabled
+              />
             </div>
-      <div className="col-md-6">
+            <div className="col-md-6">
+              <label>
+                <b>Surname</b>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
+                disabled
+              />
+            </div>
+            <div className="col-md-6">
+              <label>
+                <b>Username</b>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                disabled
+              />
+            </div>
+          </div>
+
+          <div className="row mb-2">
+            <div className="col-md-6">
+              <label>
+                <b>Date Requested</b>
+              </label>
+              <input
+                type="date"
+                className="form-control"
+                value={daterequested}
+                onChange={(e) => setDaterequested(e.target.value)}
+                disabled
+              />
+            </div>
+            <div className="col-md-6">
               <label className="form-label">
                 <b>Department</b>
               </label>
@@ -172,66 +203,121 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
           </div>
 
           <div className="mb-2">
-            <label><b>Date Required</b></label>
-            <input type="date" className="form-control" value={daterequired} onChange={(e) => setDaterequired(e.target.value)} disabled />
+            <label>
+              <b>Date Required</b>
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              value={daterequired}
+              onChange={(e) => setDaterequired(e.target.value)}
+              disabled
+            />
           </div>
 
-          {/* ICT SECTION */}
           <div className="mb-3 mt-4">
-            <b>ICT DEPARTMENT<i> (Use Only)</i></b>
+            <b>
+              ICT DEPARTMENT<i> (Use Only)</i>
+            </b>
           </div>
+
           <div className="row mb-2">
             <div className="col-md-4">
-              <label><b>Device</b></label>
-              <input type="text" className="form-control" value={device} onChange={(e) => setDevice(e.target.value)} disabled = {role !== "itmanagement"} />
+              <label>
+                <b>Device</b>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={device}
+                onChange={(e) => setDevice(e.target.value)}
+                disabled={role !== "itmanagement"}
+              />
             </div>
             <div className="col-md-4">
-              <label><b>IP Address</b></label>
-              <input type="text" className="form-control" value={ipaddress} onChange={(e) => setIpaddress(e.target.value)} disabled = {role !== "itmanagement"}/>
+              <label>
+                <b>IP Address</b>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={ipaddress}
+                onChange={(e) => setIpaddress(e.target.value)}
+                disabled={role !== "itmanagement"}
+              />
             </div>
             <div className="col-md-4">
-              <label><b>MAC Address</b></label>
-              <input type="text" className="form-control" value={macaddress} onChange={(e) => setMacaddress(e.target.value)} disabled = {role !== "itmanagement"} />
+              <label>
+                <b>MAC Address</b>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                value={macaddress}
+                onChange={(e) => setMacaddress(e.target.value)}
+                disabled={role !== "itmanagement"}
+              />
             </div>
           </div>
 
           <div className="mb-2">
-            <label><b>Business Justification</b></label>
-            <textarea className="form-control" rows="3" value={businessjustification} onChange={(e) => setBusinessjustification(e.target.value)} />
+            <label>
+              <b>Business Justification</b>
+            </label>
+            <textarea
+              className="form-control"
+              rows="3"
+              value={businessjustification}
+              onChange={(e) => setBusinessjustification(e.target.value)}
+            />
           </div>
 
-          {/* APPROVAL SECTION */}
           <div className="row mb-4">
             <div className="col-12 text-center mb-3">
-              <label className="form-label mb-0"><b>APPROVALS</b></label>
+              <label className="form-label mb-0">
+                <b>APPROVALS</b>
+              </label>
             </div>
+
             <div className="col-md-6 mb-3">
-              <label className="form-label"><b>IT Manager</b></label>
-              <select className="form-select w-100" 
-              value={itmanagerapproval}
-               onChange={(e) => setItmanagerapproval(e.target.value)} 
-              disabled = {role !== "itmanager"}
+              <label className="form-label">
+                <b>IT Manager</b>
+              </label>
+              <select
+                className="form-select w-100"
+                value={itmanagerapproval}
+                onChange={(e) => setItmanagerapproval(e.target.value)}
+                disabled={role !== "itmanager"}
               >
-                <option value="pending"><i>Pending</i></option>
+                <option value="pending">
+                  <i>Pending</i>
+                </option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
               </select>
             </div>
 
             <div className="col-md-6 mb-3">
-              <label className="form-label"><b>IT Executive</b></label>
-              <select className="form-select w-100" value={itexcapproval} onChange={(e) => setItexecapproval(e.target.value)} disabled = {role !== "itexec"}>
-               
-                <option value="pending"><i>Pending</i></option>
+              <label className="form-label">
+                <b>IT Executive</b>
+              </label>
+              <select
+                className="form-select w-100"
+                value={itexcapproval}
+                onChange={(e) => setItexecapproval(e.target.value)}
+                disabled={role !== "itexec"}
+              >
+                <option value="pending">
+                  <i>Pending</i>
+                </option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
-              
               </select>
             </div>
           </div>
 
           <button type="submit" className="btn btn-dark w-100 mt-3">
-          <b>  {item?._id ? "Update Request" : "SUBMIT REQUEST"}</b>
+            <b>{item?._id ? "Update Request" : "SUBMIT REQUEST"}</b>
           </button>
         </form>
       </div>

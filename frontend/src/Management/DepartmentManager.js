@@ -14,12 +14,12 @@ import { IoLogOutSharp } from "react-icons/io5";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 const collections = [
-  "ivendusers",
-  "meatmatrix",
-  "vpn",
-  "changeofcontrol",
-  "domainaccess",
-  "internetaccess"
+  { label: "Ivend Users", value: "ivendusers" },
+  { label: "Meat Matrix", value: "meatmatrix" },
+  { label: "VPN Requests", value: "vpn" },
+  { label: "Change of Control", value: "changeofcontrol" },
+  { label: "Domain Access", value: "domainaccess" },
+  { label: "Internet Access", value: "internetaccess" }
 ];
 
 // Column mapping for each collection
@@ -35,7 +35,10 @@ const columnMapping = {
 const DepartmentManager = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [collectionSelected, setCollectionSelected] = useState(collections[0]);
+
+  // Initialize collectionSelected as string value, not object
+  const [collectionSelected, setCollectionSelected] = useState(collections[0].value);
+
   const [formData, setFormData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [department, setDepartment] = useState('');
@@ -45,6 +48,8 @@ const DepartmentManager = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const storedDepartment = localStorage.getItem('department');
     const storedUsername = localStorage.getItem('username');
@@ -53,8 +58,8 @@ const DepartmentManager = () => {
   }, []);
 
   useEffect(() => {
-    setShowModal(false);     
-    setSelectedItem(null);   
+    setShowModal(false);
+    setSelectedItem(null);
 
     if (!collectionSelected) return;
 
@@ -85,6 +90,7 @@ const DepartmentManager = () => {
       });
   }, [collectionSelected]);
 
+  // Filter by department - be mindful if item.department may be undefined
   const filteredData = formData.filter(item =>
     item.department?.toLowerCase() === department.toLowerCase()
   );
@@ -94,23 +100,22 @@ const DepartmentManager = () => {
     setShowModal(true);
   };
 
-  const navigate = useNavigate();
-
   const handleBack = () => {
     navigate(-1);
   };
 
   const renderCellContent = (col, value) => {
+    // all lowercase approval fields to avoid duplication & case mismatch
     const approvalFields = [
       'deptmanagerapproval',
       'itmanagerapproval',
       'itexecapproval',
-      'itExecutiveApproval',
+      'itexecutiveapproval',
       'headofict',
       'headofdept',
-      'deptManagerApproval',
-      'itManagerApproval',
-      'itExecutiveApproval'
+      'deptmanagerapproval',
+      'itmanagerapproval',
+      'itexecutiveapproval'
     ];
 
     if (approvalFields.includes(col.toLowerCase())) {
@@ -164,8 +169,8 @@ const DepartmentManager = () => {
           onChange={(e) => setCollectionSelected(e.target.value)}
         >
           {collections.map((col) => (
-            <option key={col} value={col}>
-              {col.charAt(0).toUpperCase() + col.slice(1)}
+            <option key={col.value} value={col.value}>
+              {col.label}
             </option>
           ))}
         </select>
@@ -191,7 +196,9 @@ const DepartmentManager = () => {
           <tr>
             {columns.length > 0 ? (
               columns.map((col) => (
-                <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+                <th key={col}>
+                  {col.charAt(0).toUpperCase() + col.slice(1)}
+                </th>
               ))
             ) : (
               <th>No Data</th>

@@ -4,7 +4,6 @@ import axios from 'axios';
 import image1 from '../images/login.png';
 import { useNavigate } from 'react-router-dom';
 
-
 import { IoCreate } from "react-icons/io5";
 import { IoLogOutSharp } from "react-icons/io5";
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -16,7 +15,6 @@ import ChangeofcontrolEdit from '../UserformsModals/changecontrolEdit';
 import MeatmatrixEdit from '../UserformsModals/meatmatrixEdit';
 import VpnEdit from '../UserformsModals/vpnEdit';
 
-
 const collections = [
   'ivendusers',
   'meatmatrix',
@@ -26,6 +24,17 @@ const collections = [
   'internetaccess',
 ];
 
+// Friendly names for collections
+const collectionLabels = {
+  ivendusers: 'Ivend Users',
+  meatmatrix: 'Meat Matrix',
+  vpn: 'VPN Requests',
+  changeofcontrol: 'Change of Control',
+  domainaccess: 'Domain Access',
+  internetaccess: 'Internet Access',
+};
+
+// Columns to show per collection
 const columnMapping = {
   ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'roles'],
   meatmatrix: ['fullName', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
@@ -33,6 +42,65 @@ const columnMapping = {
   changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
   domainaccess: ['fullName', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
+};
+
+// Friendly labels for columns per collection
+const columnLabels = {
+  ivendusers: {
+    fullName: 'Full Name',
+    jobtitle: 'Job Title',
+    store: 'Store',
+    headofdepartmentname: 'Head of Department',
+    deptmanagerapproval: 'Dept Manager Approval',
+    itmanagerapproval: 'IT Manager Approval',
+    roles: 'Roles',
+  },
+  meatmatrix: {
+    fullName: 'Full Name',
+    jobtitle: 'Job Title',
+    date: 'Date',
+    headofdepartmentname: 'Head of Department',
+    from: 'From',
+    to: 'To',
+    deptmanagerapproval: 'Dept Manager Approval',
+    itmanagerapproval: 'IT Manager Approval',
+  },
+  vpn: {
+    vpnRequestorname: 'Requestor Name',
+    vpnRequestordepartment: 'Department',
+    vpnRequestorjobtitle: 'Job Title',
+    vpnRequestoremail: 'Email',
+    deptManagerApproval: 'Dept Manager Approval',
+    itManagerApproval: 'IT Manager Approval',
+    itExecutiveApproval: 'IT Executive Approval',
+  },
+  changeofcontrol: {
+    name: 'Name',
+    division: 'Division',
+    datesubmitted: 'Date Submitted',
+    proposedchange: 'Proposed Change',
+    changesmade: 'Changes Made',
+    requestor: 'Requestor',
+  },
+  domainaccess: {
+    fullName: 'Full Name',
+    jobtitle: 'Job Title',
+    department: 'Department',
+    division: 'Division',
+    managersname: "Manager's Name",
+    deptmanagerapproval: 'Dept Manager Approval',
+    itmanagerapproval: 'IT Manager Approval',
+  },
+  internetaccess: {
+    firstname: 'First Name',
+    surname: 'Surname',
+    department: 'Department',
+    device: 'Device',
+    ipaddress: 'IP Address',
+    macaddress: 'MAC Address',
+    itmanagerapproval: 'IT Manager Approval',
+    itexecapproval: 'IT Executive Approval',
+  },
 };
 
 const ITManagement = () => {
@@ -45,7 +113,6 @@ const ITManagement = () => {
   const [username, setUsername] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -86,14 +153,14 @@ const ITManagement = () => {
     setSelectedItem(item);
     setShowModal(true);
   };
+
   const navigate = useNavigate();
 
   const handleBack = () => {
     navigate(-1);
   };
 
-
- const renderCellContent = (col, value) => {
+  const renderCellContent = (col, value) => {
     const approvalFields = [
       'deptmanagerapproval',
       'itmanagerapproval',
@@ -127,7 +194,6 @@ const ITManagement = () => {
     return value != null ? value.toString() : "";
   };
 
-
   return (
     <div>
       <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
@@ -143,16 +209,20 @@ const ITManagement = () => {
       </nav>
 
       <div className="mb-3 d-flex justify-content-between mt-3">
-        <select className="form-select w-25" value={collectionSelected} onChange={(e) => setCollectionSelected(e.target.value)}>
+        <select
+          className="form-select w-25"
+          value={collectionSelected}
+          onChange={(e) => setCollectionSelected(e.target.value)}
+        >
           {collections.map((col) => (
             <option key={col} value={col}>
-              {col.charAt(0).toUpperCase() + col.slice(1)}
+              {collectionLabels[col] || col.charAt(0).toUpperCase() + col.slice(1)}
             </option>
           ))}
         </select>
         <div className="d-flex justify-content-end">
           <button onClick={handleBack} className="btn btn-primary">
-           <b><IoMdArrowRoundBack /> Back</b>
+            <b><IoMdArrowRoundBack /> Back</b>
           </button>
           <button className="btn btn-danger" onClick={() => {
             localStorage.clear();
@@ -161,44 +231,44 @@ const ITManagement = () => {
             <b> <IoLogOutSharp />Logout</b>
           </button>
         </div>
-
       </div>
-
 
       {loading && <p>Loading data...</p>}
       {error && <p className="text-danger">{error}</p>}
 
-     <table className="table table-striped table-bordered mt-3">
-  <thead className="table-dark">
-    <tr>
-      {columns.length > 0 ? (
-        columns.map((col) => (
-          <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
-        ))
-      ) : (
-        <th>No Data</th>
-      )}
-    </tr>
-  </thead>
-  <tbody>
-    {filteredData.length > 0 ? (
-      filteredData.map((item, idx) => (
-        <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
-          {columns.map((col) => (
-            <td key={col}>{renderCellContent(col, item[col])}</td>
-          ))}
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan={columns.length || 1} className="text-center">
-          No records found
-        </td>
-      </tr>
-    )}
-  </tbody>
-</table>
-
+      <table className="table table-striped table-bordered mt-3">
+        <thead className="table-dark">
+          <tr>
+            {columns.length > 0 ? (
+              columns.map((col) => (
+                <th key={col}>
+                  {columnLabels[collectionSelected]?.[col] ||
+                    col.charAt(0).toUpperCase() + col.slice(1)}
+                </th>
+              ))
+            ) : (
+              <th>No Data</th>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {filteredData.length > 0 ? (
+            filteredData.map((item, idx) => (
+              <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
+                {columns.map((col) => (
+                  <td key={col}>{renderCellContent(col, item[col])}</td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={columns.length || 1} className="text-center">
+                No records found
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
 
       {showModal && selectedItem && (
         <>
