@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { LuFileInput } from "react-icons/lu";
 import { GiMeatCleaver } from "react-icons/gi";
 import axios from "axios";
@@ -39,14 +39,14 @@ const MeatmatrixModal = () => {
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [showModal3, setShowModal3] = useState(true);
 
- useEffect(() => {
+  useEffect(() => {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) {
       setUsername(storedUsername);
     }
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const storedDepartment = localStorage.getItem("department");
     if (storedDepartment) {
       setDepartment(storedDepartment);
@@ -76,86 +76,86 @@ const MeatmatrixModal = () => {
     }
   };
 
-const handlemeatmatrixSubmit = async (e) => {
-  e.preventDefault();
+  const handlemeatmatrixSubmit = async (e) => {
+    e.preventDefault();
 
-  if (selectedRoles.length === 0) {
-    alert("Please select at least one access right.");
-    return;
-  }
+    if (selectedRoles.length === 0) {
+      alert("Please select at least one access right.");
+      return;
+    }
 
-  // Convert from/to strings to numbers (optional, if you want them as numbers)
-  const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
-    from: Number(from),
-    to: Number(to),
-  }));
+    // Convert from/to strings to numbers (optional, if you want them as numbers)
+    const cleanedStockLocations = stockTransferLocations.map(({ from, to }) => ({
+      from: Number(from),
+      to: Number(to),
+    }));
 
-  const formEntry = {
-    fullname,
-    username,
-    jobtitle,
-    store,
-    department,
-    date,
-    headofdepartmentname,
-    stockTransferLocations: cleanedStockLocations, // <-- send array here
-    authoriseddatabase,
-    datetermination,
-    time,
-    terminatedby,
-    userCode,
-    userId,
-    costCenter,
-    stationNumber,
-    processId,
-    authorisedBy,
-    actionedBy,
-    date1,
-    deptmanagerapproval,
-    itmanagerapproval,
-    rights: selectedRoles,
+    const formEntry = {
+      fullname,
+      username,
+      jobtitle,
+      store,
+      department,
+      date,
+      headofdepartmentname,
+      stockTransferLocations: cleanedStockLocations, // <-- send array here
+      authoriseddatabase,
+      datetermination,
+      time,
+      terminatedby,
+      userCode,
+      userId,
+      costCenter,
+      stationNumber,
+      processId,
+      authorisedBy,
+      actionedBy,
+      date1,
+      deptmanagerapproval,
+      itmanagerapproval,
+      rights: selectedRoles,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/meatmatrix/create-meatmatrix",
+        formEntry
+      );
+      console.log("Form submitted successfully", response.data);
+
+      window.location.reload();
+
+      // Reset all fields on successful submit
+      setFullname("");
+      setUsername("");
+      setJobtitle("");
+      setStore("");
+      setDepartment("");
+      setDate("");
+      setHeadofdepartment("");
+      setStockTransferLocations([{ from: "", to: "" }]); // reset array state
+      setAuthoriseddatabase("");
+      setDatetermination("");
+      setTime("");
+      setTerminatedby("");
+      setUsercode("");
+      setUserid("");
+      setCostcenter("");
+      setStationnumber("");
+      setProcessid("");
+      setAuthorisedby("");
+      setActionedby("");
+      setDate1("");
+      setDepartmentapproval("");
+      setItmanagerapproval("");
+      setRightsArray([{ item: "", access: "" }]);
+      setSelectedRoles([]);
+      setShowModal3(false);
+    } catch (error) {
+      console.error("Error submitting form", error);
+      alert("Failed to submit form. Please try again later.");
+    }
   };
-
-  try {
-    const response = await axios.post(
-      "http://localhost:3001/meatmatrix/create-meatmatrix",
-      formEntry
-    );
-    console.log("Form submitted successfully", response.data);
-
-    window.location.reload();
-
-    // Reset all fields on successful submit
-    setFullname("");
-    setUsername("");
-    setJobtitle("");
-    setStore("");
-    setDepartment("");
-    setDate("");
-    setHeadofdepartment("");
-    setStockTransferLocations([{ from: "", to: "" }]); // reset array state
-    setAuthoriseddatabase("");
-    setDatetermination("");
-    setTime("");
-    setTerminatedby("");
-    setUsercode("");
-    setUserid("");
-    setCostcenter("");
-    setStationnumber("");
-    setProcessid("");
-    setAuthorisedby("");
-    setActionedby("");
-    setDate1("");
-    setDepartmentapproval("");
-    setItmanagerapproval("");
-    setRightsArray([{ item: "", access: "" }]);
-    setSelectedRoles([]);
-    setShowModal3(false);
-  } catch (error) {
-    console.error("Error submitting form", error);
-    alert("Failed to submit form. Please try again later.");
-  }
-};
 
 
   const styles = {
@@ -193,40 +193,40 @@ const handlemeatmatrixSubmit = async (e) => {
           <b><GiMeatCleaver /> &nbsp;MEAT MATRIX FORM</b>
         </h5>
         <form onSubmit={handlemeatmatrixSubmit}>
-       <div className="row mb-2">
-  <div className="col-md-4">
-    <label><b>Fullname</b></label>
-    <input
-      type="text"
-      value={fullname}
-      onChange={(e) => setFullname(e.target.value)}
-      className="form-control"
-      required
-    />
-  </div>
+          <div className="row mb-2">
+            <div className="col-md-4">
+              <label><b>Fullname</b></label>
+              <input
+                type="text"
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
 
-  <div className="col-md-4">
-    <label><b>Username</b></label>
-    <input
-      type="text"
-      value={username}
-      onChange={(e) => setUsername(e.target.value)}
-      className="form-control"
-      required
-    />
-  </div>
+            <div className="col-md-4">
+              <label><b>Username</b></label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
 
-  <div className="col-md-4">
-    <label><b>Job Title</b></label>
-    <input
-      type="text"
-      value={jobtitle}
-      onChange={(e) => setJobtitle(e.target.value)}
-      className="form-control"
-      required
-    />
-  </div>
-</div>
+            <div className="col-md-4">
+              <label><b>Job Title</b></label>
+              <input
+                type="text"
+                value={jobtitle}
+                onChange={(e) => setJobtitle(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
+          </div>
 
 
           <div className="row mb-2">
@@ -234,7 +234,7 @@ const handlemeatmatrixSubmit = async (e) => {
               <label><b>Store</b></label>
               <input type="text" value={store} onChange={(e) => setStore(e.target.value)} className="form-control" required />
             </div>
-              <div className="col-md-6">
+            <div className="col-md-6">
               <label className="form-label">
                 <b>Department</b>
               </label>
@@ -263,63 +263,63 @@ const handlemeatmatrixSubmit = async (e) => {
             <input type="text" value={headofdepartmentname} onChange={(e) => setHeadofdepartment(e.target.value)} className="form-control" />
           </div>
 
-<label>AUTHORISED STOCK TRANSFER LOCATION</label>
-{stockTransferLocations.map((location, index) => (
-  <div className="row mb-2" key={index}>
-    <div className="col-md-5">
-      <label><b>From</b></label>
-      <input
-        type="number"
-        value={location.from}
-        onChange={(e) => {
-          const newLocations = [...stockTransferLocations];
-          newLocations[index].from = e.target.value;
-          setStockTransferLocations(newLocations);
-        }}
-        className="form-control"
-        min={0}  // optionally prevent negative numbers
-        step={1} // integer steps only
-      />
-    </div>
-    <div className="col-md-5">
-      <label><b>To</b></label>
-      <input
-        type="number"
-        value={location.to}
-        onChange={(e) => {
-          const newLocations = [...stockTransferLocations];
-          newLocations[index].to = e.target.value;
-          setStockTransferLocations(newLocations);
-        }}
-        className="form-control"
-        min={0}
-        step={1}
-      />
-    </div>
-    <div className="col-md-2 d-flex align-items-end">
-      {stockTransferLocations.length > 1 && (
-        <button
-          type="button"
-          className="btn btn-danger"
-          onClick={() => {
-            const newLocations = stockTransferLocations.filter((_, i) => i !== index);
-            setStockTransferLocations(newLocations);
-          }}
-        >
-          Remove
-        </button>
-      )}
-    </div>
-  </div>
-))}
+          <label>AUTHORISED STOCK TRANSFER LOCATION</label>
+          {stockTransferLocations.map((location, index) => (
+            <div className="row mb-2" key={index}>
+              <div className="col-md-5">
+                <label><b>From</b></label>
+                <input
+                  type="number"
+                  value={location.from}
+                  onChange={(e) => {
+                    const newLocations = [...stockTransferLocations];
+                    newLocations[index].from = e.target.value;
+                    setStockTransferLocations(newLocations);
+                  }}
+                  className="form-control"
+                  min={0}  // optionally prevent negative numbers
+                  step={1} // integer steps only
+                />
+              </div>
+              <div className="col-md-5">
+                <label><b>To</b></label>
+                <input
+                  type="number"
+                  value={location.to}
+                  onChange={(e) => {
+                    const newLocations = [...stockTransferLocations];
+                    newLocations[index].to = e.target.value;
+                    setStockTransferLocations(newLocations);
+                  }}
+                  className="form-control"
+                  min={0}
+                  step={1}
+                />
+              </div>
+              <div className="col-md-2 d-flex align-items-end">
+                {stockTransferLocations.length > 1 && (
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => {
+                      const newLocations = stockTransferLocations.filter((_, i) => i !== index);
+                      setStockTransferLocations(newLocations);
+                    }}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
 
-<button
-  type="button"
-  className="btn btn-secondary mb-3"
-  onClick={() => setStockTransferLocations([...stockTransferLocations, { from: "", to: "" }])}
->
-  Add Location
-</button>
+          <button
+            type="button"
+            className="btn btn-secondary mb-3"
+            onClick={() => setStockTransferLocations([...stockTransferLocations, { from: "", to: "" }])}
+          >
+            Add Location
+          </button>
 
 
 
@@ -343,7 +343,7 @@ const handlemeatmatrixSubmit = async (e) => {
             </div>
             <div className="col-md-4">
               <label><b>Terminated By</b></label>
-              <input type="text" value={terminatedby} onChange={(e) => setTerminatedby(e.target.value)} className="form-control" disabled/>
+              <input type="text" value={terminatedby} onChange={(e) => setTerminatedby(e.target.value)} className="form-control" disabled />
             </div>
           </div>
 
@@ -387,31 +387,31 @@ const handlemeatmatrixSubmit = async (e) => {
           </div>
 
           <div className="row mb-4">
-  <div className="col-12 text-center mb-3">
-    <label className="form-label mb-0">
-      <b>APPROVALS</b>
-    </label>
-  </div>
+            <div className="col-12 text-center mb-3">
+              <label className="form-label mb-0">
+                <b>APPROVALS</b>
+              </label>
+            </div>
 
-  <div className="col-md-6 mb-3">
-    <label className="form-label">
-      <b>Head of Department</b>
-    </label>
-    <button type="button" className="btn btn-danger w-100" disabled>
-        <i> unapproved</i>
-    </button>
-  </div>
+            <div className="col-md-6 mb-3">
+              <label className="form-label">
+                <b>Head of Department</b>
+              </label>
+              <button type="button" className="btn btn-danger w-100" disabled>
+                <i> unapproved</i>
+              </button>
+            </div>
 
-  <div className="col-md-6 mb-3">
-    <label className="form-label">
-      <b>IT Manager</b>
-    </label>
-    <button type="button" className="btn btn-danger w-100" disabled>
-     <i> unapproved</i>
-    </button>
-  </div>
-</div>
-          <button type="submit" className="btn btn-primary w-100">Submit</button>
+            <div className="col-md-6 mb-3">
+              <label className="form-label">
+                <b>IT Manager</b>
+              </label>
+              <button type="button" className="btn btn-danger w-100" disabled>
+                <i> unapproved</i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" className="btn btn-dark w-100"><b>SUBMIT</b></button>
         </form>
       </div>
     </div>

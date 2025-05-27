@@ -50,77 +50,79 @@ useEffect(() => {
   }, []);
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const formData = {
-    vpnRequestorname,
-    department,
-    username,
-    vpnRequestorjobtitle,
-    vpnRequestoremail,
+    const formData = {
+      vpnRequestorname,
+      department,
+      username,
+      vpnRequestorjobtitle,
+      vpnRequestoremail,
 
-    headofdepartmentname,
-    headofdeptDepartment,
-    headofdeptjobtitle,
-    headofdeptemail,
+      headofdepartmentname,
+      headofdeptDepartment,
+      headofdeptjobtitle,
+      headofdeptemail,
 
-    raccesstocolcomservers,
-    otherservices,
-    durationStartdate,
-    durationEnddate,
+      raccesstocolcomservers,
+      otherservices,
+      durationStartdate,
+      durationEnddate,
 
-    computername,
-    assettag,
-    model,
-    operatingsystem,
+      computername,
+      assettag,
+      model,
+      operatingsystem,
 
-    deptManagerApproval,
-    itManagerApproval,
-    itExecutiveApproval,
+      deptManagerApproval,
+      itManagerApproval,
+      itExecutiveApproval,
 
-    itauthourisedby,
-    itactionedby,
+      itauthourisedby,
+      itactionedby,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:3001/vpn/create-vpn", formData);
+      console.log("VPN Request submitted successfully:", response.data);
+
+      // Clear all fields
+      setVpnrequestorname("");
+      setDepartment("");
+      setUsername("");
+      setVpnrequestorjobtitle("");
+      setVpnrequestoremail("");
+
+      setHeadofdepartmentname("");
+      setHeadofdeptdepartment("");
+      setHeadofdeptjobtitle("");
+      setHeadofdeptemail("");
+
+      setRaccesstocolcomservers("");
+      setOtherservices("");
+      setDurationStartdate("");
+      setDurationEnddate("");
+
+      setComputername("");
+      setAssettag("");
+      setModel("");
+      setOperatingsystem("");
+
+      setDeptManagerApproval("unapproved");
+      setItManagerApproval("unapproved");
+      setItExecutiveApproval("unapproved");
+
+      setItauthourisedby("");
+      setItactionedby("");
+
+      setShowModal8(false) // Close modal
+      window.location.reload(); // Optional: refresh page
+
+    } catch (error) {
+      console.error("Failed to submit VPN Request:", error);
+    }
   };
-
-  try {
-    const response = await axios.post("http://localhost:3001/vpn/create-vpn", formData);
-    console.log("VPN Request submitted successfully:", response.data);
-
-    // Clear all fields after successful submission
-    setVpnrequestorname("");
-    setDepartment("");
-    setVpnrequestorjobtitle("");
-    setVpnrequestoremail("");
-
-    setHeadofdepartmentname("");
-    setHeadofdeptdepartment("");
-    setHeadofdeptjobtitle("");
-    setHeadofdeptemail("");
-
-    setRaccesstocolcomservers("");
-    setOtherservices("");
-    setDurationStartdate("");
-    setDurationEnddate("");
-
-    setComputername("");
-    setAssettag("");
-    setModel("");
-    setOperatingsystem("");
-
-    setDeptManagerApproval("unapproved");
-    setItManagerApproval("unapproved");
-    setItExecutiveApproval("unapproved");
-
-    setItauthourisedby("");
-    setItactionedby("");
-
-    setShowModal(false);  // Close the modal
-  } catch (error) {
-    console.error("Failed to submit VPN Request:", error);
-  }
-};
-
   const styles = {
     modalBackdrop: {
       position: "fixed",
@@ -150,6 +152,7 @@ const handleSubmit = async (e) => {
   return (
    <div style={styles.modalBackdrop} onClick={() => setShowModal8(false)}>
       <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        
         <h5 className="mb-4">
           <b><MdDomainDisabled /> VPN REQUEST FORM</b>
         </h5>
@@ -293,7 +296,7 @@ const handleSubmit = async (e) => {
 
 
           <div className="mt-4">
-            <button type="submit" className="btn btn-primary w-100">Submit VPN Request</button>
+            <button type="submit" className="btn btn-dark w-100"><b>SUBMIT VPN REQUEST</b></button>
           </div>
         </form>
       </div>

@@ -277,8 +277,8 @@ const IvendEdit = ({ item, setFormEntries }) => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-100" disabled={role !== "deptmanager" && role !== "itmanager" && role !== "itmanagement"}>
-              Submit
+            <button type="submit" className="btn btn-dark w-100" disabled={role !== "deptmanager" && role !== "itmanager" && role !== "itmanagement"}>
+              <b>SUBMIT</b>
             </button>
           </form>
         </div>

@@ -230,8 +230,8 @@ const InternetaccessEdit = ({ item, setFormEntries }) => {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary w-100 mt-3">
-            {item?._id ? "Update Request" : "Submit Request"}
+          <button type="submit" className="btn btn-dark w-100 mt-3">
+          <b>  {item?._id ? "Update Request" : "SUBMIT REQUEST"}</b>
           </button>
         </form>
       </div>

@@ -415,7 +415,7 @@ const MeatmatrixEdit = ({ item, setFormEntries }) => {
               </select>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary w-100">Submit</button>
+          <button type="submit" className="btn btn-dark w-100"><b>SUBMIT</b></button>
         </form>
       </div>
     </div>

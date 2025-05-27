@@ -164,7 +164,7 @@ const IvendModal = () => {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "15px" }}>
               {roles.map((role, index) => (
                 <div key={index} className="form-check">
-                  <input type="checkbox" value={role} id={`role-${index}`} onChange={handleCheckboxChange} className="form-check-input" disabled />
+                  <input type="checkbox" value={role} id={`role-${index}`} onChange={handleCheckboxChange} className="form-check-input"  />
                   <label htmlFor={`role-${index}`} className="form-check-label">{role}</label>
                 </div>
               ))}
@@ -219,7 +219,7 @@ const IvendModal = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-100">Submit</button>
+            <button type="submit" className="btn btn-dark w-100"><b>SUBMIT</b></button>
           </form>
         </div>
       </div>

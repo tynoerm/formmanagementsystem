@@ -369,8 +369,8 @@ const handleSubmit = async (e) => {
           </div>
 
           <div className="mt-4">
-            <button type="submit" className="btn btn-primary w-100">
-              Submit Change of Control
+            <button type="submit" className="btn btn-dark w-100">
+             <b> SUBMIT CHANGE OF CONTROL</b>
             </button>
           </div>
         </form>

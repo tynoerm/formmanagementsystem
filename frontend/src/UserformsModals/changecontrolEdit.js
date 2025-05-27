@@ -240,8 +240,8 @@ const handleSubmit = async (e) => {
           </div>
 
           <div className="mt-4">
-            <button type="submit" className="btn btn-primary w-100">
-              {item ? "Update" : "Submit"} Change of Control
+            <button type="submit" className="btn btn-dark w-100">
+            <b>  {item ? "Update" : "SUBMIT"} </b>
             </button>
           </div>
         </form>

@@ -21,7 +21,7 @@ const collections = [
 
 
 const columnMapping = {
-  ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname','deptmanagerapproval','itmanagerapproval','rights','roles'],
+  ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname','deptmanagerapproval','itmanagerapproval','roles'],
   meatmatrix: ['fullName', 'jobtitle', 'date', 'headofdepartmentname', 'from','to','deptmanagerapproval','itmanagerapproval'],
   vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail','deptManagerApproval','itManagerApproval','itExecutiveApproval'],
   changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade','requestor'],
@@ -89,6 +89,39 @@ const ITExecutive = () => {
       navigate(-1);
     };
   
+     const renderCellContent = (col, value) => {
+    const approvalFields = [
+      'deptmanagerapproval',
+      'itmanagerapproval',
+      'itexecapproval',
+      'itExecutiveApproval',
+      'headofict',
+      'headofdept',
+      'deptManagerApproval',
+      'itManagerApproval',
+      'itExecutiveApproval'
+    ];
+
+    if (approvalFields.includes(col.toLowerCase())) {
+      if (value?.toLowerCase() === 'approved') {
+        return <span className="badge rounded-pill bg-success">Approved</span>;
+      } else if (value?.toLowerCase() === 'rejected') {
+        return <span className="badge rounded-pill bg-danger">Rejected</span>;
+      } else {
+        return <span className="badge rounded-pill bg-secondary">Unapproved</span>;
+      }
+    }
+
+    if (value && (col.toLowerCase().includes("date") || col.toLowerCase().includes("at"))) {
+      try {
+        return new Date(value).toLocaleDateString();
+      } catch {
+        return value;
+      }
+    }
+
+    return value != null ? value.toString() : "";
+  };
 
   return (
     <div>
@@ -136,42 +169,37 @@ const ITExecutive = () => {
       {loading && <p>Loading data...</p>}
       {error && <p className="text-danger">{error}</p>}
 
-      <table className="table table-striped table-bordered mt-3">
-        <thead className="table-dark">
-          <tr>
-            {columns.length > 0 ? (
-              columns.map((col) => (
-                <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
-              ))
-            ) : (
-              <th>No Data</th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.length > 0 ? (
-            filteredData.map((item, idx) => (
-              <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
-                {columns.map((col) => {
-                  let value = item[col];
-                  if (value && (col.toLowerCase().includes("date") || col.toLowerCase().includes("at"))) {
-                    try {
-                      value = new Date(value).toLocaleDateString();
-                    } catch {}
-                  }
-                  return <td key={col}>{value != null ? value.toString() : ""}</td>;
-                })}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={columns.length || 1} className="text-center">
-                No records found
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+   <table className="table table-striped table-bordered mt-3">
+  <thead className="table-dark">
+    <tr>
+      {columns.length > 0 ? (
+        columns.map((col) => (
+          <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
+        ))
+      ) : (
+        <th>No Data</th>
+      )}
+    </tr>
+  </thead>
+  <tbody>
+    {filteredData.length > 0 ? (
+      filteredData.map((item, idx) => (
+        <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
+          {columns.map((col) => (
+            <td key={col}>{renderCellContent(col, item[col])}</td>
+          ))}
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan={columns.length || 1} className="text-center">
+          No records found
+        </td>
+      </tr>
+    )}
+  </tbody>
+</table>
+
 
       {showModal && selectedItem && (
         <>

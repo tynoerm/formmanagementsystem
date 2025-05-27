@@ -101,7 +101,7 @@ function Login({ setLoggedIn, login }) {
               />
             </div>
             <button type="submit" className="btn btn-dark w-100" disabled={loading}>
-              {loading ? 'Logging in...' : 'LOGIN'}
+            <b>  {loading ? 'Logging in...' : 'LOGIN'}</b>
             </button>
             <div className="text-center mt-2">
               <Link to="/UserManagement"><i></i></Link>
