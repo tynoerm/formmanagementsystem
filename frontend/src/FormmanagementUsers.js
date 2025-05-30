@@ -13,12 +13,46 @@ const collections = [
 ];
 
 const columnMapping = {
-  ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'rights', 'roles'],
-  meatmatrix: ['fullName', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
+  ivendusers: ['fullname', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'roles'],
+  meatmatrix: ['fullname', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
   vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail', 'deptManagerApproval', 'itManagerApproval', 'itExecutiveApproval'],
   changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
   domainaccess: ['fullname', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
+};
+
+const columnLabelMapping = {
+  fullname: 'Full Name',
+  jobtitle: 'Job Title',
+  store: 'Store',
+  headofdepartmentname: 'Head of Department',
+  deptmanagerapproval: 'Dept Manager Approval',
+  itmanagerapproval: 'IT Manager Approval',
+  roles: 'Roles',
+  date: 'Date',
+  from: 'From',
+  to: 'To',
+  vpnRequestorname: 'Requestor Name',
+  vpnRequestordepartment: 'Requestor Department',
+  vpnRequestorjobtitle: 'Requestor Job Title',
+  vpnRequestoremail: 'Requestor Email',
+  deptManagerApproval: 'Dept Manager Approval',
+  itManagerApproval: 'IT Manager Approval',
+  itExecutiveApproval: 'IT Executive Approval',
+  name: 'Name',
+  division: 'Division',
+  datesubmitted: 'Date Submitted',
+  proposedchange: 'Proposed Change',
+  changesmade: 'Changes Made',
+  requestor: 'Requestor',
+  department: 'Department',
+  managersname: 'Manager’s Name',
+  firstname: 'First Name',
+  surname: 'Surname',
+  device: 'Device',
+  ipaddress: 'IP Address',
+  macaddress: 'MAC Address',
+  itexecapproval: 'IT Executive Approval'
 };
 
 const FormmanagementUsers = () => {
@@ -27,6 +61,15 @@ const FormmanagementUsers = () => {
   const [collectionSelected, setCollectionSelected] = useState(collections[0]);
   const [formData, setFormData] = useState([]);
   const [username, setUsername] = useState('');
+
+  const approvalFields = [
+    'deptmanagerapproval',
+    'itmanagerapproval',
+    'itexecapproval',
+    'itManagerApproval',
+    'deptManagerApproval',
+    'itExecutiveApproval'
+  ];
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -45,7 +88,6 @@ const FormmanagementUsers = () => {
         const filteredData = data.filter(item =>
           item.username === username || item.createdBy === username
         );
-
         setFormData(filteredData);
         setLoading(false);
       })
@@ -60,20 +102,18 @@ const FormmanagementUsers = () => {
   const columns = columnMapping[collectionSelected] || (formData[0] ? Object.keys(formData[0]) : []);
 
   const formatHeader = (header) => {
-    return header
-      .replace(/([A-Z])/g, ' $1')        // Add space before capital letters
-      .replace(/_/g, ' ')                // Replace underscores with spaces
-      .replace(/\b\w/g, c => c.toUpperCase()) // Capitalize first letter of each word
+    return columnLabelMapping[header] || header
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase())
       .trim();
   };
 
+  const navigate = useNavigate();
 
-   const navigate = useNavigate();
-  
-    const handleBack = () => {
-      navigate(-1);
-    };
-  
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   return (
     <div>
@@ -89,7 +129,7 @@ const FormmanagementUsers = () => {
         </div>
       </nav>
 
-      <div className="mb-3 d-flex justify-content-start">
+      <div className="mb-3 d-flex justify-content-between align-items-center">
         <select
           className="form-select w-25"
           value={collectionSelected}
@@ -101,7 +141,7 @@ const FormmanagementUsers = () => {
             </option>
           ))}
         </select>
-           <div className="d-flex justify-content-end">
+        <div className="d-flex gap-2">
           <button onClick={handleBack} className="btn btn-primary">
             &larr; Back
           </button>
@@ -140,7 +180,21 @@ const FormmanagementUsers = () => {
                   }
                 }
 
-                return <td key={col}>{value != null ? value.toString() : ''}</td>;
+                return (
+                  <td key={col}>
+                    {approvalFields.includes(col) && value ? (
+                      <span className={`badge 
+                        ${value.toLowerCase() === 'approved' ? 'bg-success' :
+                          value.toLowerCase() === 'rejected' ? 'bg-danger' :
+                          value.toLowerCase() === 'pending' ? 'bg-warning text-dark' :
+                          'bg-secondary'}`}>
+                        {value}
+                      </span>
+                    ) : (
+                      value != null ? value.toString() : ''
+                    )}
+                  </td>
+                );
               })}
             </tr>
           )) : (

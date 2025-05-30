@@ -67,7 +67,7 @@ const cards = {
       id: 5,
       title: "IT EXECUTIVE MANAGEMENT",
       icon: SiNginxproxymanager,
-      text: "Nature of expenses incurred, amount used.",
+      text: "form management",
       link: "/ITExecutive",
     },
   ],

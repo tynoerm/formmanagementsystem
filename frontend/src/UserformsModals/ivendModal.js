@@ -159,7 +159,7 @@ const IvendModal = () => {
             </div>
 
             <div className="text-center mb-2">
-              <label className="form-label"><b>ACCESS RIGHTS <i>(Managers Use Only)</i></b></label>
+              <label className="form-label"><b>ACCESS RIGHTS <i></i></b></label>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "15px" }}>
               {roles.map((role, index) => (

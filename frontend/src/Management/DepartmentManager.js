@@ -22,7 +22,6 @@ const collections = [
   { label: "Internet Access", value: "internetaccess" }
 ];
 
-// Column mapping for each collection
 const columnMapping = {
   ivendusers: ['fullname', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'roles'],
   meatmatrix: ['fullname', 'jobtitle', 'date', 'department', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
@@ -32,22 +31,78 @@ const columnMapping = {
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
 };
 
+const columnLabels = {
+  ivendusers: {
+    fullname: "Full Name",
+    jobtitle: "Job Title",
+    store: "Store",
+    headofdepartmentname: "Head of Department",
+    deptmanagerapproval: "Department Manager Approval",
+    itmanagerapproval: "IT Manager Approval",
+    roles: "Roles",
+  },
+  meatmatrix: {
+    fullname: "Full Name",
+    jobtitle: "Job Title",
+    date: "Date",
+    department: "Department",
+    headofdepartmentname: "Head of Department",
+    from: "From",
+    to: "To",
+    deptmanagerapproval: "Department Manager Approval",
+    itmanagerapproval: "IT Manager Approval",
+  },
+  vpn: {
+    vpnRequestorname: "Requestor Name",
+    vpnRequestordepartment: "Department",
+    vpnRequestorjobtitle: "Job Title",
+    vpnRequestoremail: "Email",
+    deptManagerApproval: "Department Manager Approval",
+    itManagerApproval: "IT Manager Approval",
+    itExecutiveApproval: "IT Executive Approval",
+  },
+  changeofcontrol: {
+    name: "Name",
+    division: "Division",
+    department: "Department",
+    datesubmitted: "Date Submitted",
+    proposedchange: "Proposed Change",
+    headofdept: "Head of Department",
+    headofict: "Head of ICT",
+    changesmade: "Changes Made",
+    requestor: "Requestor",
+  },
+  domainaccess: {
+    fullname: "Full Name",
+    jobtitle: "Job Title",
+    department: "Department",
+    division: "Division",
+    managersname: "Manager's Name",
+    deptmanagerapproval: "Department Manager Approval",
+    itmanagerapproval: "IT Manager Approval",
+  },
+  internetaccess: {
+    firstname: "First Name",
+    surname: "Surname",
+    department: "Department",
+    device: "Device",
+    ipaddress: "IP Address",
+    macaddress: "MAC Address",
+    itmanagerapproval: "IT Manager Approval",
+    itexecapproval: "IT Executive Approval",
+  },
+};
+
 const DepartmentManager = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  // Initialize collectionSelected as string value, not object
   const [collectionSelected, setCollectionSelected] = useState(collections[0].value);
-
   const [formData, setFormData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [department, setDepartment] = useState('');
   const [username, setUsername] = useState('');
-
-  // Modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -69,7 +124,10 @@ const DepartmentManager = () => {
     axios.get(`http://localhost:3001/${collectionSelected}/`)
       .then((res) => {
         const data = res.data.data || [];
-        setFormData(data);
+
+        // Sort entries by most recent
+        const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setFormData(sortedData);
 
         if (columnMapping[collectionSelected]) {
           setColumns(columnMapping[collectionSelected]);
@@ -90,7 +148,6 @@ const DepartmentManager = () => {
       });
   }, [collectionSelected]);
 
-  // Filter by department - be mindful if item.department may be undefined
   const filteredData = formData.filter(item =>
     item.department?.toLowerCase() === department.toLowerCase()
   );
@@ -105,17 +162,13 @@ const DepartmentManager = () => {
   };
 
   const renderCellContent = (col, value) => {
-    // all lowercase approval fields to avoid duplication & case mismatch
     const approvalFields = [
       'deptmanagerapproval',
       'itmanagerapproval',
       'itexecapproval',
       'itexecutiveapproval',
       'headofict',
-      'headofdept',
-      'deptmanagerapproval',
-      'itmanagerapproval',
-      'itexecutiveapproval'
+      'headofdept'
     ];
 
     if (approvalFields.includes(col.toLowerCase())) {
@@ -143,22 +196,13 @@ const DepartmentManager = () => {
     <div>
       <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
         <div className="container-fluid d-flex align-items-center">
-
-          {/* Left: Logo and title */}
           <div className="d-flex align-items-center text-white me-auto">
-            <img
-              src={image1}
-              alt="Login Icon"
-              style={{ width: '40px', height: '40px', objectFit: 'contain' }}
-            />
+            <img src={image1} alt="Login Icon" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
             <span className="ms-2 fw-bold">DEPARTMENT MANAGER MANAGEMENT</span>
           </div>
-
-          {/* Right: Welcome message */}
           <div className="d-flex align-items-center ms-auto text-white">
             <h5 className="mb-0 me-3"><i>Welcome {username || 'User'}</i></h5>
           </div>
-
         </div>
       </nav>
 
@@ -197,7 +241,7 @@ const DepartmentManager = () => {
             {columns.length > 0 ? (
               columns.map((col) => (
                 <th key={col}>
-                  {col.charAt(0).toUpperCase() + col.slice(1)}
+                  {columnLabels[collectionSelected]?.[col] || col.charAt(0).toUpperCase() + col.slice(1)}
                 </th>
               ))
             ) : (
@@ -228,48 +272,12 @@ const DepartmentManager = () => {
 
       {showModal && selectedItem && (
         <>
-          {collectionSelected === 'ivendusers' && (
-            <IvendEdit
-              item={selectedItem}
-              onClose={() => setShowModal(false)}
-              collection={collectionSelected}
-            />
-          )}
-          {collectionSelected === 'internetaccess' && (
-            <InternetaccessEdit
-              item={selectedItem}
-              onClose={() => setShowModal(false)}
-              collection={collectionSelected}
-            />
-          )}
-          {collectionSelected === 'domainaccess' && (
-            <DomainEdit
-              item={selectedItem}
-              onClose={() => setShowModal(false)}
-              collection={collectionSelected}
-            />
-          )}
-          {collectionSelected === 'changeofcontrol' && (
-            <ChangeofcontrolEdit
-              item={selectedItem}
-              onClose={() => setShowModal(false)}
-              collection={collectionSelected}
-            />
-          )}
-          {collectionSelected === 'meatmatrix' && (
-            <MeatmatrixEdit
-              item={selectedItem}
-              onClose={() => setShowModal(false)}
-              collection={collectionSelected}
-            />
-          )}
-          {collectionSelected === 'vpn' && (
-            <VpnEdit
-              item={selectedItem}
-              onClose={() => setShowModal(false)}
-              collection={collectionSelected}
-            />
-          )}
+          {collectionSelected === 'ivendusers' && <IvendEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />}
+          {collectionSelected === 'internetaccess' && <InternetaccessEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />}
+          {collectionSelected === 'domainaccess' && <DomainEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />}
+          {collectionSelected === 'changeofcontrol' && <ChangeofcontrolEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />}
+          {collectionSelected === 'meatmatrix' && <MeatmatrixEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />}
+          {collectionSelected === 'vpn' && <VpnEdit item={selectedItem} onClose={() => setShowModal(false)} collection={collectionSelected} />}
         </>
       )}
 

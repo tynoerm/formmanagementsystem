@@ -77,7 +77,7 @@ function Login({ setLoggedIn, login }) {
         <div className="card p-3 shadow" style={{ width: '400px' }}>
           <ToastContainer />
           <RiLoginBoxFill />
-          <h2 className="text-center mb-4">LOGIN</h2>
+          <h2 className="text-center mb-4"><b>LOGIN</b></h2>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">

@@ -158,7 +158,7 @@ const UserformSelection = () => {
                   <GrCloudSoftware style={styles.icon} />
                   <h5 className="card-title">IVEND USER ACCESS </h5>
                 </div>
-                <p className="card-text">click and fill</p>
+                <p className="card-text">user access form</p>
               </div>
             </div>
           </div>
@@ -170,7 +170,7 @@ const UserformSelection = () => {
                   <SiBmcsoftware style={styles.icon} />
                   <h5 className="card-title">DOMAIN USER ACCESS</h5>
                 </div>
-                <p className="card-text">click and fill</p>
+                <p className="card-text">domain access form</p>
               </div>
             </div>
           </div>
@@ -182,7 +182,7 @@ const UserformSelection = () => {
                   <SiEsotericsoftware style={styles.icon} />
                   <h5 className="card-title">MEAT MATRIX </h5>
                 </div>
-                <p className="card-text">click and fill</p>
+                <p className="card-text">meat matrix form </p>
               </div>
             </div>
           </div>
@@ -195,7 +195,7 @@ const UserformSelection = () => {
                   <FaInternetExplorer style={styles.icon} />
                   <h5 className="card-title">INTERNET USER ACCESS</h5>
                 </div>
-                <p className="card-text">bring your own device.</p>
+                <p className="card-text">internet access form</p>
               </div>
             </div>
           </div>
@@ -208,7 +208,7 @@ const UserformSelection = () => {
                   <MdOutlineVpnLock style={styles.icon} />
                   <h5 className="card-title">VPN REQUEST</h5>
                 </div>
-                <p className="card-text">bring your own device.</p>
+                <p className="card-text">vpn access form</p>
 
               </div>
             </div>
@@ -224,7 +224,7 @@ const UserformSelection = () => {
                   <AiOutlineControl style={styles.icon} />
                   <h5 className="card-title">CHANGE OF CONTROL </h5>
                 </div>
-                <p className="card-text">bring your own device.</p>
+                <p className="card-text">change of control form</p>
 
               </div>
             </div>
@@ -238,7 +238,7 @@ const UserformSelection = () => {
                   <MdAccountBalanceWallet  style={styles.icon} />
                   <h5 className="card-title">PREDICTIV USER FORMS </h5>
                 </div>
-                <p className="card-text">bring your own device.</p>
+                <p className="card-text">predictive access form</p>
 
               </div>
             </div>
@@ -255,7 +255,7 @@ const UserformSelection = () => {
                   <IoLaptopSharp style={styles.icon} />
                   <h5 className="card-title">LAPTOP ACCESS</h5>
                 </div>
-                <p className="card-text">bring your own device.</p>
+                <p className="card-text">laptop access form</p>
               </div>
             </div>
           </div>

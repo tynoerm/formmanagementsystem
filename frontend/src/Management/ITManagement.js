@@ -24,7 +24,6 @@ const collections = [
   'internetaccess',
 ];
 
-// Friendly names for collections
 const collectionLabels = {
   ivendusers: 'Ivend Users',
   meatmatrix: 'Meat Matrix',
@@ -34,20 +33,18 @@ const collectionLabels = {
   internetaccess: 'Internet Access',
 };
 
-// Columns to show per collection
 const columnMapping = {
-  ivendusers: ['fullName', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'roles'],
-  meatmatrix: ['fullName', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
+  ivendusers: ['fullname', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'roles'],
+  meatmatrix: ['fullname', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
   vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail', 'deptManagerApproval', 'itManagerApproval', 'itExecutiveApproval'],
   changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor'],
   domainaccess: ['fullName', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
   internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexecapproval'],
 };
 
-// Friendly labels for columns per collection
 const columnLabels = {
   ivendusers: {
-    fullName: 'Full Name',
+    fullname: 'Full Name',
     jobtitle: 'Job Title',
     store: 'Store',
     headofdepartmentname: 'Head of Department',
@@ -56,7 +53,7 @@ const columnLabels = {
     roles: 'Roles',
   },
   meatmatrix: {
-    fullName: 'Full Name',
+    fullname: 'Full Name',
     jobtitle: 'Job Title',
     date: 'Date',
     headofdepartmentname: 'Head of Department',
@@ -83,7 +80,7 @@ const columnLabels = {
     requestor: 'Requestor',
   },
   domainaccess: {
-    fullName: 'Full Name',
+    fullname: 'Full Name',
     jobtitle: 'Job Title',
     department: 'Department',
     division: 'Division',
@@ -114,6 +111,8 @@ const ITManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) setUsername(storedUsername);
@@ -129,7 +128,7 @@ const ITManagement = () => {
       .get(`http://localhost:3001/${collectionSelected}/`)
       .then((res) => {
         const data = res.data.data || [];
-        setFormData(data);
+        setFormData(data.reverse()); // ✅ Reverse for newest on top
         setColumns(columnMapping[collectionSelected] || []);
         setLoading(false);
       })
@@ -154,23 +153,13 @@ const ITManagement = () => {
     setShowModal(true);
   };
 
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate(-1);
-  };
+  const handleBack = () => navigate(-1);
 
   const renderCellContent = (col, value) => {
     const approvalFields = [
-      'deptmanagerapproval',
-      'itmanagerapproval',
-      'itexecapproval',
-      'itExecutiveApproval',
-      'headofict',
-      'headofdept',
-      'deptManagerApproval',
-      'itManagerApproval',
-      'itExecutiveApproval'
+      'deptmanagerapproval', 'itmanagerapproval', 'itexecapproval',
+      'itExecutiveApproval', 'headofict', 'headofdept',
+      'deptManagerApproval', 'itManagerApproval'
     ];
 
     if (approvalFields.includes(col.toLowerCase())) {

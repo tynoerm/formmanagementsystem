@@ -18,12 +18,63 @@ const collections = [
 ];
 
 const columnMapping = {
-  ivendusers: ['fullname', 'jobtitle', 'store', 'headofdepartmentname', 'deptmanagerapproval', 'itmanagerapproval', 'roles'],
-  meatmatrix: ['fullname', 'jobtitle', 'date', 'headofdepartmentname', 'from', 'to', 'deptmanagerapproval', 'itmanagerapproval'],
-  vpn: ['vpnRequestorname', 'vpnRequestordepartment', 'vpnRequestorjobtitle', 'vpnRequestoremail', 'deptManagerApproval', 'itManagerApproval', 'itExecutiveApproval'],
-  changeofcontrol: ['name', 'division', 'datesubmitted', 'proposedchange', 'changesmade', 'requestor', 'headofdept', 'headofict'],
-  domainaccess: ['fullname', 'jobtitle', 'department', 'division', 'managersname', 'deptmanagerapproval', 'itmanagerapproval'],
-  internetaccess: ['firstname', 'surname', 'department', 'device', 'ipaddress', 'macaddress', 'itmanagerapproval', 'itexcapproval'], // ✅ Fixed here
+  ivendusers: [
+    { field: 'fullname', label: 'Full Name' },
+    { field: 'jobtitle', label: 'Job Title' },
+    { field: 'store', label: 'Store' },
+    { field: 'headofdepartmentname', label: 'Head of Department' },
+    { field: 'deptmanagerapproval', label: 'Department Manager Approval' },
+    { field: 'itmanagerapproval', label: 'IT Manager Approval' },
+    { field: 'roles', label: 'Roles' },
+  ],
+  meatmatrix: [
+    { field: 'fullname', label: 'Full Name' },
+    { field: 'jobtitle', label: 'Job Title' },
+    { field: 'date', label: 'Date' },
+    { field: 'headofdepartmentname', label: 'Head of Department' },
+    { field: 'from', label: 'From' },
+    { field: 'to', label: 'To' },
+    { field: 'deptmanagerapproval', label: 'Department Manager Approval' },
+    { field: 'itmanagerapproval', label: 'IT Manager Approval' },
+  ],
+  vpn: [
+    { field: 'vpnRequestorname', label: 'Requestor Name' },
+    { field: 'vpnRequestordepartment', label: 'Department' },
+    { field: 'vpnRequestorjobtitle', label: 'Job Title' },
+    { field: 'vpnRequestoremail', label: 'Email' },
+    { field: 'deptManagerApproval', label: 'Dept Manager Approval' },
+    { field: 'itManagerApproval', label: 'IT Manager Approval' },
+    { field: 'itExecutiveApproval', label: 'IT Executive Approval' },
+  ],
+  changeofcontrol: [
+    { field: 'name', label: 'Name' },
+    { field: 'division', label: 'Division' },
+    { field: 'datesubmitted', label: 'Date Submitted' },
+    { field: 'proposedchange', label: 'Proposed Change' },
+    { field: 'changesmade', label: 'Changes Made' },
+    { field: 'requestor', label: 'Requestor' },
+    { field: 'headofdept', label: 'Head of Department' },
+    { field: 'headofict', label: 'Head of ICT' },
+  ],
+  domainaccess: [
+    { field: 'fullname', label: 'Full Name' },
+    { field: 'jobtitle', label: 'Job Title' },
+    { field: 'department', label: 'Department' },
+    { field: 'division', label: 'Division' },
+    { field: 'managersname', label: 'Manager’s Name' },
+    { field: 'deptmanagerapproval', label: 'Department Manager Approval' },
+    { field: 'itmanagerapproval', label: 'IT Manager Approval' },
+  ],
+  internetaccess: [
+    { field: 'firstname', label: 'First Name' },
+    { field: 'surname', label: 'Surname' },
+    { field: 'department', label: 'Department' },
+    { field: 'device', label: 'Device' },
+    { field: 'ipaddress', label: 'IP Address' },
+    { field: 'macaddress', label: 'MAC Address' },
+    { field: 'itmanagerapproval', label: 'IT Manager Approval' },
+    { field: 'itexcapproval', label: 'IT Executive Approval' },
+  ]
 };
 
 const ITExecutive = () => {
@@ -119,7 +170,7 @@ const ITExecutive = () => {
       <nav className="navbar border-bottom shadow-lg p-1 mb-0 rounded" style={{ backgroundColor: 'black' }}>
         <div className="container-fluid d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center text-white">
-            <img src={image1} alt="Login Icon" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+            <img src={image1} alt="Login Icon" style={{ width: '40px', height: '40px' }} />
             <span className="ms-2 fw-bold">IT EXECUTIVE MANAGEMENT</span>
           </div>
           <div className="text-white">
@@ -128,26 +179,22 @@ const ITExecutive = () => {
         </div>
       </nav>
 
-      {/* Top Controls */}
-      <div className="mb-3 d-flex justify-content-between mt-3">
+      {/* Controls */}
+      <div className="d-flex justify-content-between align-items-center mt-3 mb-2 px-3">
         <select
           className="form-select w-25"
           value={collectionSelected}
           onChange={(e) => setCollectionSelected(e.target.value)}
         >
-          {collections.map((col) => (
+          {collections.map(col => (
             <option key={col.value} value={col.value}>{col.label}</option>
           ))}
         </select>
-        <div className="d-flex justify-content-end">
-          <button onClick={handleBack} className="btn btn-primary me-2">
-            <b><IoMdArrowRoundBack /> Back</b>
-          </button>
-          <button className="btn btn-danger" onClick={() => {
-            localStorage.clear();
-            navigate('/');
-          }}>
-            <b><IoLogOutSharp /> Logout</b>
+        
+        <div>
+          <button onClick={handleBack} className="btn btn-primary me-2"><IoMdArrowRoundBack /> Back</button>
+          <button className="btn btn-danger" onClick={() => { localStorage.clear(); navigate('/'); }}>
+            <IoLogOutSharp /> Logout
           </button>
         </div>
       </div>
@@ -159,29 +206,24 @@ const ITExecutive = () => {
       <table className="table table-striped table-bordered mt-3">
         <thead className="table-dark">
           <tr>
-            {columns.length > 0 ? (
-              columns.map((col) => (
-                <th key={col}>{col.charAt(0).toUpperCase() + col.slice(1)}</th>
-              ))
-            ) : (
-              <th>No Data</th>
-            )}
+            {columns.length > 0
+              ? columns.map(col => <th key={col.field}>{col.label}</th>)
+              : <th>No Data</th>
+            }
           </tr>
         </thead>
         <tbody>
           {filteredData.length > 0 ? (
             filteredData.map((item, idx) => (
               <tr key={idx} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
-                {columns.map((col) => (
-                  <td key={col}>{renderCellContent(col, item[col])}</td>
+                {columns.map(col => (
+                  <td key={col.field}>{renderCellContent(col.field, item[col.field])}</td>
                 ))}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length || 1} className="text-center">
-                No records found
-              </td>
+              <td colSpan={columns.length || 1} className="text-center">No records found</td>
             </tr>
           )}
         </tbody>
