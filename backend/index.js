@@ -25,6 +25,7 @@ import { vpnRoutes } from './routes/userforms/vpnRoutes.js';
 import { changeofcontrolRoutes } from './routes/userforms/changeofcontrolRoutes.js';
 import { usersRoutes } from './routes/usermanagementRoutes.js';
 import { formselectionRoutes } from './routes/formselectionRoutes.js';
+import { boardroomRoutes } from './routes/BoardroomRoutes.js';
 
 
 app.use("/ivendusers" , ivendRoutes)
@@ -35,13 +36,14 @@ app.use("/vpn", vpnRoutes)
 app.use("/changeofcontrol", changeofcontrolRoutes)
 app.use("/users", usersRoutes)
 app.use('/api/forms', formselectionRoutes);
+app.use("/boardroom", boardroomRoutes)
 
 
 app.use(express.urlencoded({ extended: true })); 
 app.use(cors(corsOptions));
 
 // Connecting to MongoDB Database with options
-mongoose.connect("mongodb://localhost:27017/ampformsystem", {
+mongoose.connect("mongodb://127.0.0.1:27017/ampformsystem", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   connectTimeoutMS: 40000,  // 30 seconds for connection timeout
