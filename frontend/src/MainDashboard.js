@@ -9,9 +9,9 @@ import { LuLayoutDashboard } from 'react-icons/lu';
 import { IoCreate } from "react-icons/io5";
 import { IoLogOutSharp } from "react-icons/io5";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { MdWebAsset } from "react-icons/md";
 
-
-
+import { MdRoomPreferences } from "react-icons/md";
 
 
 import image1 from './images/login.png';
@@ -38,9 +38,24 @@ const cards = {
     id: 6,
     title: "USERS MODULE ",
     icon: SiGoogletagmanager,
-    text: "user forms approvals",
+    text: "User Forms approvals",
     link: "/Users",
   },
+  {
+    id: 7,
+    title: "ASSET MANAGEMENT",
+    icon: MdWebAsset,
+    text: "Asset Management",
+    link: "/AssetManagement"
+  },
+  {
+    id: 8,
+    title: "BOARDROOM",
+    icon: MdRoomPreferences,
+    text: "Boardroom Management",
+    link: "/BoardroomDashboard",
+  },
+
   ],
   itmanager: [
   {
@@ -50,6 +65,20 @@ const cards = {
     text: "user forms approvals",
     link: "/ITManager",
   },
+   {
+    id: 8,
+    title: "BOARDROOM",
+    icon: MdRoomPreferences,
+    text: "Boardroom Management",
+    link: "/BoardroomDashboard",
+  },
+   {
+    id: 7,
+    title: "ASSET MANAGEMENT",
+    icon: MdWebAsset,
+    text: "Asset Management",
+    link: "/AssetManagement"
+  },
 
 ],
 
@@ -58,9 +87,16 @@ const cards = {
       id: 4,
       title: "DEPARTMENT MANAGER",
       icon: FcManager,
-      text: "deparment forms management.",
+      text: "user forms section.",
       link: "/DepartmentManager",
     },
+     {
+    id: 8,
+    title: "BOARDROOM",
+    icon: MdRoomPreferences,
+    text: "Boardroom Management",
+    link: "/BoardroomDashboard",
+  },
   ],
   itexec: [
     {
@@ -70,6 +106,13 @@ const cards = {
       text: "form management",
       link: "/ITExecutive",
     },
+       {
+    id: 8,
+    title: "BOARDROOM",
+    icon: MdRoomPreferences,
+    text: "Boardroom Management",
+    link: "/Boardroom",
+  },
   ],
   
 };

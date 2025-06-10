@@ -10,6 +10,8 @@ import ITManager from './Management/ITManager.js';
 import ITExecutive from './Management/ITExecutive.js';
 import UserformSelection from './UserformSelection.js';
 import ITManagement from './Management/ITManagement.js'
+import AssetManagement from './AssetManagement.js'
+import BoardroomDashboard from './Boardroom.js'
 
 import FormmanagementUsers from './FormmanagementUsers.js'
 
@@ -49,6 +51,8 @@ function App() {
   <Route path="MainDashboard" element={<MainDashboard />} />
   <Route path="ITManager" element={<ITManager />} />
    <Route path="Users" element={<Users />} />
+   <Route path="AssetManagement" element={<AssetManagement />} />
+      <Route path="BoardroomDashboard" element={<BoardroomDashboard />} />
   <Route path="ITExecutive" element={<ITExecutive />} />
   <Route path="UserformSelection" element={<UserformSelection />} />
   <Route path="UserManagement" element={<UserManagement />} />

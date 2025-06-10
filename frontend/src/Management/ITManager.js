@@ -149,6 +149,7 @@ const ITManager = () => {
       'headofict',
       'headofdept'
     ];
+    
 
     if (approvalFields.includes(col)) {
       if (value?.toLowerCase() === 'approved') {
